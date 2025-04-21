@@ -1,8 +1,9 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Commit } from '@/data/skillData';
 import { GitCommitHorizontal } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface CommitNodeProps {
   commit: Commit;
@@ -23,6 +24,9 @@ const CommitNode: React.FC<CommitNodeProps> = ({
   isLast,
   onEvaluate
 }) => {
+  // Estado para controlar hover e valor selecionado
+  const [isSliderHovered, setIsSliderHovered] = useState(false);
+
   // Map de evaluation para slider value
   const getValueFromEval = (evalValue: Commit['evaluation']) => {
     if (evalValue === 'never') return 0;
@@ -38,6 +42,13 @@ const CommitNode: React.FC<CommitNodeProps> = ({
   };
 
   const sliderValue = [getValueFromEval(commit.evaluation)];
+
+  // Obtém label correspondente ao valor atual do slider
+  const getCurrentLabel = () => {
+    const value = sliderValue[0];
+    const found = evaluationValues.find(ev => ev.value === value);
+    return found ? found.label : '';
+  };
 
   return (
     <div className={`flex items-center mb-2 ${isLast ? '' : 'pb-1'}`}>
@@ -56,27 +67,31 @@ const CommitNode: React.FC<CommitNodeProps> = ({
         <div className="flex flex-col flex-1 justify-center">
           <h4 className="font-medium text-sm leading-tight">{commit.message}</h4>
         </div>
-        {/* Inline slider */}
-        <div className="flex flex-col items-end ml-3" style={{ minWidth: 130 }}>
-          <Slider
-            min={0}
-            max={2}
-            step={1}
-            value={sliderValue}
-            onValueChange={([val]) => onEvaluate(getEvalFromValue(val))}
-            className="w-28"
-          />
-          <div className="flex justify-between w-full mt-1 text-xs">
-            {evaluationValues.map(ev => (
-              <span
-                key={ev.label}
-                className={`text-center ${getValueFromEval(commit.evaluation) === ev.value ? ev.color + ' text-white font-bold px-1 rounded' : 'text-gray-500'}`}
-                style={{ width: 32 }}
+        {/* Inline slider alinhado à direita com tooltip */}
+        <div className="flex flex-col items-end ml-3" style={{ minWidth: 112 }}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div
+                onMouseEnter={() => setIsSliderHovered(true)}
+                onMouseLeave={() => setIsSliderHovered(false)}
+                className="w-28"
               >
-                {ev.label}
+                <Slider
+                  min={0}
+                  max={2}
+                  step={1}
+                  value={sliderValue}
+                  onValueChange={([val]) => onEvaluate(getEvalFromValue(val))}
+                  className="w-28"
+                />
+              </div>
+            </TooltipTrigger>
+            <TooltipContent side="top" align="center">
+              <span className="block text-xs font-medium">
+                {getCurrentLabel()}
               </span>
-            ))}
-          </div>
+            </TooltipContent>
+          </Tooltip>
         </div>
       </div>
     </div>
@@ -84,3 +99,4 @@ const CommitNode: React.FC<CommitNodeProps> = ({
 };
 
 export default CommitNode;
+
