@@ -43,7 +43,7 @@ const CommitNode: React.FC<CommitNodeProps> = ({
   };
 
   return (
-    <div className={`flex items-start mb-4 ${isLast ? '' : 'pb-2'}`}>
+    <div className={`flex items-center mb-4 ${isLast ? '' : 'pb-2'}`}>
       <div 
         className="w-8 h-8 rounded-full flex items-center justify-center mr-3 cursor-pointer"
         style={{ backgroundColor: branchColor }}
@@ -53,15 +53,15 @@ const CommitNode: React.FC<CommitNodeProps> = ({
       </div>
       
       <div 
-        className={`flex-1 p-3 rounded border ${getEvaluationStyle()} cursor-pointer hover:shadow transition-shadow`}
+        className={`flex-1 rounded border ${getEvaluationStyle()} cursor-pointer hover:shadow transition-shadow`}
         onClick={onClick}
+        style={{ height: '3rem', padding: '0.75rem 1rem' }} // Half the original height with adjusted padding
       >
-        <div className="flex justify-between items-start">
-          <div className="pt-1">
+        <div className="flex justify-between items-center h-full">
+          <div>
             <h4 className="font-medium text-sm">{commit.message}</h4>
-            <p className="text-xs mt-1 text-gray-600">{commit.description}</p>
           </div>
-          <div className="text-xs font-medium mt-1">
+          <div className="text-xs font-medium">
             {getEvaluationText()}
           </div>
         </div>
