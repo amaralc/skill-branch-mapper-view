@@ -3,7 +3,7 @@ import React from 'react';
 import { Branch, SkillPath, Tag } from '@/data/skillData';
 import CommitNode from './CommitNode';
 import TagIllustratedNode from './TagIllustratedNode';
-import { dataScientistPath } from '@/data/skillData';
+import { dataScientistPath, calculatePoints } from '@/data/skillData';
 
 // Lista de imagens placeholder para as tags
 const images = [
@@ -24,22 +24,96 @@ interface BranchViewProps {
   isCurrentBranch: boolean;
 }
 
+interface CommitLock {
+  index: number;
+  locked: boolean;
+}
+
+// Auxiliar: retorna os índices de início/fim dos níveis (tags) da branch
+function getTagLevelsForBranch(branchId: string): { start: number, end: number, tag: Tag }[] {
+  const tags = dataScientistPath.tags.filter(tag => tag.branchId === branchId);
+  if (tags.length === 0) return [];
+  // Ordena por commitIndex crescente
+  const sortedTags = [...tags].sort((a, b) => a.commitIndex - b.commitIndex);
+  const levels: { start: number, end: number, tag: Tag }[] = [];
+  let prevEnd = -1;
+  for (let i = 0; i < sortedTags.length; i++) {
+    const start = prevEnd + 1;
+    const end = sortedTags[i].commitIndex;
+    levels.push({ start, end, tag: sortedTags[i] });
+    prevEnd = end;
+  }
+  // Adiciona um último nível (caso haja commits depois da última tag) -- neste design, opcional
+  return levels;
+}
+
+// Verifica se todos os commits do nível estão em avaliação máxima
+function isLevelCompleted(commits: Branch['commits'], start: number, end: number): boolean {
+  for (let i = start; i <= end; i++) {
+    if (commits[i] && commits[i].evaluation !== 'always') {
+      return false;
+    }
+  }
+  return true;
+}
+
+// Mapeia cada commit para sua situação de bloqueio (locked = true se não pode avaliar)
+function getCommitLocks(commits: Branch['commits'], tagLevels: { start: number, end: number, tag: Tag }[]) {
+  const locks: CommitLock[] = [];
+  // Se não há tags, tudo liberado
+  if (tagLevels.length === 0) {
+    return commits.map((_, idx) => ({ index: idx, locked: false }));
+  }
+  // Para cada nível, bloqueia se anterior não completo
+  let prevLevelComplete = true;
+  for (let lvl = 0; lvl < tagLevels.length; lvl++) {
+    const { start, end } = tagLevels[lvl];
+    // Se não é o primeiro nível, depende do anterior estar completo
+    if (lvl > 0) {
+      prevLevelComplete = isLevelCompleted(commits, tagLevels[lvl - 1].start, tagLevels[lvl - 1].end);
+    }
+    for (let i = start; i <= end; i++) {
+      locks[i] = { index: i, locked: !prevLevelComplete };
+    }
+  }
+  // Libera qualquer commit que NÃO está coberto por tags (entre níveis? incomum, mas segurança)
+  for (let i = 0; i < commits.length; i++) {
+    if (typeof locks[i] === 'undefined') {
+      locks[i] = { index: i, locked: false };
+    }
+  }
+  return locks;
+}
+
 const BranchView: React.FC<BranchViewProps> = ({ branch, onEvaluateCommit, isCurrentBranch }) => {
   // Pegando todas as tags desta branch
   const tagsForBranch = dataScientistPath.tags.filter(
     tag => tag.branchId === branch.id
   );
+  
+  // Obter "níveis" de commits conforme as tags
+  const tagLevels = getTagLevelsForBranch(branch.id);
+
+  // Calcular bloqueios de cada commit
+  const commitLocks = getCommitLocks(branch.commits, tagLevels);
 
   // Renderiza commits e intercala os componentes TagIllustratedNode quando necessário
   const items: React.ReactNode[] = [];
   branch.commits.forEach((commit, idx) => {
+    // Checa se esse commit está bloqueado
+    const lock = commitLocks[idx]?.locked ?? false;
     items.push(
       <CommitNode
         key={commit.id}
         commit={commit}
         branchColor={branch.color}
         isLast={idx === branch.commits.length - 1}
-        onEvaluate={evaluation => onEvaluateCommit(branch.id, commit.id, evaluation)}
+        onEvaluate={evaluation => !lock && onEvaluateCommit(branch.id, commit.id, evaluation)}
+        // Passa disabled e uma tooltip opcional se bloqueado
+        disabled={lock}
+        lockReason={
+          lock ? "Para avaliar este item, conclua todos os anteriores deste nível com 'Sempre'." : undefined
+        }
       />
     );
     // Verificar se após esse commit existe uma tag nesta branch para este índice

@@ -10,6 +10,8 @@ interface CommitNodeProps {
   branchColor: string;
   isLast: boolean;
   onEvaluate: (evaluation: 'never' | 'sometimes' | 'always') => void;
+  disabled?: boolean;
+  lockReason?: string;
 }
 
 const evaluationValues = [
@@ -22,7 +24,9 @@ const CommitNode: React.FC<CommitNodeProps> = ({
   commit, 
   branchColor, 
   isLast,
-  onEvaluate
+  onEvaluate,
+  disabled = false,
+  lockReason
 }) => {
   // Estado para controlar hover e valor selecionado
   const [isSliderHovered, setIsSliderHovered] = useState(false);
@@ -61,7 +65,8 @@ const CommitNode: React.FC<CommitNodeProps> = ({
       </div>
       {/* Caixa do texto, altura reduzida */}
       <div 
-        className={`flex-1 flex items-center rounded border bg-white border-gray-300 text-gray-700 shadow-sm transition-shadow`}
+        className={`flex-1 flex items-center rounded border bg-white border-gray-300 text-gray-700 shadow-sm transition-shadow 
+        ${disabled ? 'opacity-50 pointer-events-auto' : ''}`}
         style={{ minHeight: "2.25rem", padding: "0.5rem 1rem" }}  // altura reduzida (~36px)
       >
         <div className="flex flex-col flex-1 justify-center">
@@ -81,15 +86,17 @@ const CommitNode: React.FC<CommitNodeProps> = ({
                   max={2}
                   step={1}
                   value={sliderValue}
-                  onValueChange={([val]) => onEvaluate(getEvalFromValue(val))}
-                  className="w-28"
+                  onValueChange={([val]) => !disabled && onEvaluate(getEvalFromValue(val))}
+                  className={`w-28 ${disabled ? 'cursor-not-allowed' : ''}`}
+                  disabled={disabled}
                 />
               </div>
             </TooltipTrigger>
             <TooltipContent side="top" align="center">
-              <span className="block text-xs font-medium">
-                {getCurrentLabel()}
-              </span>
+              {disabled && lockReason
+                ? <span className="block text-xs font-medium text-red-500">{lockReason}</span>
+                : <span className="block text-xs font-medium">{getCurrentLabel()}</span>
+              }
             </TooltipContent>
           </Tooltip>
         </div>
@@ -99,4 +106,3 @@ const CommitNode: React.FC<CommitNodeProps> = ({
 };
 
 export default CommitNode;
-
