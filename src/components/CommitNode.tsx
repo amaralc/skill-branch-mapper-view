@@ -2,18 +2,31 @@
 import React from 'react';
 import { Commit } from '@/data/skillData';
 import { GitCommitHorizontal } from 'lucide-react';
+import { Slider } from '@/components/ui/slider';
 
 interface CommitNodeProps {
   commit: Commit;
   branchColor: string;
-  onClick: () => void;
+  onEvaluate: (evaluation: 'never' | 'sometimes' | 'always') => void;
   isLast: boolean;
 }
+
+const evaluationMarks = [
+  { label: 'Nunca', value: 0, code: 'never' },
+  { label: 'Às Vezes', value: 1, code: 'sometimes' },
+  { label: 'Sempre', value: 2, code: 'always' }
+];
+
+const evaluationValueMap = {
+  never: 0,
+  sometimes: 1,
+  always: 2,
+};
 
 const CommitNode: React.FC<CommitNodeProps> = ({ 
   commit, 
   branchColor, 
-  onClick,
+  onEvaluate,
   isLast
 }) => {
   const getEvaluationStyle = () => {
@@ -29,16 +42,18 @@ const CommitNode: React.FC<CommitNodeProps> = ({
     }
   };
 
-  const getEvaluationText = () => {
-    switch(commit.evaluation) {
-      case 'never':
-        return '0 - Nunca';
-      case 'sometimes':
-        return '1 - Às vezes';
-      case 'always':
-        return '2 - Sempre';
-      default:
-        return 'Não avaliado';
+  // Calcula o valor do slider a partir do commit.evaluation
+  const sliderValue = typeof commit.evaluation === 'string'
+    ? [evaluationValueMap[commit.evaluation]]
+    : [0];
+
+  const handleSliderChange = (value: number[]) => {
+    const newEvaluation = evaluationMarks[value[0]]?.code;
+    if (
+      newEvaluation &&
+      newEvaluation !== commit.evaluation
+    ) {
+      onEvaluate(newEvaluation as 'never' | 'sometimes' | 'always');
     }
   };
 
@@ -47,23 +62,32 @@ const CommitNode: React.FC<CommitNodeProps> = ({
       <div 
         className="w-8 h-8 rounded-full flex items-center justify-center mr-3 cursor-pointer"
         style={{ backgroundColor: branchColor }}
-        onClick={onClick}
       >
         <GitCommitHorizontal className="text-white" size={16} />
       </div>
       
       <div 
-        className={`flex-1 rounded border ${getEvaluationStyle()} cursor-pointer hover:shadow transition-shadow`}
-        onClick={onClick}
-        style={{ height: '3rem', padding: '0.75rem 1rem' }} // Half the original height with adjusted padding
+        className={`flex-1 rounded border ${getEvaluationStyle()} hover:shadow transition-shadow`}
+        style={{ height: '3rem', padding: '0.75rem 1rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
       >
         <div className="flex justify-between items-center h-full">
           <div>
             <h4 className="font-medium text-sm">{commit.message}</h4>
           </div>
-          <div className="text-xs font-medium">
-            {getEvaluationText()}
-          </div>
+        </div>
+        {/* Slider de avaliação */}
+        <div className="mt-2 flex items-center space-x-4">
+          <Slider
+            min={0}
+            max={2}
+            step={1}
+            value={sliderValue}
+            onValueChange={handleSliderChange}
+            className="w-32"
+          />
+          <span className="text-xs font-medium select-none" style={{ minWidth: 64 }}>
+            {evaluationMarks[sliderValue[0]]?.label}
+          </span>
         </div>
       </div>
     </div>
@@ -71,4 +95,3 @@ const CommitNode: React.FC<CommitNodeProps> = ({
 };
 
 export default CommitNode;
-
