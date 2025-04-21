@@ -1,3 +1,4 @@
+
 // Dados das competências, branches, commits e tags
 
 export interface Commit {
@@ -42,40 +43,35 @@ export const dataScientistPath: SkillPath = {
       name: "Qualidade",
       color: "#4CAF50",
       commits: [
-        // IC01
-        { id: "q1", message: "Testa como o usuário final e busca aprender com falhas que poderiam passar despercebidas", description: "Pratica testes sob a perspectiva do usuário e busca aprender com possíveis falhas.", evaluation: null },
-        { id: "q2", message: "Revisa sua entrega com atenção, corrigindo falhas e aprendendo com os próprios erros", description: "Faz revisões detalhadas das próprias entregas buscando aprendizado.", evaluation: null },
-        { id: "q3", message: "Escreve testes úteis e entende melhor o comportamento esperado do sistema", description: "Cria testes que ajudam a clarificar e validar comportamentos esperados.", evaluation: null },
-        { id: "q4", message: "Cria testes para falhas encontradas, aprendendo a evitar regressões com confiança", description: "Transforma falhas em testes automatizados para evitar recorrência.", evaluation: null },
-        { id: "q5", message: "Participa de revisões e pares com atenção, aprendendo e aplicando padrões de qualidade do time", description: "Troca conhecimento em revisões e pair programming com foco em qualidade.", evaluation: null },
+        { id: "q1", message: "Testa como o usuário final e busca aprender com falhas que poderiam passar despercebidas", description: "", evaluation: null },
+        { id: "q2", message: "Revisa sua entrega com atenção, corrigindo falhas e aprendendo com os próprios erros", description: "", evaluation: null },
+        { id: "q3", message: "Escreve testes úteis e entende melhor o comportamento esperado do sistema", description: "", evaluation: null },
+        { id: "q4", message: "Cria testes para falhas encontradas, aprendendo a evitar regressões com confiança", description: "", evaluation: null },
+        { id: "q5", message: "Participa de revisões e pares com atenção, aprendendo e aplicando padrões de qualidade do time", description: "", evaluation: null },
 
-        // IC02
-        { id: "q6", message: "Garante por conta própria que o usuário final não perceba falhas na experiência", description: "Se responsabiliza pela experiência do usuário mesmo antes da validação externa.", evaluation: null },
-        { id: "q7", message: "Valida a qualidade da entrega com rigor antes de envolver QA ou revisão técnica", description: "Tem critério próprio para validar entregas antes de submeter a terceiros.", evaluation: null },
-        { id: "q8", message: "Escreve testes claros e confiáveis para validar os cenários que entrega", description: "Garante clareza e confiança nos testes criados para seus desenvolvimentos.", evaluation: null },
-        { id: "q9", message: "Reproduz falhas reportadas com testes e ajuda colegas a evitar regressões", description: "Transforma bugs em testes e compartilha aprendizado para evitar recorrências.", evaluation: null },
-        { id: "q10", message: "Revisa com critério e orienta colegas em pares para elevar o padrão do time", description: "Atua como referência e orientação para elevar o padrão da equipe em revisões.", evaluation: null },
+        { id: "q6", message: "Garante por conta própria que o usuário final não perceba falhas na experiência", description: "", evaluation: null },
+        { id: "q7", message: "Valida a qualidade da entrega com rigor antes de envolver QA ou revisão técnica", description: "", evaluation: null },
+        { id: "q8", message: "Escreve testes claros e confiáveis para validar os cenários que entrega", description: "", evaluation: null },
+        { id: "q9", message: "Reproduz falhas reportadas com testes e ajuda colegas a evitar regressões", description: "", evaluation: null },
+        { id: "q10", message: "Revisa com critério e orienta colegas em pares para elevar o padrão do time", description: "", evaluation: null },
 
-        // IC03
-        { id: "q11", message: "Antecipa falhas que afetariam o usuário e ajusta a entrega antes que elas ocorram", description: "Identifica pontos frágeis e resolve proativamente.", evaluation: null },
-        { id: "q12", message: "Garante qualidade de ponta a ponta com autonomia, mesmo em cenários ambíguos", description: "Mantém nível elevado de qualidade mesmo com requisitos pouco claros.", evaluation: null },
-        { id: "q13", message: "Escreve testes completos, legíveis e sustentáveis para o time", description: "Cuida da legibilidade e manutenção dos testes da base de código.", evaluation: null },
-        { id: "q14", message: "Traduz falhas reais em testes robustos e compartilha o aprendizado com o time", description: "Transforma experiências em aprendizados compartilhados via testes.", evaluation: null },
-        { id: "q15", message: "Conduz revisões e pares com profundidade, formando o critério técnico do time", description: "Aprofunda técnicas de revisão compartilhando racional no time.", evaluation: null },
+        { id: "q11", message: "Antecipa falhas que afetariam o usuário e ajusta a entrega antes que elas ocorram", description: "", evaluation: null },
+        { id: "q12", message: "Garante qualidade de ponta a ponta com autonomia, mesmo em cenários ambíguos", description: "", evaluation: null },
+        { id: "q13", message: "Escreve testes completos, legíveis e sustentáveis para o time", description: "", evaluation: null },
+        { id: "q14", message: "Traduz falhas reais em testes robustos e compartilha o aprendizado com o time", description: "", evaluation: null },
+        { id: "q15", message: "Conduz revisões e pares com profundidade, formando o critério técnico do time", description: "", evaluation: null },
 
-        // IC04
-        { id: "q16", message: "Estabelece práticas que evitam falhas perceptíveis em escala, com foco na experiência do usuário", description: "Cria regras/sistemas para prevenir problemas em larga escala.", evaluation: null },
-        { id: "q17", message: "Cria padrões e ferramentas que tornam a qualidade parte natural do fluxo de entrega", description: "Desenvolve recursos para que qualidade seja embedada no processo.", evaluation: null },
-        { id: "q18", message: "Define critérios e estruturas de teste que fortalecem a confiabilidade do sistema", description: "Propõe critérios e estruturas de teste para robustez sistêmica.", evaluation: null },
-        { id: "q19", message: "Sistematiza testes para falhas críticas e orienta prevenção em escala no time", description: "Orquestra respostas e prevenção sistematizada a falhas críticas.", evaluation: null },
-        { id: "q20", message: "Promove revisões e pares intencionais para desenvolver critério técnico no time", description: "Torna o processo de revisões/pairing intencional para coaching de qualidade.", evaluation: null },
+        { id: "q16", message: "Estabelece práticas que evitam falhas perceptíveis em escala, com foco na experiência do usuário", description: "", evaluation: null },
+        { id: "q17", message: "Cria padrões e ferramentas que tornam a qualidade parte natural do fluxo de entrega", description: "", evaluation: null },
+        { id: "q18", message: "Define critérios e estruturas de teste que fortalecem a confiabilidade do sistema", description: "", evaluation: null },
+        { id: "q19", message: "Sistematiza testes para falhas críticas e orienta prevenção em escala no time", description: "", evaluation: null },
+        { id: "q20", message: "Promove revisões e pares intencionais para desenvolver critério técnico no time", description: "", evaluation: null },
 
-        // IC05
-        { id: "q21", message: "Garante que falhas perceptíveis ao usuário sejam raras e evitadas sistemicamente", description: "Tem atuação para que falhas quase nunca atinjam o usuário final.", evaluation: null },
-        { id: "q22", message: "Influencia times e áreas a tornarem a qualidade parte natural do fluxo de entrega", description: "Atua promovendo qualidade além da própria equipe, influenciando áreas.", evaluation: null },
-        { id: "q23", message: "Evolui critérios de testabilidade e práticas que aumentam a confiança em sistemas críticos", description: "Avança e adapta critérios/práticas de teste para sistemas estratégicos.", evaluation: null },
-        { id: "q24", message: "Estabelece padrões de prevenção e resposta a falhas com impacto além do próprio time", description: "Define padrões escaláveis de prevenção e resposta a erros organizacionais.", evaluation: null },
-        { id: "q25", message: "Constrói uma cultura de revisão e pairing que eleva o nível técnico da organização", description: "Fomenta cultura de colaboração focada em qualidade em toda org.", evaluation: null }
+        { id: "q21", message: "Garante que falhas perceptíveis ao usuário sejam raras e evitadas sistemicamente", description: "", evaluation: null },
+        { id: "q22", message: "Influencia times e áreas a tornarem a qualidade parte natural do fluxo de entrega", description: "", evaluation: null },
+        { id: "q23", message: "Evolui critérios de testabilidade e práticas que aumentam a confiança em sistemas críticos", description: "", evaluation: null },
+        { id: "q24", message: "Estabelece padrões de prevenção e resposta a falhas com impacto além do próprio time", description: "", evaluation: null },
+        { id: "q25", message: "Constrói uma cultura de revisão e pairing que eleva o nível técnico da organização", description: "", evaluation: null }
       ]
     },
     {
@@ -234,3 +230,4 @@ export const getNextLevel = (path: SkillPath): Tag | null => {
   
   return null;
 };
+
