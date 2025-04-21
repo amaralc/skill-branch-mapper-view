@@ -18,7 +18,7 @@ const ProgressSummary: React.FC<ProgressSummaryProps> = ({ skillPath }) => {
 
   return (
     <div
-      className="sticky top-0 z-20 bg-white shadow-md mb-6 transition-colors duration-300"
+      className="sticky top-0 z-40 bg-white shadow-md mb-6 transition-colors duration-300 border-b border-gray-200"
       style={{
         // Pequena borda no fim para separar visualmente
         borderBottom: '1.5px solid rgba(180,180,180,0.15)',
@@ -80,4 +80,3 @@ const ProgressSummary: React.FC<ProgressSummaryProps> = ({ skillPath }) => {
 };
 
 export default ProgressSummary;
-

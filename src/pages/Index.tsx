@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Branch, Commit, dataScientistPath } from '@/data/skillData';
 import BranchView from '@/components/BranchView';
@@ -87,14 +86,9 @@ const Index = () => {
       </header>
 
       <main className="max-w-[1200px] mx-auto py-0 px-0">
-        {/* Sticky ProgressSummary bar at the top WITHOUT blur/opacity */}
-        <div className="sticky top-0 z-40 bg-white border-b border-gray-200">
-          {/* No backdrop-blur or bg-opacity */}
-          <ProgressSummary skillPath={skillPath} />
-        </div>
+        <ProgressSummary skillPath={skillPath} />
 
         <div className="flex flex-col">
-          {/* Trilhas de Competência card */}
           <div className="bg-white rounded-lg shadow p-4 mb-6">
             <h2 className="text-lg font-bold mb-3">Trilhas de Competência</h2>
             <div className="space-y-2">
@@ -125,7 +119,6 @@ const Index = () => {
             {renderTagsForCurrentBranch()}
           </div>
 
-          {/* Branch details area: NO max-h, NO flex-1, takes all the space needed */}
           <div className="bg-white rounded-lg shadow p-4">
             <h2 className="text-lg font-bold mb-4">
               {currentBranchId ? `Branch: ${getBranchName(currentBranchId)}` : 'Selecione uma branch para visualizar os commits'}
