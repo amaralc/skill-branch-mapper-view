@@ -117,7 +117,7 @@ const CommitNode: React.FC<CommitNodeProps> = ({
           <Drawer>
             <DrawerTrigger asChild>
               <button
-                className={`p-1 border-2 rounded text-gray-700 hover:text-blue-600 hover:border-blue-400 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                className={`p-1 rounded text-gray-700 hover:text-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500`}
                 aria-label="Ver referências sugeridas"
                 type="button"
               >
@@ -151,17 +151,17 @@ const CommitNode: React.FC<CommitNodeProps> = ({
         </div>
 
         {/* Inline slider alinhado à direita com tooltip */}
-        <div className="flex flex-col items-end ml-3" style={{ minWidth: 112 }}>
+        <div className="flex flex-col items-end ml-3" style={{ minWidth: 56 }}>
           <Tooltip>
             <TooltipTrigger asChild>
-              <div className="w-28">
+              <div className="w-14">
                 <Slider
                   min={0}
                   max={2}
                   step={1}
                   value={sliderValue}
                   onValueChange={handleValueChange}
-                  className={`w-28 ${disabled ? 'cursor-not-allowed' : ''}`}
+                  className={`w-14 ${disabled ? 'cursor-not-allowed' : ''}`}
                   disabled={disabled}
                 />
               </div>
