@@ -1,4 +1,3 @@
-
 // Dados das competências, branches, commits e tags
 
 export interface Commit {
@@ -43,11 +42,40 @@ export const dataScientistPath: SkillPath = {
       name: "Qualidade",
       color: "#4CAF50",
       commits: [
-        { id: "q1", message: "Adota revisão de código", description: "Participa regularmente de revisões de código para manter o padrão e reduzir erros.", evaluation: null },
-        { id: "q2", message: "Escreve testes automatizados", description: "Cria testes unitários, de integração e end-to-end.", evaluation: null },
-        { id: "q3", message: "Documenta requisitos e comportamentos", description: "Mantém documentação clara sobre requisitos, bugs e funcionalidades.", evaluation: null },
-        { id: "q4", message: "Conhece métricas de qualidade", description: "Interpreta métricas como cobertura de testes, defeitos por release e MTTR.", evaluation: null },
-        { id: "q5", message: "Implementa práticas de melhoria contínua", description: "Sugere melhorias baseadas em resultados recorrentes ou métricas.", evaluation: null }
+        // IC01
+        { id: "q1", message: "Testa como o usuário final e busca aprender com falhas que poderiam passar despercebidas", description: "Pratica testes sob a perspectiva do usuário e busca aprender com possíveis falhas.", evaluation: null },
+        { id: "q2", message: "Revisa sua entrega com atenção, corrigindo falhas e aprendendo com os próprios erros", description: "Faz revisões detalhadas das próprias entregas buscando aprendizado.", evaluation: null },
+        { id: "q3", message: "Escreve testes úteis e entende melhor o comportamento esperado do sistema", description: "Cria testes que ajudam a clarificar e validar comportamentos esperados.", evaluation: null },
+        { id: "q4", message: "Cria testes para falhas encontradas, aprendendo a evitar regressões com confiança", description: "Transforma falhas em testes automatizados para evitar recorrência.", evaluation: null },
+        { id: "q5", message: "Participa de revisões e pares com atenção, aprendendo e aplicando padrões de qualidade do time", description: "Troca conhecimento em revisões e pair programming com foco em qualidade.", evaluation: null },
+
+        // IC02
+        { id: "q6", message: "Garante por conta própria que o usuário final não perceba falhas na experiência", description: "Se responsabiliza pela experiência do usuário mesmo antes da validação externa.", evaluation: null },
+        { id: "q7", message: "Valida a qualidade da entrega com rigor antes de envolver QA ou revisão técnica", description: "Tem critério próprio para validar entregas antes de submeter a terceiros.", evaluation: null },
+        { id: "q8", message: "Escreve testes claros e confiáveis para validar os cenários que entrega", description: "Garante clareza e confiança nos testes criados para seus desenvolvimentos.", evaluation: null },
+        { id: "q9", message: "Reproduz falhas reportadas com testes e ajuda colegas a evitar regressões", description: "Transforma bugs em testes e compartilha aprendizado para evitar recorrências.", evaluation: null },
+        { id: "q10", message: "Revisa com critério e orienta colegas em pares para elevar o padrão do time", description: "Atua como referência e orientação para elevar o padrão da equipe em revisões.", evaluation: null },
+
+        // IC03
+        { id: "q11", message: "Antecipa falhas que afetariam o usuário e ajusta a entrega antes que elas ocorram", description: "Identifica pontos frágeis e resolve proativamente.", evaluation: null },
+        { id: "q12", message: "Garante qualidade de ponta a ponta com autonomia, mesmo em cenários ambíguos", description: "Mantém nível elevado de qualidade mesmo com requisitos pouco claros.", evaluation: null },
+        { id: "q13", message: "Escreve testes completos, legíveis e sustentáveis para o time", description: "Cuida da legibilidade e manutenção dos testes da base de código.", evaluation: null },
+        { id: "q14", message: "Traduz falhas reais em testes robustos e compartilha o aprendizado com o time", description: "Transforma experiências em aprendizados compartilhados via testes.", evaluation: null },
+        { id: "q15", message: "Conduz revisões e pares com profundidade, formando o critério técnico do time", description: "Aprofunda técnicas de revisão compartilhando racional no time.", evaluation: null },
+
+        // IC04
+        { id: "q16", message: "Estabelece práticas que evitam falhas perceptíveis em escala, com foco na experiência do usuário", description: "Cria regras/sistemas para prevenir problemas em larga escala.", evaluation: null },
+        { id: "q17", message: "Cria padrões e ferramentas que tornam a qualidade parte natural do fluxo de entrega", description: "Desenvolve recursos para que qualidade seja embedada no processo.", evaluation: null },
+        { id: "q18", message: "Define critérios e estruturas de teste que fortalecem a confiabilidade do sistema", description: "Propõe critérios e estruturas de teste para robustez sistêmica.", evaluation: null },
+        { id: "q19", message: "Sistematiza testes para falhas críticas e orienta prevenção em escala no time", description: "Orquestra respostas e prevenção sistematizada a falhas críticas.", evaluation: null },
+        { id: "q20", message: "Promove revisões e pares intencionais para desenvolver critério técnico no time", description: "Torna o processo de revisões/pairing intencional para coaching de qualidade.", evaluation: null },
+
+        // IC05
+        { id: "q21", message: "Garante que falhas perceptíveis ao usuário sejam raras e evitadas sistemicamente", description: "Tem atuação para que falhas quase nunca atinjam o usuário final.", evaluation: null },
+        { id: "q22", message: "Influencia times e áreas a tornarem a qualidade parte natural do fluxo de entrega", description: "Atua promovendo qualidade além da própria equipe, influenciando áreas.", evaluation: null },
+        { id: "q23", message: "Evolui critérios de testabilidade e práticas que aumentam a confiança em sistemas críticos", description: "Avança e adapta critérios/práticas de teste para sistemas estratégicos.", evaluation: null },
+        { id: "q24", message: "Estabelece padrões de prevenção e resposta a falhas com impacto além do próprio time", description: "Define padrões escaláveis de prevenção e resposta a erros organizacionais.", evaluation: null },
+        { id: "q25", message: "Constrói uma cultura de revisão e pairing que eleva o nível técnico da organização", description: "Fomenta cultura de colaboração focada em qualidade em toda org.", evaluation: null }
       ]
     },
     {
@@ -104,33 +132,41 @@ export const dataScientistPath: SkillPath = {
       id: "ic01",
       name: "IC01",
       branchId: "qualidade",
-      commitIndex: 2,
+      commitIndex: 4,
       pointsRequired: 10,
       level: "Iniciante"
     },
     {
       id: "ic02",
       name: "IC02",
-      branchId: "engenharia",
-      commitIndex: 2,
+      branchId: "qualidade",
+      commitIndex: 9,
       pointsRequired: 20,
       level: "Intermediário"
     },
     {
       id: "ic03",
       name: "IC03",
-      branchId: "especialidade",
-      commitIndex: 1,
-      pointsRequired: 40,
+      branchId: "qualidade",
+      commitIndex: 14,
+      pointsRequired: 30,
       level: "Avançado"
     },
     {
       id: "ic04",
       name: "IC04",
-      branchId: "especialidade",
-      commitIndex: 3,
-      pointsRequired: 60,
+      branchId: "qualidade",
+      commitIndex: 19,
+      pointsRequired: 40,
       level: "Especialista"
+    },
+    {
+      id: "ic05",
+      name: "IC05",
+      branchId: "qualidade",
+      commitIndex: 24,
+      pointsRequired: 50,
+      level: "Liderança"
     },
     {
       id: "em01",
@@ -198,4 +234,3 @@ export const getNextLevel = (path: SkillPath): Tag | null => {
   
   return null;
 };
-
