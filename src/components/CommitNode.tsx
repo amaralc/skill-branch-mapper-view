@@ -15,9 +15,9 @@ interface CommitNodeProps {
 }
 
 const evaluationValues = [
-  { label: 'Nunca', value: 0, color: 'bg-red-400', bg: 'bg-[#ea384c]/20' },
-  { label: 'Às Vezes', value: 1, color: 'bg-yellow-400', bg: 'bg-yellow-100' },
-  { label: 'Sempre', value: 2, color: 'bg-green-400', bg: 'bg-green-100' }
+  { label: 'Nunca', value: 0, color: 'border-red-400 text-red-600' },
+  { label: 'Às Vezes', value: 1, color: 'border-yellow-400 text-yellow-600' },
+  { label: 'Sempre', value: 2, color: 'border-green-400 text-green-600' }
 ];
 
 const CommitNode: React.FC<CommitNodeProps> = ({ 
@@ -28,10 +28,8 @@ const CommitNode: React.FC<CommitNodeProps> = ({
   disabled = false,
   lockReason
 }) => {
-  // Novo estado para saber se foi avaliado pelo usuário localmente
   const [touched, setTouched] = useState(false);
 
-  // Map de evaluation para slider value
   const getValueFromEval = (evalValue: Commit['evaluation']) => {
     if (evalValue === 'never') return 0;
     if (evalValue === 'sometimes') return 1;
@@ -47,24 +45,21 @@ const CommitNode: React.FC<CommitNodeProps> = ({
 
   const sliderValue = [getValueFromEval(commit.evaluation)];
 
-  // Obtém label correspondente ao valor atual do slider
   const getCurrentLabel = () => {
     const value = sliderValue[0];
     const found = evaluationValues.find(ev => ev.value === value);
     return found ? found.label : '';
   };
 
-  // Detecta se o commit já foi avaliado localmente ou globalmente
   const wasEvaluated = touched || commit.evaluation;
 
-  // Define cor do fundo após avaliação
-  let bgColor = "";
+  // Determina classe para borda e texto conforme avaliação, ou vazio antes da interação
+  let borderTextClass = "";
   if (wasEvaluated && commit.evaluation !== null && commit.evaluation !== undefined) {
     const val = getValueFromEval(commit.evaluation);
-    bgColor = evaluationValues.find(ev => ev.value === val)?.bg ?? '';
+    borderTextClass = evaluationValues.find(ev => ev.value === val)?.color ?? '';
   }
 
-  // Handler para slider: registra toque local + chama onEvaluate do pai
   const handleValueChange = ([val]: number[]) => {
     if (disabled) return;
     setTouched(true);
@@ -82,13 +77,15 @@ const CommitNode: React.FC<CommitNodeProps> = ({
       </div>
       {/* Caixa do texto, altura reduzida */}
       <div 
-        className={`flex-1 flex items-center rounded transition-shadow
-        ${bgColor} border bg-white border-gray-300 text-gray-700 shadow-sm
-        ${disabled ? 'opacity-50 pointer-events-auto' : ''}`}
+        className={`flex-1 flex items-center rounded border bg-white shadow-sm transition-shadow 
+          ${borderTextClass}
+          ${disabled ? 'opacity-50 pointer-events-auto' : ''}`}
         style={{ minHeight: "2.25rem", padding: "0.5rem 1rem" }}  // altura reduzida (~36px)
       >
         <div className="flex flex-col flex-1 justify-center">
-          <h4 className="font-medium text-sm leading-tight">{commit.message}</h4>
+          <h4 className={`font-medium text-sm leading-tight ${wasEvaluated ? borderTextClass.replace('border-', 'text-') : ''}`}>
+            {commit.message}
+          </h4>
         </div>
         {/* Inline slider alinhado à direita com tooltip */}
         <div className="flex flex-col items-end ml-3" style={{ minWidth: 112 }}>
@@ -124,3 +121,4 @@ const CommitNode: React.FC<CommitNodeProps> = ({
 };
 
 export default CommitNode;
+
