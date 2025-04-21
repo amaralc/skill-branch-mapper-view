@@ -30,8 +30,8 @@ export interface SkillPath {
   tags: Tag[];
 }
 
-// Nova trilha com as áreas solicitadas
-export const dataScientistPath: SkillPath = {
+// Trilha Engenharia de Software
+const softwareCareerPath: SkillPath = {
   id: "software-career-path",
   name: "Trilha de Carreira em Software",
   description: "Trilhas de conhecimento em Qualidade, Segurança, Engenharia, Entrega Contínua e Full-Stack",
@@ -166,6 +166,54 @@ export const dataScientistPath: SkillPath = {
     }
   ]
 };
+
+// Trilha Gestão de Produtos (estrutura SkillPath)
+const productManagementPath: SkillPath = {
+  id: "product-management",
+  name: "Gestão de Produtos",
+  description: "Trilha de habilidades essenciais para profissionais de gestão de produtos.",
+  branches: [
+    {
+      id: "prod1",
+      name: "Fundamentos de Gestão de Produtos",
+      color: "#f97316",
+      commits: [
+        {
+          id: "pcommit1",
+          message: "Entendimento do usuário",
+          description: "Identificar e compreender as necessidades do usuário.",
+          evaluation: null
+        },
+        {
+          id: "pcommit2",
+          message: "Visão de Produto",
+          description: "Definir a visão do produto e alinhar ao negócio.",
+          evaluation: null
+        }
+      ]
+    }
+    // Outras branches podem ser adicionadas seguindo o padrão acima
+  ],
+  tags: [
+    {
+      id: "nivel1",
+      name: "Nível 1 - Júnior",
+      level: "Júnior",
+      pointsRequired: 2,
+      description: "Conhecimento inicial sobre produto."
+    },
+    {
+      id: "nivel2",
+      name: "Nível 2 - Pleno",
+      level: "Pleno",
+      pointsRequired: 4,
+      description: "Experiência intermediária em gestão de produtos."
+    }
+  ]
+};
+
+// Agora exportamos todas as trilhas disponíveis no projeto como um array
+export const careerPaths: SkillPath[] = [softwareCareerPath, productManagementPath];
 
 export const calculatePoints = (path: SkillPath): number => {
   let totalPoints = 0;
