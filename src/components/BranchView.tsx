@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Branch, SkillPath, Tag } from '@/data/skillData';
 import CommitNode from './CommitNode';
@@ -29,111 +28,71 @@ interface CommitLock {
   locked: boolean;
 }
 
-// Auxiliar: retorna os índices de início/fim dos níveis (tags) da branch
-function getTagLevelsForBranch(branchId: string): { start: number, end: number, tag: Tag }[] {
-  const tags = dataScientistPath.tags.filter(tag => tag.branchId === branchId);
-  if (tags.length === 0) return [];
-  // Ordena por commitIndex crescente
-  const sortedTags = [...tags].sort((a, b) => a.commitIndex - b.commitIndex);
-  const levels: { start: number, end: number, tag: Tag }[] = [];
-  let prevEnd = -1;
-  for (let i = 0; i < sortedTags.length; i++) {
-    const start = prevEnd + 1;
-    const end = sortedTags[i].commitIndex;
-    levels.push({ start, end, tag: sortedTags[i] });
-    prevEnd = end;
-  }
-  // Adiciona um último nível (caso haja commits depois da última tag) -- neste design, opcional
-  return levels;
+// Helper: Calculate points needed for each tag level
+function getTagsWithPointThresholds(tags: Tag[]): { pointThreshold: number, tag: Tag }[] {
+  // Sort tags by pointsRequired in ascending order
+  return [...tags].sort((a, b) => a.pointsRequired - b.pointsRequired)
+    .map(tag => ({ pointThreshold: tag.pointsRequired, tag }));
 }
 
-// Verifica se todos os commits do nível estão em avaliação máxima
-function isLevelCompleted(commits: Branch['commits'], start: number, end: number): boolean {
-  for (let i = start; i <= end; i++) {
-    if (commits[i] && commits[i].evaluation !== 'always') {
-      return false;
+// Helper: Calculate points needed for next level
+function getNextLevelThreshold(currentPoints: number, tags: Tag[]): number | null {
+  const sortedTags = [...tags].sort((a, b) => a.pointsRequired - b.pointsRequired);
+  for (const tag of sortedTags) {
+    if (tag.pointsRequired > currentPoints) {
+      return tag.pointsRequired;
     }
   }
-  return true;
+  return null; // No next level
 }
 
-// Mapeia cada commit para sua situação de bloqueio (locked = true se não pode avaliar)
-function getCommitLocks(commits: Branch['commits'], tagLevels: { start: number, end: number, tag: Tag }[]) {
-  const locks: CommitLock[] = [];
-  // Se não há tags, tudo liberado
-  if (tagLevels.length === 0) {
-    return commits.map((_, idx) => ({ index: idx, locked: false }));
-  }
-  // Para cada nível, bloqueia se anterior não completo
-  let prevLevelComplete = true;
-  for (let lvl = 0; lvl < tagLevels.length; lvl++) {
-    const { start, end } = tagLevels[lvl];
-    // Se não é o primeiro nível, depende do anterior estar completo
-    if (lvl > 0) {
-      prevLevelComplete = isLevelCompleted(commits, tagLevels[lvl - 1].start, tagLevels[lvl - 1].end);
-    }
-    for (let i = start; i <= end; i++) {
-      locks[i] = { index: i, locked: !prevLevelComplete };
-    }
-  }
-  // Libera qualquer commit que NÃO está coberto por tags (entre níveis? incomum, mas segurança)
-  for (let i = 0; i < commits.length; i++) {
-    if (typeof locks[i] === 'undefined') {
-      locks[i] = { index: i, locked: false };
-    }
-  }
-  return locks;
+// Helper: Should commits be locked based on points
+function shouldLockCommitsBasedOnPoints(currentPoints: number, tags: Tag[], index: number): boolean {
+  // Find which "level range" the current commit is in
+  const commitsPerLevel = 5; // Assuming 5 commits per level
+  const commitLevel = Math.floor(index / commitsPerLevel);
+  // Level 0 (0-4) is always unlocked
+  if (commitLevel === 0) return false;
+  
+  // Otherwise, check if the previous level is achieved
+  const previousLevelPoints = commitLevel * 10; // 10 points per level (simplified)
+  return currentPoints < previousLevelPoints;
 }
 
 const BranchView: React.FC<BranchViewProps> = ({ branch, onEvaluateCommit, isCurrentBranch }) => {
-  // Pegando todas as tags desta branch
-  const tagsForBranch = dataScientistPath.tags.filter(
-    tag => tag.branchId === branch.id
-  );
+  const currentPoints = calculatePoints(dataScientistPath);
+  const tags = dataScientistPath.tags;
   
-  // Obter "níveis" de commits conforme as tags
-  const tagLevels = getTagLevelsForBranch(branch.id);
-
-  // Calcular bloqueios de cada commit
-  const commitLocks = getCommitLocks(branch.commits, tagLevels);
-
-  // Renderiza commits e intercala os componentes TagIllustratedNode quando necessário
-  const items: React.ReactNode[] = [];
+  // Calculate locks for commits
+  const commitLocks: CommitLock[] = branch.commits.map((_, idx) => ({
+    index: idx,
+    locked: shouldLockCommitsBasedOnPoints(currentPoints, tags, idx)
+  }));
+  
+  // Determine if tags should be shown in this branch
+  // For simplicity, we'll show all level tags in the first branch only
+  const shouldShowTags = branch.id === 'qualidade';
+  const tagsToShow = shouldShowTags ? tags : [];
+  
+  // Distribute tags visually throughout the branch commits
+  const commitTagPairs: { commit?: Branch['commits'][0], tag?: Tag, commitIndex: number }[] = [];
+  
+  // First add all commits
   branch.commits.forEach((commit, idx) => {
-    // Checa se esse commit está bloqueado
-    const lock = commitLocks[idx]?.locked ?? false;
-    items.push(
-      <CommitNode
-        key={commit.id}
-        commit={commit}
-        branchColor={branch.color}
-        isLast={idx === branch.commits.length - 1}
-        onEvaluate={evaluation => !lock && onEvaluateCommit(branch.id, commit.id, evaluation)}
-        // Passa disabled e uma tooltip opcional se bloqueado
-        disabled={lock}
-        lockReason={
-          lock ? "Para avaliar este item, conclua todos os anteriores deste nível com 'Sempre'." : undefined
-        }
-      />
-    );
-    // Verificar se após esse commit existe uma tag nesta branch para este índice
-    tagsForBranch.forEach((tag, tagIdx) => {
-      if (tag.commitIndex === idx) {
-        // alterna imagens pelo índice da tag
-        const img = images[tagIdx % images.length];
-        items.push(
-          <TagIllustratedNode
-            key={`tag-${tag.id}`}
-            tag={tag}
-            branch={branch}
-            skillPath={dataScientistPath}
-            imageSrc={img}
-          />
-        );
+    commitTagPairs.push({ commit, commitIndex: idx });
+  });
+  
+  // Now insert tags at logical positions (e.g., every 5 commits)
+  if (shouldShowTags) {
+    tags.forEach((tag, tagIdx) => {
+      // Position tags every 5 commits
+      const position = (tagIdx + 1) * 5 - 1; // Positions 4, 9, 14, 19, 24
+      if (position < branch.commits.length) {
+        commitTagPairs.splice(position + tagIdx + 1, 0, { tag, commitIndex: position });
       }
     });
-  });
-
+  }
+  
   return (
     <div className={`mb-8 ${isCurrentBranch ? 'opacity-100' : 'opacity-60'}`}>
       <div className="flex items-center mb-2">
@@ -152,7 +111,35 @@ const BranchView: React.FC<BranchViewProps> = ({ branch, onEvaluateCommit, isCur
         ></div>
         {/* Commits e tags ilustradas */}
         <div className="relative z-10">
-          {items}
+          {commitTagPairs.map((item, idx) => {
+            if (item.commit) {
+              const commitIdx = item.commitIndex;
+              const lock = commitLocks[commitIdx]?.locked ?? false;
+              return (
+                <CommitNode
+                  key={`commit-${item.commit.id}`}
+                  commit={item.commit}
+                  branchColor={branch.color}
+                  isLast={commitIdx === branch.commits.length - 1}
+                  onEvaluate={evaluation => !lock && onEvaluateCommit(branch.id, item.commit.id, evaluation)}
+                  disabled={lock}
+                  lockReason={
+                    lock ? "Para avaliar este item, alcance o nível anterior com pontos suficientes." : undefined
+                  }
+                />
+              );
+            } else if (item.tag) {
+              return (
+                <TagIllustratedNode
+                  key={`tag-${item.tag.id}`}
+                  tag={item.tag}
+                  skillPath={dataScientistPath}
+                  imageSrc={images[idx % images.length]}
+                />
+              );
+            }
+            return null;
+          })}
         </div>
       </div>
     </div>

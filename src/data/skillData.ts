@@ -17,10 +17,9 @@ export interface Branch {
 export interface Tag {
   id: string;
   name: string;
-  branchId: string;
-  commitIndex: number;
-  pointsRequired: number;
   level: string;
+  pointsRequired: number;
+  description?: string;
 }
 
 export interface SkillPath {
@@ -126,50 +125,44 @@ export const dataScientistPath: SkillPath = {
     {
       id: "ic01",
       name: "IC01",
-      branchId: "qualidade",
-      commitIndex: 4,
+      level: "Iniciante",
       pointsRequired: 10,
-      level: "Iniciante"
+      description: "Nível de senioridade inicial - Demonstra comportamentos básicos em todas as áreas"
     },
     {
       id: "ic02",
       name: "IC02",
-      branchId: "qualidade",
-      commitIndex: 9,
+      level: "Intermediário",
       pointsRequired: 20,
-      level: "Intermediário"
+      description: "Nível de senioridade intermediário - Demonstra comportamentos consistentes em todas as áreas"
     },
     {
       id: "ic03",
       name: "IC03",
-      branchId: "qualidade",
-      commitIndex: 14,
+      level: "Avançado",
       pointsRequired: 30,
-      level: "Avançado"
+      description: "Nível de senioridade avançado - Demonstra comportamentos avançados em todas as áreas"
     },
     {
       id: "ic04",
       name: "IC04",
-      branchId: "qualidade",
-      commitIndex: 19,
+      level: "Especialista",
       pointsRequired: 40,
-      level: "Especialista"
+      description: "Nível de senioridade especialista - Demonstra comportamentos de liderança técnica"
     },
     {
       id: "ic05",
       name: "IC05",
-      branchId: "qualidade",
-      commitIndex: 24,
+      level: "Liderança",
       pointsRequired: 50,
-      level: "Liderança"
+      description: "Nível de senioridade sênior - Demonstra comportamentos de liderança e influência"
     },
     {
       id: "em01",
       name: "EM01",
-      branchId: "engenharia",
-      commitIndex: 4,
+      level: "Gestor",
       pointsRequired: 60,
-      level: "Gestor"
+      description: "Nível de gestão - Demonstra capacidade de gestão de equipes e processos"
     }
   ]
 };

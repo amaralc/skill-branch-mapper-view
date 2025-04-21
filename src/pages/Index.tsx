@@ -1,12 +1,15 @@
+
 import React, { useState } from 'react';
 import { Branch, Commit, dataScientistPath } from '@/data/skillData';
 import BranchView from '@/components/BranchView';
 import ProgressSummary from '@/components/ProgressSummary';
 import { Button } from '@/components/ui/button';
-import { Tag } from 'lucide-react';
+import { GraduationCap } from 'lucide-react';
+
 const Index = () => {
   const [skillPath, setSkillPath] = useState(dataScientistPath);
   const [currentBranchId, setCurrentBranchId] = useState<string | null>(null);
+
   const handleEvaluateCommit = (branchId: string, commitId: string, evaluation: 'never' | 'sometimes' | 'always') => {
     setSkillPath(prev => ({
       ...prev,
@@ -24,23 +27,22 @@ const Index = () => {
       })
     }));
   };
+
   const getBranchName = (branchId: string): string => {
     const branch = skillPath.branches.find(b => b.id === branchId);
     return branch ? branch.name : '';
   };
-  const renderTagsForCurrentBranch = () => {
-    if (!currentBranchId) return null;
-    const tagsForBranch = skillPath.tags.filter(tag => tag.branchId === currentBranchId);
-    if (tagsForBranch.length === 0) return null;
-    const branch = skillPath.branches.find(b => b.id === currentBranchId);
-    if (!branch) return null;
+
+  const renderTagsSection = () => {
+    if (skillPath.tags.length === 0) return null;
+    
     return <div className="mb-6 my-[24px]">
         <h3 className="font-medium text-gray-700 mb-2 flex items-center">
-          <Tag className="mr-2" size={16} />
-          Níveis nesta trilha
+          <GraduationCap className="mr-2" size={16} />
+          Níveis de Senioridade
         </h3>
         <div className="pl-4 border-l-2 border-gray-300">
-          {tagsForBranch.map(tag => <div key={tag.id} className="mb-2 bg-gray-50 p-2 rounded border">
+          {skillPath.tags.map(tag => <div key={tag.id} className="mb-2 bg-gray-50 p-2 rounded border">
               <div className="flex items-center">
                 <span className="font-bold text-sm">{tag.name}</span>
                 <span className="ml-2 text-xs text-gray-600">({tag.level})</span>
@@ -48,10 +50,14 @@ const Index = () => {
               <div className="text-xs mt-1 text-gray-500">
                 Requer {tag.pointsRequired} pontos
               </div>
+              {tag.description && (
+                <div className="text-xs mt-1 text-gray-600">{tag.description}</div>
+              )}
             </div>)}
         </div>
       </div>;
   };
+
   const resetEvaluations = () => {
     setSkillPath(prev => ({
       ...prev,
@@ -64,6 +70,7 @@ const Index = () => {
       }))
     }));
   };
+
   return <>
       <header className="bg-black text-white p-4">
         <div className="max-w-[1200px] mx-auto">
@@ -95,7 +102,7 @@ const Index = () => {
             <Button variant="outline" className="w-full mt-4" onClick={resetEvaluations}>
               Reiniciar Avaliação
             </Button>
-            {renderTagsForCurrentBranch()}
+            {renderTagsSection()}
           </div>
 
           <div className="bg-white rounded-lg shadow p-4">

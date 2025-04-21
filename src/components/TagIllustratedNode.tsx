@@ -1,16 +1,15 @@
 
 import React from 'react';
 import { Tag, Branch, SkillPath, calculatePoints } from '@/data/skillData';
-import { Tag as TagIcon } from 'lucide-react';
+import { GraduationCap } from 'lucide-react';
 
 interface TagIllustratedNodeProps {
   tag: Tag;
-  branch: Branch;
   skillPath: SkillPath;
   imageSrc: string;
 }
 
-const TagIllustratedNode: React.FC<TagIllustratedNodeProps> = ({ tag, branch, skillPath, imageSrc }) => {
+const TagIllustratedNode: React.FC<TagIllustratedNodeProps> = ({ tag, skillPath, imageSrc }) => {
   const currentPoints = calculatePoints(skillPath);
   const isAchieved = currentPoints >= tag.pointsRequired;
 
@@ -34,7 +33,7 @@ const TagIllustratedNode: React.FC<TagIllustratedNodeProps> = ({ tag, branch, sk
         }`}
       >
         <div className="flex items-center">
-          <TagIcon
+          <GraduationCap
             className={isAchieved ? 'text-green-600 mr-2' : 'text-gray-500 mr-2'}
             size={18}
           />
@@ -44,6 +43,7 @@ const TagIllustratedNode: React.FC<TagIllustratedNodeProps> = ({ tag, branch, sk
           </span>
         </div>
         <div className="text-xs mt-1">{tag.level}</div>
+        {tag.description && <div className="text-xs mt-1 text-gray-500">{tag.description}</div>}
       </div>
     </div>
   );
