@@ -1,10 +1,11 @@
+
 import React, { useState } from 'react';
 import { Branch, Commit, dataScientistPath } from '@/data/skillData';
 import BranchView from '@/components/BranchView';
 import ProgressSummary from '@/components/ProgressSummary';
 import { Button } from '@/components/ui/button';
 import { Tag } from 'lucide-react';
-import { ScrollArea } from '@/components/ui/scroll-area';
+
 const Index = () => {
   const [skillPath, setSkillPath] = useState(dataScientistPath);
   const [currentBranchId, setCurrentBranchId] = useState<string | null>(null);
@@ -81,7 +82,10 @@ const Index = () => {
           <div className="md:col-span-1"></div>
           {/* Main content - Tudo agora na coluna central */}
           <div className="md:col-span-2 flex flex-col">
-            <ProgressSummary skillPath={skillPath} />
+            {/* ProgressSummary sticky with blur background */}
+            <div className="sticky top-0 z-20 backdrop-blur-sm bg-white bg-opacity-70 border-b border-gray-200">
+              <ProgressSummary skillPath={skillPath} />
+            </div>
 
             {/* Card de Trilhas de Competência realocado */}
             <div className="bg-white rounded-lg shadow p-4 mb-6">
@@ -104,17 +108,23 @@ const Index = () => {
               {renderTagsForCurrentBranch()}
             </div>
 
-            {/* Detalhes da branch */}
-            <div className="bg-white rounded-lg shadow p-4 flex-1 flex flex-col min-h-[480px] max-h-[80vh]">
+            {/* Detalhes da branch sem scroll interno */}
+            <div className="bg-white rounded-lg shadow p-4 flex-1 min-h-[480px] max-h-[80vh]">
               <h2 className="text-lg font-bold mb-4">
                 {currentBranchId ? `Branch: ${getBranchName(currentBranchId)}` : 'Selecione uma branch para visualizar os commits'}
               </h2>
               
-              {currentBranchId ? <ScrollArea className="flex-1 max-h-[60vh] min-h-[200px] pr-2">
-                  {skillPath.branches.filter(branch => branch.id === currentBranchId).map(branch => <BranchView key={branch.id} branch={branch} onEvaluateCommit={handleEvaluateCommit} isCurrentBranch={true} />)}
-                </ScrollArea> : <div className="text-center py-12 text-gray-500">
+              {currentBranchId ? (
+                <BranchView 
+                  branch={skillPath.branches.find(branch => branch.id === currentBranchId)!}
+                  onEvaluateCommit={handleEvaluateCommit}
+                  isCurrentBranch={true}
+                />
+              ) : (
+                <div className="text-center py-12 text-gray-500">
                   Selecione uma branch no menu ao lado para visualizar os commits
-                </div>}
+                </div>
+              )}
             </div>
           </div>
         </div>
