@@ -1,4 +1,3 @@
-
 // Dados das competências, branches, commits e tags
 
 export interface Commit {
@@ -43,35 +42,35 @@ export const dataScientistPath: SkillPath = {
       name: "Qualidade",
       color: "#4CAF50",
       commits: [
-        { id: "q1", message: "Testa como o usuário final e busca aprender com falhas que poderiam passar despercebidas", description: "", evaluation: null },
-        { id: "q2", message: "Revisa sua entrega com atenção, corrigindo falhas e aprendendo com os próprios erros", description: "", evaluation: null },
-        { id: "q3", message: "Escreve testes úteis e entende melhor o comportamento esperado do sistema", description: "", evaluation: null },
-        { id: "q4", message: "Cria testes para falhas encontradas, aprendendo a evitar regressões com confiança", description: "", evaluation: null },
-        { id: "q5", message: "Participa de revisões e pares com atenção, aprendendo e aplicando padrões de qualidade do time", description: "", evaluation: null },
+        { id: "q1", message: "Testa como o usuário final e busca aprender com falhas que poderiam passar despercebidas", description: "", evaluation: 'never' },
+        { id: "q2", message: "Revisa sua entrega com atenção, corrigindo falhas e aprendendo com os próprios erros", description: "", evaluation: 'never' },
+        { id: "q3", message: "Escreve testes úteis e entende melhor o comportamento esperado do sistema", description: "", evaluation: 'never' },
+        { id: "q4", message: "Cria testes para falhas encontradas, aprendendo a evitar regressões com confiança", description: "", evaluation: 'never' },
+        { id: "q5", message: "Participa de revisões e pares com atenção, aprendendo e aplicando padrões de qualidade do time", description: "", evaluation: 'never' },
 
-        { id: "q6", message: "Garante por conta própria que o usuário final não perceba falhas na experiência", description: "", evaluation: null },
-        { id: "q7", message: "Valida a qualidade da entrega com rigor antes de envolver QA ou revisão técnica", description: "", evaluation: null },
-        { id: "q8", message: "Escreve testes claros e confiáveis para validar os cenários que entrega", description: "", evaluation: null },
-        { id: "q9", message: "Reproduz falhas reportadas com testes e ajuda colegas a evitar regressões", description: "", evaluation: null },
-        { id: "q10", message: "Revisa com critério e orienta colegas em pares para elevar o padrão do time", description: "", evaluation: null },
+        { id: "q6", message: "Garante por conta própria que o usuário final não perceba falhas na experiência", description: "", evaluation: 'never' },
+        { id: "q7", message: "Valida a qualidade da entrega com rigor antes de envolver QA ou revisão técnica", description: "", evaluation: 'never' },
+        { id: "q8", message: "Escreve testes claros e confiáveis para validar os cenários que entrega", description: "", evaluation: 'never' },
+        { id: "q9", message: "Reproduz falhas reportadas com testes e ajuda colegas a evitar regressões", description: "", evaluation: 'never' },
+        { id: "q10", message: "Revisa com critério e orienta colegas em pares para elevar o padrão do time", description: "", evaluation: 'never' },
 
-        { id: "q11", message: "Antecipa falhas que afetariam o usuário e ajusta a entrega antes que elas ocorram", description: "", evaluation: null },
-        { id: "q12", message: "Garante qualidade de ponta a ponta com autonomia, mesmo em cenários ambíguos", description: "", evaluation: null },
-        { id: "q13", message: "Escreve testes completos, legíveis e sustentáveis para o time", description: "", evaluation: null },
-        { id: "q14", message: "Traduz falhas reais em testes robustos e compartilha o aprendizado com o time", description: "", evaluation: null },
-        { id: "q15", message: "Conduz revisões e pares com profundidade, formando o critério técnico do time", description: "", evaluation: null },
+        { id: "q11", message: "Antecipa falhas que afetariam o usuário e ajusta a entrega antes que elas ocorram", description: "", evaluation: 'never' },
+        { id: "q12", message: "Garante qualidade de ponta a ponta com autonomia, mesmo em cenários ambíguos", description: "", evaluation: 'never' },
+        { id: "q13", message: "Escreve testes completos, legíveis e sustentáveis para o time", description: "", evaluation: 'never' },
+        { id: "q14", message: "Traduz falhas reais em testes robustos e compartilha o aprendizado com o time", description: "", evaluation: 'never' },
+        { id: "q15", message: "Conduz revisões e pares com profundidade, formando o critério técnico do time", description: "", evaluation: 'never' },
 
-        { id: "q16", message: "Estabelece práticas que evitam falhas perceptíveis em escala, com foco na experiência do usuário", description: "", evaluation: null },
-        { id: "q17", message: "Cria padrões e ferramentas que tornam a qualidade parte natural do fluxo de entrega", description: "", evaluation: null },
-        { id: "q18", message: "Define critérios e estruturas de teste que fortalecem a confiabilidade do sistema", description: "", evaluation: null },
-        { id: "q19", message: "Sistematiza testes para falhas críticas e orienta prevenção em escala no time", description: "", evaluation: null },
-        { id: "q20", message: "Promove revisões e pares intencionais para desenvolver critério técnico no time", description: "", evaluation: null },
+        { id: "q16", message: "Estabelece práticas que evitam falhas perceptíveis em escala, com foco na experiência do usuário", description: "", evaluation: 'never' },
+        { id: "q17", message: "Cria padrões e ferramentas que tornam a qualidade parte natural do fluxo de entrega", description: "", evaluation: 'never' },
+        { id: "q18", message: "Define critérios e estruturas de teste que fortalecem a confiabilidade do sistema", description: "", evaluation: 'never' },
+        { id: "q19", message: "Sistematiza testes para falhas críticas e orienta prevenção em escala no time", description: "", evaluation: 'never' },
+        { id: "q20", message: "Promove revisões e pares intencionais para desenvolver critério técnico no time", description: "", evaluation: 'never' },
 
-        { id: "q21", message: "Garante que falhas perceptíveis ao usuário sejam raras e evitadas sistemicamente", description: "", evaluation: null },
-        { id: "q22", message: "Influencia times e áreas a tornarem a qualidade parte natural do fluxo de entrega", description: "", evaluation: null },
-        { id: "q23", message: "Evolui critérios de testabilidade e práticas que aumentam a confiança em sistemas críticos", description: "", evaluation: null },
-        { id: "q24", message: "Estabelece padrões de prevenção e resposta a falhas com impacto além do próprio time", description: "", evaluation: null },
-        { id: "q25", message: "Constrói uma cultura de revisão e pairing que eleva o nível técnico da organização", description: "", evaluation: null }
+        { id: "q21", message: "Garante que falhas perceptíveis ao usuário sejam raras e evitadas sistemicamente", description: "", evaluation: 'never' },
+        { id: "q22", message: "Influencia times e áreas a tornarem a qualidade parte natural do fluxo de entrega", description: "", evaluation: 'never' },
+        { id: "q23", message: "Evolui critérios de testabilidade e práticas que aumentam a confiança em sistemas críticos", description: "", evaluation: 'never' },
+        { id: "q24", message: "Estabelece padrões de prevenção e resposta a falhas com impacto além do próprio time", description: "", evaluation: 'never' },
+        { id: "q25", message: "Constrói uma cultura de revisão e pairing que eleva o nível técnico da organização", description: "", evaluation: 'never' }
       ]
     },
     {
@@ -79,11 +78,11 @@ export const dataScientistPath: SkillPath = {
       name: "Segurança",
       color: "#EF4444",
       commits: [
-        { id: "s1", message: "Segue boas práticas de segurança", description: "", evaluation: null },
-        { id: "s2", message: "Conhece principais vulnerabilidades", description: "", evaluation: null },
-        { id: "s3", message: "Realiza revisão de segurança em código", description: "", evaluation: null },
-        { id: "s4", message: "Gerencia segredos e chaves", description: "", evaluation: null },
-        { id: "s5", message: "Monitora e responde a incidentes", description: "", evaluation: null }
+        { id: "s1", message: "Segue boas práticas de segurança", description: "", evaluation: 'never' },
+        { id: "s2", message: "Conhece principais vulnerabilidades", description: "", evaluation: 'never' },
+        { id: "s3", message: "Realiza revisão de segurança em código", description: "", evaluation: 'never' },
+        { id: "s4", message: "Gerencia segredos e chaves", description: "", evaluation: 'never' },
+        { id: "s5", message: "Monitora e responde a incidentes", description: "", evaluation: 'never' }
       ]
     },
     {
@@ -91,11 +90,11 @@ export const dataScientistPath: SkillPath = {
       name: "Engenharia de Software",
       color: "#6366F1",
       commits: [
-        { id: "e1", message: "Domina versionamento com Git", description: "", evaluation: null },
-        { id: "e2", message: "Pratica arquitetura modular", description: "", evaluation: null },
-        { id: "e3", message: "Aplica princípios SOLID", description: "", evaluation: null },
-        { id: "e4", message: "Faz code review construtivo", description: "", evaluation: null },
-        { id: "e5", message: "Participa ativamente de cerimônias técnicas", description: "", evaluation: null }
+        { id: "e1", message: "Domina versionamento com Git", description: "", evaluation: 'never' },
+        { id: "e2", message: "Pratica arquitetura modular", description: "", evaluation: 'never' },
+        { id: "e3", message: "Aplica princípios SOLID", description: "", evaluation: 'never' },
+        { id: "e4", message: "Faz code review construtivo", description: "", evaluation: 'never' },
+        { id: "e5", message: "Participa ativamente de cerimônias técnicas", description: "", evaluation: 'never' }
       ]
     },
     {
@@ -103,11 +102,11 @@ export const dataScientistPath: SkillPath = {
       name: "Entrega Contínua",
       color: "#F59E42",
       commits: [
-        { id: "ec1", message: "Utiliza pipelines de CI/CD", description: "", evaluation: null },
-        { id: "ec2", message: "Gerencia releases de forma incremental", description: "", evaluation: null },
-        { id: "ec3", message: "Implementa observabilidade", description: "", evaluation: null },
-        { id: "ec4", message: "Realiza rollback com segurança", description: "", evaluation: null },
-        { id: "ec5", message: "Valida entregas em ambiente de staging", description: "", evaluation: null }
+        { id: "ec1", message: "Utiliza pipelines de CI/CD", description: "", evaluation: 'never' },
+        { id: "ec2", message: "Gerencia releases de forma incremental", description: "", evaluation: 'never' },
+        { id: "ec3", message: "Implementa observabilidade", description: "", evaluation: 'never' },
+        { id: "ec4", message: "Realiza rollback com segurança", description: "", evaluation: 'never' },
+        { id: "ec5", message: "Valida entregas em ambiente de staging", description: "", evaluation: 'never' }
       ]
     },
     {
@@ -115,11 +114,11 @@ export const dataScientistPath: SkillPath = {
       name: "Especialidade (Full-Stack)",
       color: "#22C55E",
       commits: [
-        { id: "es1", message: "Desenvolve backend escalável", description: "", evaluation: null },
-        { id: "es2", message: "Estrutura frontends modernos", description: "", evaluation: null },
-        { id: "es3", message: "Integra soluções de banco de dados", description: "", evaluation: null },
-        { id: "es4", message: "Realiza deploy full-stack", description: "", evaluation: null },
-        { id: "es5", message: "Interage com times multidisciplinares", description: "", evaluation: null }
+        { id: "es1", message: "Desenvolve backend escalável", description: "", evaluation: 'never' },
+        { id: "es2", message: "Estrutura frontends modernos", description: "", evaluation: 'never' },
+        { id: "es3", message: "Integra soluções de banco de dados", description: "", evaluation: 'never' },
+        { id: "es4", message: "Realiza deploy full-stack", description: "", evaluation: 'never' },
+        { id: "es5", message: "Interage com times multidisciplinares", description: "", evaluation: 'never' }
       ]
     }
   ],
@@ -230,4 +229,3 @@ export const getNextLevel = (path: SkillPath): Tag | null => {
   
   return null;
 };
-

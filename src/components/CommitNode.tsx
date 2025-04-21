@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Commit } from '@/data/skillData';
 import { GitCommitHorizontal } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
@@ -20,16 +20,15 @@ const evaluationValues = [
   { label: 'Sempre', value: 2, color: 'border-green-400 text-green-600' }
 ];
 
-const CommitNode: React.FC<CommitNodeProps> = ({ 
-  commit, 
-  branchColor, 
+const CommitNode: React.FC<CommitNodeProps> = ({
+  commit,
+  branchColor,
   isLast,
   onEvaluate,
   disabled = false,
   lockReason
 }) => {
-  const [touched, setTouched] = useState(false);
-
+  // O value do evaluation sempre determina cor, não há mais ativação/touch
   const getValueFromEval = (evalValue: Commit['evaluation']) => {
     if (evalValue === 'never') return 0;
     if (evalValue === 'sometimes') return 1;
@@ -51,39 +50,36 @@ const CommitNode: React.FC<CommitNodeProps> = ({
     return found ? found.label : '';
   };
 
-  const wasEvaluated = touched || commit.evaluation;
-
-  // Determina classe para borda e texto conforme avaliação, ou vazio antes da interação
+  // Sempre define cor pela avaliação atual
   let borderTextClass = "";
-  if (wasEvaluated && commit.evaluation !== null && commit.evaluation !== undefined) {
+  if (commit.evaluation !== null && commit.evaluation !== undefined) {
     const val = getValueFromEval(commit.evaluation);
     borderTextClass = evaluationValues.find(ev => ev.value === val)?.color ?? '';
   }
 
   const handleValueChange = ([val]: number[]) => {
     if (disabled) return;
-    setTouched(true);
     onEvaluate(getEvalFromValue(val));
   };
 
   return (
     <div className={`flex items-center mb-2 ${isLast ? '' : 'pb-1'}`}>
       {/* Linha e círculo do commit */}
-      <div 
+      <div
         className="w-8 h-8 rounded-full flex items-center justify-center mr-3"
         style={{ backgroundColor: branchColor }}
       >
         <GitCommitHorizontal className="text-white" size={16} />
       </div>
       {/* Caixa do texto, altura reduzida */}
-      <div 
+      <div
         className={`flex-1 flex items-center rounded border bg-white shadow-sm transition-shadow 
           ${borderTextClass}
           ${disabled ? 'opacity-50 pointer-events-auto' : ''}`}
-        style={{ minHeight: "2.25rem", padding: "0.5rem 1rem" }}  // altura reduzida (~36px)
+        style={{ minHeight: "2.25rem", padding: "0.5rem 1rem" }}
       >
         <div className="flex flex-col flex-1 justify-center">
-          <h4 className={`font-medium text-sm leading-tight ${wasEvaluated ? borderTextClass.replace('border-', 'text-') : ''}`}>
+          <h4 className={`font-medium text-sm leading-tight ${borderTextClass.replace('border-', 'text-')}`}>
             {commit.message}
           </h4>
         </div>
@@ -91,11 +87,7 @@ const CommitNode: React.FC<CommitNodeProps> = ({
         <div className="flex flex-col items-end ml-3" style={{ minWidth: 112 }}>
           <Tooltip>
             <TooltipTrigger asChild>
-              <div
-                onMouseEnter={() => {}}
-                onMouseLeave={() => {}}
-                className="w-28"
-              >
+              <div className="w-28">
                 <Slider
                   min={0}
                   max={2}
