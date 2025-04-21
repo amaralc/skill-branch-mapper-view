@@ -2,67 +2,80 @@
 import React from 'react';
 import { Commit } from '@/data/skillData';
 import { GitCommitHorizontal } from 'lucide-react';
+import { Slider } from '@/components/ui/slider';
 
 interface CommitNodeProps {
   commit: Commit;
   branchColor: string;
-  onClick: () => void;
   isLast: boolean;
+  onEvaluate: (evaluation: 'never' | 'sometimes' | 'always') => void;
 }
+
+const evaluationValues = [
+  { label: 'Nunca', value: 0, color: 'bg-red-400' },
+  { label: 'Às Vezes', value: 1, color: 'bg-yellow-400' },
+  { label: 'Sempre', value: 2, color: 'bg-green-400' }
+];
 
 const CommitNode: React.FC<CommitNodeProps> = ({ 
   commit, 
   branchColor, 
-  onClick,
-  isLast
+  isLast,
+  onEvaluate
 }) => {
-  const getEvaluationStyle = () => {
-    switch(commit.evaluation) {
-      case 'never':
-        return 'bg-red-100 border-red-500 text-red-700';
-      case 'sometimes':
-        return 'bg-yellow-100 border-yellow-500 text-yellow-700';
-      case 'always':
-        return 'bg-green-100 border-green-500 text-green-700';
-      default:
-        return 'bg-white border-gray-300 text-gray-700';
-    }
+  // Map de evaluation para slider value
+  const getValueFromEval = (evalValue: Commit['evaluation']) => {
+    if (evalValue === 'never') return 0;
+    if (evalValue === 'sometimes') return 1;
+    if (evalValue === 'always') return 2;
+    return 0;
   };
 
-  const getEvaluationText = () => {
-    switch(commit.evaluation) {
-      case 'never':
-        return '0 - Nunca';
-      case 'sometimes':
-        return '1 - Às vezes';
-      case 'always':
-        return '2 - Sempre';
-      default:
-        return 'Não avaliado';
-    }
+  const getEvalFromValue = (sliderVal: number): 'never' | 'sometimes' | 'always' => {
+    if (sliderVal === 0) return 'never';
+    if (sliderVal === 1) return 'sometimes';
+    return 'always';
   };
+
+  const sliderValue = [getValueFromEval(commit.evaluation)];
 
   return (
-    <div className={`flex items-center mb-4 ${isLast ? '' : 'pb-2'}`}>
+    <div className={`flex items-center mb-2 ${isLast ? '' : 'pb-1'}`}>
+      {/* Linha e círculo do commit */}
       <div 
-        className="w-8 h-8 rounded-full flex items-center justify-center mr-3 cursor-pointer"
+        className="w-8 h-8 rounded-full flex items-center justify-center mr-3"
         style={{ backgroundColor: branchColor }}
-        onClick={onClick}
       >
         <GitCommitHorizontal className="text-white" size={16} />
       </div>
-      
+      {/* Caixa do texto, altura reduzida */}
       <div 
-        className={`flex-1 rounded border ${getEvaluationStyle()} cursor-pointer hover:shadow transition-shadow`}
-        onClick={onClick}
-        style={{ height: '3rem', padding: '0.75rem 1rem' }} // Half the original height with adjusted padding
+        className={`flex-1 flex items-center rounded border bg-white border-gray-300 text-gray-700 shadow-sm transition-shadow`}
+        style={{ minHeight: "2.25rem", padding: "0.5rem 1rem" }}  // altura reduzida (~36px)
       >
-        <div className="flex justify-between items-center h-full">
-          <div>
-            <h4 className="font-medium text-sm">{commit.message}</h4>
-          </div>
-          <div className="text-xs font-medium">
-            {getEvaluationText()}
+        <div className="flex flex-col flex-1 justify-center">
+          <h4 className="font-medium text-sm leading-tight">{commit.message}</h4>
+        </div>
+        {/* Inline slider */}
+        <div className="flex flex-col items-end ml-3" style={{ minWidth: 130 }}>
+          <Slider
+            min={0}
+            max={2}
+            step={1}
+            value={sliderValue}
+            onValueChange={([val]) => onEvaluate(getEvalFromValue(val))}
+            className="w-28"
+          />
+          <div className="flex justify-between w-full mt-1 text-xs">
+            {evaluationValues.map(ev => (
+              <span
+                key={ev.label}
+                className={`text-center ${getValueFromEval(commit.evaluation) === ev.value ? ev.color + ' text-white font-bold px-1 rounded' : 'text-gray-500'}`}
+                style={{ width: 32 }}
+              >
+                {ev.label}
+              </span>
+            ))}
           </div>
         </div>
       </div>
@@ -71,4 +84,3 @@ const CommitNode: React.FC<CommitNodeProps> = ({
 };
 
 export default CommitNode;
-

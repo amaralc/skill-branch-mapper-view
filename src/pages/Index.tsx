@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { Branch, Commit, dataScientistPath } from '@/data/skillData';
 import BranchView from '@/components/BranchView';
-import EvaluationModal from '@/components/EvaluationModal';
 import ProgressSummary from '@/components/ProgressSummary';
 import { Button } from '@/components/ui/button';
 import { Tag } from 'lucide-react';
@@ -10,46 +9,22 @@ import { Tag } from 'lucide-react';
 const Index = () => {
   const [skillPath, setSkillPath] = useState(dataScientistPath);
   const [currentBranchId, setCurrentBranchId] = useState<string | null>(null);
-  const [selectedCommit, setSelectedCommit] = useState<{
-    commit: Commit;
-    branchId: string;
-  } | null>(null);
-  const [modalOpen, setModalOpen] = useState(false);
 
-  const handleCommitClick = (branchId: string, commitId: string) => {
-    const branch = skillPath.branches.find(b => b.id === branchId);
-    if (!branch) return;
-    
-    const commit = branch.commits.find(c => c.id === commitId);
-    if (!commit) return;
-    
-    setSelectedCommit({ commit, branchId });
-    setModalOpen(true);
-  };
-
-  const handleEvaluate = (evaluation: 'never' | 'sometimes' | 'always') => {
-    if (!selectedCommit) return;
-    
-    const updatedSkillPath = {
-      ...skillPath,
-      branches: skillPath.branches.map(branch => {
-        if (branch.id === selectedCommit.branchId) {
+  const handleEvaluateCommit = (branchId: string, commitId: string, evaluation: 'never' | 'sometimes' | 'always') => {
+    setSkillPath(prev => ({
+      ...prev,
+      branches: prev.branches.map(branch => {
+        if (branch.id === branchId) {
           return {
             ...branch,
-            commits: branch.commits.map(commit => {
-              if (commit.id === selectedCommit.commit.id) {
-                return { ...commit, evaluation };
-              }
-              return commit;
-            }),
+            commits: branch.commits.map(commit =>
+              commit.id === commitId ? { ...commit, evaluation } : commit
+            ),
           };
         }
         return branch;
       }),
-    };
-    
-    setSkillPath(updatedSkillPath);
-    setModalOpen(false);
+    }));
   };
 
   const getBranchName = (branchId: string): string => {
@@ -90,18 +65,16 @@ const Index = () => {
   };
 
   const resetEvaluations = () => {
-    const updatedSkillPath = {
-      ...skillPath,
-      branches: skillPath.branches.map(branch => ({
+    setSkillPath(prev => ({
+      ...prev,
+      branches: prev.branches.map(branch => ({
         ...branch,
         commits: branch.commits.map(commit => ({
           ...commit,
           evaluation: null
         }))
       }))
-    };
-    
-    setSkillPath(updatedSkillPath);
+    }));
   };
 
   return (
@@ -174,7 +147,7 @@ const Index = () => {
                     <BranchView
                       key={branch.id}
                       branch={branch}
-                      onCommitClick={handleCommitClick}
+                      onEvaluateCommit={handleEvaluateCommit}
                       isCurrentBranch={true}
                     />
                   ))
@@ -187,16 +160,6 @@ const Index = () => {
           </div>
         </div>
       </main>
-      
-      {selectedCommit && (
-        <EvaluationModal
-          open={modalOpen}
-          onOpenChange={setModalOpen}
-          commit={selectedCommit.commit}
-          branchName={getBranchName(selectedCommit.branchId)}
-          onEvaluate={handleEvaluate}
-        />
-      )}
     </div>
   );
 };

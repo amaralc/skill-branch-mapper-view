@@ -1,15 +1,15 @@
 
 import React from 'react';
-import { Branch, Commit } from '@/data/skillData';
+import { Branch } from '@/data/skillData';
 import CommitNode from './CommitNode';
 
 interface BranchViewProps {
   branch: Branch;
-  onCommitClick: (branchId: string, commitId: string) => void;
+  onEvaluateCommit: (branchId: string, commitId: string, evaluation: 'never' | 'sometimes' | 'always') => void;
   isCurrentBranch: boolean;
 }
 
-const BranchView: React.FC<BranchViewProps> = ({ branch, onCommitClick, isCurrentBranch }) => {
+const BranchView: React.FC<BranchViewProps> = ({ branch, onEvaluateCommit, isCurrentBranch }) => {
   return (
     <div className={`mb-8 ${isCurrentBranch ? 'opacity-100' : 'opacity-60'}`}>
       <div className="flex items-center mb-2">
@@ -35,8 +35,8 @@ const BranchView: React.FC<BranchViewProps> = ({ branch, onCommitClick, isCurren
               key={commit.id}
               commit={commit}
               branchColor={branch.color}
-              onClick={() => onCommitClick(branch.id, commit.id)}
               isLast={index === branch.commits.length - 1}
+              onEvaluate={(evaluation) => onEvaluateCommit(branch.id, commit.id, evaluation)}
             />
           ))}
         </div>
