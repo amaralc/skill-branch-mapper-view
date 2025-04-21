@@ -132,9 +132,7 @@ const Index = () => {
 
       {/* Seletor de carreira */}
       <div className="max-w-[1200px] mx-auto py-5 flex items-center gap-4 px-[16px]">
-        <div className="w-[220px] text-base font-medium">
-          Selecione a carreira:
-        </div>
+        
         <Select value={selectedCareerId} onValueChange={handleCareerChange}>
           <SelectTrigger className="w-[250px]">
             <SelectValue placeholder="Escolha a carreira" />
