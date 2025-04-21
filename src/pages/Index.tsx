@@ -16,8 +16,11 @@ const Index = () => {
     skillPath: path
   }));
 
-  const [selectedCareerId, setSelectedCareerId] = useState(careerOptions[0].id);
-  const [skillPath, setSkillPath] = useState<SkillPath>(careerOptions[0].skillPath);
+  // Busca a carreira Engenharia de Software para padrão
+  const defaultCareer = careerOptions.find(path => path.label === "Engenharia de Software") || careerOptions[0];
+
+  const [selectedCareerId, setSelectedCareerId] = useState(defaultCareer.id);
+  const [skillPath, setSkillPath] = useState<SkillPath>(defaultCareer.skillPath);
   const [currentBranchId, setCurrentBranchId] = useState<string | null>(null);
 
   // Quando carreira mudar, redefinir a trilha e branch selecionada
@@ -173,3 +176,4 @@ const Index = () => {
   );
 };
 export default Index;
+
