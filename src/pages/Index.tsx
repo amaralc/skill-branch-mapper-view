@@ -5,10 +5,79 @@ import BranchView from '@/components/BranchView';
 import ProgressSummary from '@/components/ProgressSummary';
 import { Button } from '@/components/ui/button';
 import { GraduationCap } from 'lucide-react';
+import { Select, SelectGroup, SelectTrigger, SelectContent, SelectItem, SelectValue, SelectLabel } from '@/components/ui/select';
+
+// Mock da trilha de Gestão de Produtos (substitua com dados reais depois)
+const productManagementPath = {
+  name: "Gestão de Produtos",
+  branches: [
+    {
+      id: "prod1",
+      name: "Fundamentos de Gestão de Produtos",
+      color: "#f97316",
+      commits: [
+        {
+          id: "pcommit1",
+          name: "Entendimento do usuário",
+          description: "Identificar e compreender as necessidades do usuário.",
+          evaluation: null,
+        },
+        {
+          id: "pcommit2",
+          name: "Visão de Produto",
+          description: "Definir a visão do produto e alinhar ao negócio.",
+          evaluation: null,
+        },
+      ],
+    },
+    // Outras branches podem ser adicionadas
+  ],
+  tags: [
+    {
+      id: "nivel1",
+      name: "Nível 1 - Júnior",
+      level: "Júnior",
+      pointsRequired: 2,
+      description: "Conhecimento inicial sobre produto.",
+    },
+    {
+      id: "nivel2",
+      name: "Nível 2 - Pleno",
+      level: "Pleno",
+      pointsRequired: 4,
+      description: "Experiência intermediária em gestão de produtos.",
+    },
+  ],
+};
+
+const careerOptions = [
+  {
+    id: 'data-scientist',
+    label: 'Engenharia de Software',
+    value: 'data-scientist',
+    skillPath: dataScientistPath,
+  },
+  {
+    id: 'product-management',
+    label: 'Gestão de Produtos',
+    value: 'product-management',
+    skillPath: productManagementPath,
+  },
+  // Adicione mais opções aqui futuramente
+];
 
 const Index = () => {
-  const [skillPath, setSkillPath] = useState(dataScientistPath);
+  const [selectedCareerId, setSelectedCareerId] = useState(careerOptions[0].id);
+  const [skillPath, setSkillPath] = useState(careerOptions[0].skillPath);
   const [currentBranchId, setCurrentBranchId] = useState<string | null>(null);
+
+  // Quando carreira mudar, redefinir a trilha e branch selecionada
+  const handleCareerChange = (careerId: string) => {
+    const found = careerOptions.find(x => x.id === careerId);
+    setSelectedCareerId(careerId);
+    setSkillPath(found ? found.skillPath : careerOptions[0].skillPath);
+    setCurrentBranchId(null);
+  };
 
   const handleEvaluateCommit = (branchId: string, commitId: string, evaluation: 'never' | 'sometimes' | 'always') => {
     setSkillPath(prev => ({
@@ -80,6 +149,26 @@ const Index = () => {
           </p>
         </div>
       </header>
+
+      {/* Seletor de carreira */}
+      <div className="max-w-[1200px] mx-auto py-5 flex items-center gap-4">
+        <div className="w-[220px] text-base font-medium">
+          Selecione a carreira:
+        </div>
+        <Select value={selectedCareerId} onValueChange={handleCareerChange}>
+          <SelectTrigger className="w-[250px]">
+            <SelectValue placeholder="Escolha a carreira" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Carreira</SelectLabel>
+              {careerOptions.map(opt => (
+                <SelectItem value={opt.id} key={opt.id}>{opt.label}</SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
 
       <main className="max-w-[1200px] mx-auto py-0 px-0">
         <ProgressSummary skillPath={skillPath} />
