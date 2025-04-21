@@ -1,8 +1,17 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Commit } from '@/data/skillData';
-import { GitCommitHorizontal } from 'lucide-react';
+import { GitCommitHorizontal, BookOpen } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
+import {
+  Drawer,
+  DrawerContent,
+  DrawerTrigger,
+  DrawerHeader,
+  DrawerTitle,
+} from '@/components/ui/drawer';
+import { Checkbox } from "@/components/ui/checkbox"; // Assume-se que existe um Checkbox do shadcn/ui
+// Se não existir, pode ser trocado por input type="checkbox"
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface CommitNodeProps {
@@ -20,6 +29,14 @@ const evaluationValues = [
   { label: 'Sempre', value: 2, color: 'border-green-400 text-green-600' }
 ];
 
+// Lista fake de referências do drawer
+const references = [
+  { id: 1, label: "Livro: Testes Automatizados Modernos (Cap. 3 e 4)" },
+  { id: 2, label: "Artigo: Como Escrever Testes Úteis - Dev.to" },
+  { id: 3, label: "Curso: Testes em Software na Prática - Udemy" },
+  { id: 4, label: "Workshop: Revisão de Código Colaborativa" },
+];
+
 const CommitNode: React.FC<CommitNodeProps> = ({
   commit,
   branchColor,
@@ -28,11 +45,11 @@ const CommitNode: React.FC<CommitNodeProps> = ({
   disabled = false,
   lockReason
 }) => {
-  // O value do evaluation sempre determina cor, não há mais ativação/touch
+  // O valor do slider depende da avaliação, default é "never" (0)
   const getValueFromEval = (evalValue: Commit['evaluation']) => {
-    if (evalValue === 'never') return 0;
     if (evalValue === 'sometimes') return 1;
     if (evalValue === 'always') return 2;
+    // default para nunca avaliado OU null/undefined, sempre "nunca"
     return 0;
   };
 
@@ -42,6 +59,7 @@ const CommitNode: React.FC<CommitNodeProps> = ({
     return 'always';
   };
 
+  // Sempre parte de "nunca" se commit.evaluation for null/undefined
   const sliderValue = [getValueFromEval(commit.evaluation)];
 
   const getCurrentLabel = () => {
@@ -50,9 +68,9 @@ const CommitNode: React.FC<CommitNodeProps> = ({
     return found ? found.label : '';
   };
 
-  // Sempre define cor pela avaliação atual
+  // Aplica classes da cor da avaliação, sempre!
   let borderTextClass = "";
-  if (commit.evaluation !== null && commit.evaluation !== undefined) {
+  {
     const val = getValueFromEval(commit.evaluation);
     borderTextClass = evaluationValues.find(ev => ev.value === val)?.color ?? '';
   }
@@ -60,6 +78,16 @@ const CommitNode: React.FC<CommitNodeProps> = ({
   const handleValueChange = ([val]: number[]) => {
     if (disabled) return;
     onEvaluate(getEvalFromValue(val));
+  };
+
+  // Estado local para checkboxes do drawer só para mostrar controles básicos
+  const [checkedRefs, setCheckedRefs] = useState<{ [id: number]: boolean }>({});
+
+  const handleCheckRef = (id: number) => {
+    setCheckedRefs(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
   };
 
   return (
@@ -83,6 +111,45 @@ const CommitNode: React.FC<CommitNodeProps> = ({
             {commit.message}
           </h4>
         </div>
+
+        {/* Ícone do drawer (referências) - à esquerda do slider */}
+        <div className="flex items-center mx-2">
+          <Drawer>
+            <DrawerTrigger asChild>
+              <button
+                className={`p-1 border-2 rounded text-gray-700 hover:text-blue-600 hover:border-blue-400 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                aria-label="Ver referências sugeridas"
+                type="button"
+              >
+                <BookOpen size={20} />
+              </button>
+            </DrawerTrigger>
+            <DrawerContent>
+              <DrawerHeader>
+                <DrawerTitle>Referências para se aprimorar</DrawerTitle>
+              </DrawerHeader>
+              <div className="p-4 pt-2">
+                <div className="mb-2 text-sm text-gray-600">Considere estudar/utilizar:</div>
+                <ul className="space-y-3">
+                  {references.map(ref =>
+                    <li key={ref.id} className="flex items-center gap-2">
+                      {/* Checkbox */}
+                      <input
+                        type="checkbox"
+                        checked={!!checkedRefs[ref.id]}
+                        onChange={() => handleCheckRef(ref.id)}
+                        className="accent-blue-500 w-4 h-4 rounded border border-gray-300"
+                        id={`refcheck-${ref.id}`}
+                      />
+                      <label htmlFor={`refcheck-${ref.id}`} className="text-sm">{ref.label}</label>
+                    </li>
+                  )}
+                </ul>
+              </div>
+            </DrawerContent>
+          </Drawer>
+        </div>
+
         {/* Inline slider alinhado à direita com tooltip */}
         <div className="flex flex-col items-end ml-3" style={{ minWidth: 112 }}>
           <Tooltip>
@@ -113,4 +180,3 @@ const CommitNode: React.FC<CommitNodeProps> = ({
 };
 
 export default CommitNode;
-
