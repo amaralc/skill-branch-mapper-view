@@ -66,7 +66,7 @@ const Index = () => {
       }))
     }));
   };
-  return <div className="min-h-screen bg-gray-100">
+  return <>
       <header className="bg-black text-white p-4">
         <div className="container mx-auto">
           <h1 className="text-xl font-mono font-bold">SKILL BRANCH MAPPER</h1>
@@ -129,6 +129,6 @@ const Index = () => {
           </div>
         </div>
       </main>
-    </div>;
+    </>;
 };
 export default Index;
