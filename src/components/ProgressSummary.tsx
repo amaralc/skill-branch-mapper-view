@@ -18,7 +18,7 @@ const ProgressSummary: React.FC<ProgressSummaryProps> = ({
     boxShadow: '0 8px 12px -4px rgba(255,255,255,0.9)',
     borderBottom: '1.5px solid rgba(180,180,180,0.15)'
   }}>
-      <div className="p-4 border-none shadow-[0_12px_10px_rgba(255,255,255,0.9)]">
+      <div className="p-4 border-none shadow-[0_20px_20px_white]">
         <h2 className="text-lg font-bold mb-2">Progresso da Avaliação</h2>
 
         <div className="mb-4">
