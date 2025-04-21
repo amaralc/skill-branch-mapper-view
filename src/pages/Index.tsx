@@ -1,10 +1,11 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Branch, Commit, dataScientistPath } from '@/data/skillData';
 import BranchView from '@/components/BranchView';
 import ProgressSummary from '@/components/ProgressSummary';
 import { Button } from '@/components/ui/button';
 import { Tag } from 'lucide-react';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const Index = () => {
   const [skillPath, setSkillPath] = useState(dataScientistPath);
@@ -130,10 +131,9 @@ const Index = () => {
           </div>
           
           {/* Main content - Branch commits */}
-          <div className="md:col-span-2">
+          <div className="md:col-span-2 flex flex-col">
             <ProgressSummary skillPath={skillPath} />
-            
-            <div className="bg-white rounded-lg shadow p-4">
+            <div className="bg-white rounded-lg shadow p-4 flex-1 flex flex-col min-h-[480px] max-h-[80vh]">
               <h2 className="text-lg font-bold mb-4">
                 {currentBranchId 
                   ? `Branch: ${getBranchName(currentBranchId)}` 
@@ -141,16 +141,18 @@ const Index = () => {
               </h2>
               
               {currentBranchId ? (
-                skillPath.branches
-                  .filter(branch => branch.id === currentBranchId)
-                  .map(branch => (
-                    <BranchView
-                      key={branch.id}
-                      branch={branch}
-                      onEvaluateCommit={handleEvaluateCommit}
-                      isCurrentBranch={true}
-                    />
-                  ))
+                <ScrollArea className="flex-1 max-h-[60vh] min-h-[200px] pr-2">
+                  {skillPath.branches
+                    .filter(branch => branch.id === currentBranchId)
+                    .map(branch => (
+                      <BranchView
+                        key={branch.id}
+                        branch={branch}
+                        onEvaluateCommit={handleEvaluateCommit}
+                        isCurrentBranch={true}
+                      />
+                    ))}
+                </ScrollArea>
               ) : (
                 <div className="text-center py-12 text-gray-500">
                   Selecione uma branch no menu ao lado para visualizar os commits
@@ -165,3 +167,4 @@ const Index = () => {
 };
 
 export default Index;
+
