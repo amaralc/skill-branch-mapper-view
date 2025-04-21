@@ -159,6 +159,7 @@ const Index = () => {
                 branch={skillPath.branches.find(branch => branch.id === currentBranchId)!}
                 onEvaluateCommit={handleEvaluateCommit}
                 isCurrentBranch={true}
+                skillPath={skillPath}
               />
             ) : (
               <div className="text-center py-12 text-gray-500">

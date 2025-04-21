@@ -1,8 +1,8 @@
+
 import React from 'react';
-import { Branch, SkillPath, Tag } from '@/data/skillData';
+import { Branch, SkillPath, Tag, careerPaths, calculatePoints } from '@/data/skillData';
 import CommitNode from './CommitNode';
 import TagIllustratedNode from './TagIllustratedNode';
-import { dataScientistPath, calculatePoints } from '@/data/skillData';
 
 // Lista de imagens placeholder para as tags
 const images = [
@@ -21,6 +21,7 @@ interface BranchViewProps {
   branch: Branch;
   onEvaluateCommit: (branchId: string, commitId: string, evaluation: 'never' | 'sometimes' | 'always') => void;
   isCurrentBranch: boolean;
+  skillPath: SkillPath;
 }
 
 interface CommitLock {
@@ -59,9 +60,9 @@ function shouldLockCommitsBasedOnPoints(currentPoints: number, tags: Tag[], inde
   return currentPoints < previousLevelPoints;
 }
 
-const BranchView: React.FC<BranchViewProps> = ({ branch, onEvaluateCommit, isCurrentBranch }) => {
-  const currentPoints = calculatePoints(dataScientistPath);
-  const tags = dataScientistPath.tags;
+const BranchView: React.FC<BranchViewProps> = ({ branch, onEvaluateCommit, isCurrentBranch, skillPath }) => {
+  const currentPoints = calculatePoints(skillPath);
+  const tags = skillPath.tags;
   
   // Calculate locks for commits
   const commitLocks: CommitLock[] = branch.commits.map((_, idx) => ({
@@ -133,7 +134,7 @@ const BranchView: React.FC<BranchViewProps> = ({ branch, onEvaluateCommit, isCur
                 <TagIllustratedNode
                   key={`tag-${item.tag.id}`}
                   tag={item.tag}
-                  skillPath={dataScientistPath}
+                  skillPath={skillPath}
                   imageSrc={images[idx % images.length]}
                 />
               );
