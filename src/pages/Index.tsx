@@ -1,5 +1,5 @@
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Branch, Commit, dataScientistPath } from '@/data/skillData';
 import BranchView from '@/components/BranchView';
 import ProgressSummary from '@/components/ProgressSummary';
@@ -91,8 +91,13 @@ const Index = () => {
       
       <main className="container mx-auto py-6 px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Left sidebar - Branch selector */}
-          <div className="md:col-span-1">
+          {/* Left sidebar - vazio no desktop, mas manter estrutura para responsividade */}
+          <div className="md:col-span-1"></div>
+          {/* Main content - Tudo agora na coluna central */}
+          <div className="md:col-span-2 flex flex-col">
+            <ProgressSummary skillPath={skillPath} />
+
+            {/* Card de Trilhas de Competência realocado */}
             <div className="bg-white rounded-lg shadow p-4 mb-6">
               <h2 className="text-lg font-bold mb-3">Trilhas de Competência</h2>
               <div className="space-y-2">
@@ -117,22 +122,17 @@ const Index = () => {
                   </button>
                 ))}
               </div>
+              <Button 
+                variant="outline" 
+                className="w-full mt-4"
+                onClick={resetEvaluations}
+              >
+                Reiniciar Avaliação
+              </Button>
+              {renderTagsForCurrentBranch()}
             </div>
-            
-            <Button 
-              variant="outline" 
-              className="w-full mb-4"
-              onClick={resetEvaluations}
-            >
-              Reiniciar Avaliação
-            </Button>
-            
-            {renderTagsForCurrentBranch()}
-          </div>
-          
-          {/* Main content - Branch commits */}
-          <div className="md:col-span-2 flex flex-col">
-            <ProgressSummary skillPath={skillPath} />
+
+            {/* Detalhes da branch */}
             <div className="bg-white rounded-lg shadow p-4 flex-1 flex flex-col min-h-[480px] max-h-[80vh]">
               <h2 className="text-lg font-bold mb-4">
                 {currentBranchId 
@@ -167,4 +167,3 @@ const Index = () => {
 };
 
 export default Index;
-
