@@ -9,9 +9,8 @@ import {
   DrawerTrigger,
   DrawerHeader,
   DrawerTitle,
+  DrawerDescription,
 } from '@/components/ui/drawer';
-import { Checkbox } from "@/components/ui/checkbox"; // Assume-se que existe um Checkbox do shadcn/ui
-// Se não existir, pode ser trocado por input type="checkbox"
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface CommitNodeProps {
@@ -114,7 +113,7 @@ const CommitNode: React.FC<CommitNodeProps> = ({
 
         {/* Ícone do drawer (referências) - à esquerda do slider */}
         <div className="flex items-center mx-2">
-          <Drawer>
+          <Drawer shouldScaleBackground={false}>
             <DrawerTrigger asChild>
               <button
                 className={`p-1 rounded text-gray-700 hover:text-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500`}
@@ -124,12 +123,14 @@ const CommitNode: React.FC<CommitNodeProps> = ({
                 <BookOpen size={20} />
               </button>
             </DrawerTrigger>
-            <DrawerContent>
+            <DrawerContent className="bg-white">
               <DrawerHeader>
                 <DrawerTitle>Referências para se aprimorar</DrawerTitle>
+                <DrawerDescription className="text-gray-600">
+                  Material de estudo para desenvolver esta competência
+                </DrawerDescription>
               </DrawerHeader>
-              <div className="p-4 pt-2">
-                <div className="mb-2 text-sm text-gray-600">Considere estudar/utilizar:</div>
+              <div className="p-4 pt-0">
                 <ul className="space-y-3">
                   {references.map(ref =>
                     <li key={ref.id} className="flex items-center gap-2">
