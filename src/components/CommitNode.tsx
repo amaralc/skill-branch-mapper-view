@@ -15,9 +15,9 @@ interface CommitNodeProps {
 }
 
 const evaluationValues = [
-  { label: 'Nunca', value: 0, color: 'bg-red-400' },
-  { label: 'Às Vezes', value: 1, color: 'bg-yellow-400' },
-  { label: 'Sempre', value: 2, color: 'bg-green-400' }
+  { label: 'Nunca', value: 0, color: 'bg-red-400', bg: 'bg-[#ea384c]/20' },
+  { label: 'Às Vezes', value: 1, color: 'bg-yellow-400', bg: 'bg-yellow-100' },
+  { label: 'Sempre', value: 2, color: 'bg-green-400', bg: 'bg-green-100' }
 ];
 
 const CommitNode: React.FC<CommitNodeProps> = ({ 
@@ -28,8 +28,8 @@ const CommitNode: React.FC<CommitNodeProps> = ({
   disabled = false,
   lockReason
 }) => {
-  // Estado para controlar hover e valor selecionado
-  const [isSliderHovered, setIsSliderHovered] = useState(false);
+  // Novo estado para saber se foi avaliado pelo usuário localmente
+  const [touched, setTouched] = useState(false);
 
   // Map de evaluation para slider value
   const getValueFromEval = (evalValue: Commit['evaluation']) => {
@@ -54,6 +54,23 @@ const CommitNode: React.FC<CommitNodeProps> = ({
     return found ? found.label : '';
   };
 
+  // Detecta se o commit já foi avaliado localmente ou globalmente
+  const wasEvaluated = touched || commit.evaluation;
+
+  // Define cor do fundo após avaliação
+  let bgColor = "";
+  if (wasEvaluated && commit.evaluation !== null && commit.evaluation !== undefined) {
+    const val = getValueFromEval(commit.evaluation);
+    bgColor = evaluationValues.find(ev => ev.value === val)?.bg ?? '';
+  }
+
+  // Handler para slider: registra toque local + chama onEvaluate do pai
+  const handleValueChange = ([val]: number[]) => {
+    if (disabled) return;
+    setTouched(true);
+    onEvaluate(getEvalFromValue(val));
+  };
+
   return (
     <div className={`flex items-center mb-2 ${isLast ? '' : 'pb-1'}`}>
       {/* Linha e círculo do commit */}
@@ -65,7 +82,8 @@ const CommitNode: React.FC<CommitNodeProps> = ({
       </div>
       {/* Caixa do texto, altura reduzida */}
       <div 
-        className={`flex-1 flex items-center rounded border bg-white border-gray-300 text-gray-700 shadow-sm transition-shadow 
+        className={`flex-1 flex items-center rounded transition-shadow
+        ${bgColor} border bg-white border-gray-300 text-gray-700 shadow-sm
         ${disabled ? 'opacity-50 pointer-events-auto' : ''}`}
         style={{ minHeight: "2.25rem", padding: "0.5rem 1rem" }}  // altura reduzida (~36px)
       >
@@ -77,8 +95,8 @@ const CommitNode: React.FC<CommitNodeProps> = ({
           <Tooltip>
             <TooltipTrigger asChild>
               <div
-                onMouseEnter={() => setIsSliderHovered(true)}
-                onMouseLeave={() => setIsSliderHovered(false)}
+                onMouseEnter={() => {}}
+                onMouseLeave={() => {}}
                 className="w-28"
               >
                 <Slider
@@ -86,7 +104,7 @@ const CommitNode: React.FC<CommitNodeProps> = ({
                   max={2}
                   step={1}
                   value={sliderValue}
-                  onValueChange={([val]) => !disabled && onEvaluate(getEvalFromValue(val))}
+                  onValueChange={handleValueChange}
                   className={`w-28 ${disabled ? 'cursor-not-allowed' : ''}`}
                   disabled={disabled}
                 />
