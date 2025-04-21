@@ -79,11 +79,11 @@ export const dataScientistPath: SkillPath = {
       name: "Segurança",
       color: "#EF4444",
       commits: [
-        { id: "s1", message: "Segue boas práticas de segurança", description: "Aplica conceitos como validação de input e gerenciamento seguro de senhas.", evaluation: null },
-        { id: "s2", message: "Conhece principais vulnerabilidades", description: "Está atento a OWASP Top 10 e ao impacto de vulnerabilidades comuns.", evaluation: null },
-        { id: "s3", message: "Realiza revisão de segurança em código", description: "Participa de code reviews com foco em segurança.", evaluation: null },
-        { id: "s4", message: "Gerencia segredos e chaves", description: "Evita expor chaves e utiliza cofres de segredos (ex: Vault, AWS Secrets).", evaluation: null },
-        { id: "s5", message: "Monitora e responde a incidentes", description: "Está apto a identificar e agir frente a possíveis ameaças no sistema.", evaluation: null }
+        { id: "s1", message: "Segue boas práticas de segurança", description: "", evaluation: null },
+        { id: "s2", message: "Conhece principais vulnerabilidades", description: "", evaluation: null },
+        { id: "s3", message: "Realiza revisão de segurança em código", description: "", evaluation: null },
+        { id: "s4", message: "Gerencia segredos e chaves", description: "", evaluation: null },
+        { id: "s5", message: "Monitora e responde a incidentes", description: "", evaluation: null }
       ]
     },
     {
@@ -91,11 +91,11 @@ export const dataScientistPath: SkillPath = {
       name: "Engenharia de Software",
       color: "#6366F1",
       commits: [
-        { id: "e1", message: "Domina versionamento com Git", description: "Utiliza ramificações, pull requests e resolves conflitos.", evaluation: null },
-        { id: "e2", message: "Pratica arquitetura modular", description: "Divide aplicações em módulos/componentes reutilizáveis.", evaluation: null },
-        { id: "e3", message: "Aplica princípios SOLID", description: "Adota padrões que aumentam a manutenibilidade do código.", evaluation: null },
-        { id: "e4", message: "Faz code review construtivo", description: "Oferece feedback útil e aprende com revisões alheias.", evaluation: null },
-        { id: "e5", message: "Participa ativamente de cerimônias técnicas", description: "Contribui em refinamentos, retrospectivas e discussões técnicas.", evaluation: null }
+        { id: "e1", message: "Domina versionamento com Git", description: "", evaluation: null },
+        { id: "e2", message: "Pratica arquitetura modular", description: "", evaluation: null },
+        { id: "e3", message: "Aplica princípios SOLID", description: "", evaluation: null },
+        { id: "e4", message: "Faz code review construtivo", description: "", evaluation: null },
+        { id: "e5", message: "Participa ativamente de cerimônias técnicas", description: "", evaluation: null }
       ]
     },
     {
@@ -103,11 +103,11 @@ export const dataScientistPath: SkillPath = {
       name: "Entrega Contínua",
       color: "#F59E42",
       commits: [
-        { id: "ec1", message: "Utiliza pipelines de CI/CD", description: "Automatiza builds, testes e deploys.", evaluation: null },
-        { id: "ec2", message: "Gerencia releases de forma incremental", description: "Realiza deploys frequentes e com baixo risco.", evaluation: null },
-        { id: "ec3", message: "Implementa observabilidade", description: "Adiciona logs, métricas e alertas adequados nas entregas.", evaluation: null },
-        { id: "ec4", message: "Realiza rollback com segurança", description: "Tem processos claros para reverter mudanças problemáticas.", evaluation: null },
-        { id: "ec5", message: "Valida entregas em ambiente de staging", description: "Testa funcionalidades antes da liberação para produção.", evaluation: null }
+        { id: "ec1", message: "Utiliza pipelines de CI/CD", description: "", evaluation: null },
+        { id: "ec2", message: "Gerencia releases de forma incremental", description: "", evaluation: null },
+        { id: "ec3", message: "Implementa observabilidade", description: "", evaluation: null },
+        { id: "ec4", message: "Realiza rollback com segurança", description: "", evaluation: null },
+        { id: "ec5", message: "Valida entregas em ambiente de staging", description: "", evaluation: null }
       ]
     },
     {
@@ -115,11 +115,11 @@ export const dataScientistPath: SkillPath = {
       name: "Especialidade (Full-Stack)",
       color: "#22C55E",
       commits: [
-        { id: "es1", message: "Desenvolve backend escalável", description: "Implementa APIs REST ou GraphQL performáticas.", evaluation: null },
-        { id: "es2", message: "Estrutura frontends modernos", description: "Utiliza frameworks e boas práticas em frontend.", evaluation: null },
-        { id: "es3", message: "Integra soluções de banco de dados", description: "Escolhe e manipula bancos SQL/NoSQL adequados.", evaluation: null },
-        { id: "es4", message: "Realiza deploy full-stack", description: "Publica aplicações integrando front, back e banco.", evaluation: null },
-        { id: "es5", message: "Interage com times multidisciplinares", description: "Colabora de forma eficiente com outras áreas.", evaluation: null }
+        { id: "es1", message: "Desenvolve backend escalável", description: "", evaluation: null },
+        { id: "es2", message: "Estrutura frontends modernos", description: "", evaluation: null },
+        { id: "es3", message: "Integra soluções de banco de dados", description: "", evaluation: null },
+        { id: "es4", message: "Realiza deploy full-stack", description: "", evaluation: null },
+        { id: "es5", message: "Interage com times multidisciplinares", description: "", evaluation: null }
       ]
     }
   ],
