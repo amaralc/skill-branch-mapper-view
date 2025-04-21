@@ -57,11 +57,11 @@ const CommitNode: React.FC<CommitNodeProps> = ({
         onClick={onClick}
       >
         <div className="flex justify-between items-start">
-          <div>
+          <div className="pt-1">
             <h4 className="font-medium text-sm">{commit.message}</h4>
             <p className="text-xs mt-1 text-gray-600">{commit.description}</p>
           </div>
-          <div className="text-xs font-medium">
+          <div className="text-xs font-medium mt-1">
             {getEvaluationText()}
           </div>
         </div>
@@ -71,3 +71,4 @@ const CommitNode: React.FC<CommitNodeProps> = ({
 };
 
 export default CommitNode;
+
