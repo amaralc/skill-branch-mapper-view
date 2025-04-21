@@ -78,7 +78,7 @@ const Index = () => {
         <ProgressSummary skillPath={skillPath} />
 
         <div className="flex flex-col">
-          <div className="bg-white rounded-lg shadow p-4 mb-6 border-0">
+          <div className="bg-white rounded-lg shadow p-4 mb-6 shadow-none border-none">
             <h2 className="text-lg font-bold mb-3">Trilhas de Competência</h2>
             <div className="space-y-2">
               {skillPath.branches.map(branch => <button key={branch.id} className={`w-full text-left px-3 py-2 rounded flex items-center text-sm
