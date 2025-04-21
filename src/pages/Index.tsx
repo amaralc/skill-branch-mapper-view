@@ -75,7 +75,7 @@ const Index = () => {
         </div>
       </header>
       
-      <main className="container mx-auto py-6 px-4">
+      <main className="container mx-auto py-0 px-0">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Left sidebar - vazio no desktop, mas manter estrutura para responsividade */}
           <div className="md:col-span-1"></div>
