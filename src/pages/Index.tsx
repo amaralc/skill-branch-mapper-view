@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Branch, SkillPath, careerPaths } from '@/data/skillData';
 import BranchView from '@/components/BranchView';
@@ -50,6 +51,10 @@ const Index = () => {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+  };
+
+  const handleImportEvaluation = (importedSkillPath: SkillPath) => {
+    resetAllEvaluations(importedSkillPath);
   };
 
   const getBranchName = (branchId: string): string => {
@@ -107,7 +112,7 @@ const Index = () => {
             </div>
             <ActionsDrawer 
               onExport={handleExportEvaluation}
-              onImport={resetAllEvaluations}
+              onImport={handleImportEvaluation}
             />
           </div>
         </div>

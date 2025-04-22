@@ -8,7 +8,7 @@ import { SkillPath } from '@/data/skillData';
 
 interface ActionsDrawerProps {
   onExport: () => void;
-  onImport: (importedData: { skillPath: SkillPath; timestamp: number }) => void;
+  onImport: (importedData: SkillPath) => void;
 }
 
 const ActionsDrawer = ({ onExport, onImport }: ActionsDrawerProps) => {
@@ -30,7 +30,7 @@ const ActionsDrawer = ({ onExport, onImport }: ActionsDrawerProps) => {
         throw new Error("Invalid evaluation file format");
       }
 
-      onImport(importedData);
+      onImport(importedData.skillPath);
       toast.success("Evaluation imported successfully");
     } catch (error) {
       toast.error("Failed to import evaluation file");
