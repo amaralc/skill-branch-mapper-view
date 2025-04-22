@@ -1,9 +1,10 @@
+
 import React, { useState, useRef } from 'react';
 import { Branch, SkillPath, careerPaths } from '@/data/skillData';
 import BranchView from '@/components/BranchView';
 import ProgressSummary from '@/components/ProgressSummary';
 import { Button } from '@/components/ui/button';
-import { GraduationCap, Import, Export } from 'lucide-react';
+import { GraduationCap, Download, Upload } from 'lucide-react';
 import { Select, SelectGroup, SelectTrigger, SelectContent, SelectItem, SelectValue, SelectLabel } from '@/components/ui/select';
 import { useEvaluationState } from '@/hooks/useEvaluationState';
 import { toast } from "sonner";
@@ -144,7 +145,7 @@ const Index = () => {
                 className="text-white border-white hover:text-white"
                 onClick={handleExportEvaluation}
               >
-                <Export className="w-4 h-4 mr-2" />
+                <Download className="w-4 h-4 mr-2" />
                 Export
               </Button>
               <Button 
@@ -153,7 +154,7 @@ const Index = () => {
                 className="text-white border-white hover:text-white"
                 onClick={handleImportClick}
               >
-                <Import className="w-4 h-4 mr-2" />
+                <Upload className="w-4 h-4 mr-2" />
                 Import
               </Button>
               <input
@@ -210,7 +211,11 @@ const Index = () => {
                 </button>
               ))}
             </div>
-            <Button variant="outline" className="w-full mt-4" onClick={resetAllEvaluations}>
+            <Button 
+              variant="outline" 
+              className="w-full mt-4" 
+              onClick={() => resetAllEvaluations()}
+            >
               Reiniciar Avaliação
             </Button>
             {renderTagsSection()}
