@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Commit } from '@/data/skillData';
 import { GitCommitHorizontal, BookOpen } from 'lucide-react';
@@ -24,11 +23,10 @@ interface CommitNodeProps {
 
 const evaluationValues = [
   { label: 'Nunca', value: 0, color: 'border-red-400 text-red-600' },
-  { label: 'Às Vezes', value: 1, color: 'border-yellow-400 text-yellow-600' },
-  { label: 'Sempre', value: 2, color: 'border-green-400 text-green-600' }
+  { label: 'Inconsistentemente', value: 1, color: 'border-yellow-400 text-yellow-600' },
+  { label: 'Consistentemente', value: 2, color: 'border-green-400 text-green-600' }
 ];
 
-// Lista fake de referências do drawer
 const references = [
   { id: 1, label: "Livro: Testes Automatizados Modernos (Cap. 3 e 4)" },
   { id: 2, label: "Artigo: Como Escrever Testes Úteis - Dev.to" },
@@ -44,11 +42,9 @@ const CommitNode: React.FC<CommitNodeProps> = ({
   disabled = false,
   lockReason
 }) => {
-  // O valor do slider depende da avaliação, default é "never" (0)
   const getValueFromEval = (evalValue: Commit['evaluation']) => {
     if (evalValue === 'sometimes') return 1;
     if (evalValue === 'always') return 2;
-    // default para nunca avaliado OU null/undefined, sempre "nunca"
     return 0;
   };
 
@@ -58,7 +54,6 @@ const CommitNode: React.FC<CommitNodeProps> = ({
     return 'always';
   };
 
-  // Sempre parte de "nunca" se commit.evaluation for null/undefined
   const sliderValue = [getValueFromEval(commit.evaluation)];
 
   const getCurrentLabel = () => {
@@ -67,7 +62,6 @@ const CommitNode: React.FC<CommitNodeProps> = ({
     return found ? found.label : '';
   };
 
-  // Aplica classes da cor da avaliação, sempre!
   let borderTextClass = "";
   {
     const val = getValueFromEval(commit.evaluation);
@@ -79,7 +73,6 @@ const CommitNode: React.FC<CommitNodeProps> = ({
     onEvaluate(getEvalFromValue(val));
   };
 
-  // Estado local para checkboxes do drawer só para mostrar controles básicos
   const [checkedRefs, setCheckedRefs] = useState<{ [id: number]: boolean }>({});
 
   const handleCheckRef = (id: number) => {
@@ -91,14 +84,12 @@ const CommitNode: React.FC<CommitNodeProps> = ({
 
   return (
     <div className={`flex items-center mb-2 ${isLast ? '' : 'pb-1'}`}>
-      {/* Linha e círculo do commit */}
       <div
         className="w-8 h-8 rounded-full flex items-center justify-center mr-3"
         style={{ backgroundColor: branchColor }}
       >
         <GitCommitHorizontal className="text-white" size={16} />
       </div>
-      {/* Caixa do texto, altura reduzida */}
       <div
         className={`flex-1 flex items-center rounded border bg-white shadow-sm transition-shadow 
           ${borderTextClass}
@@ -111,7 +102,6 @@ const CommitNode: React.FC<CommitNodeProps> = ({
           </h4>
         </div>
 
-        {/* Ícone do drawer (referências) - à esquerda do slider */}
         <div className="flex items-center mx-2">
           <Drawer shouldScaleBackground={false}>
             <DrawerTrigger asChild>
@@ -134,7 +124,6 @@ const CommitNode: React.FC<CommitNodeProps> = ({
                 <ul className="space-y-3">
                   {references.map(ref =>
                     <li key={ref.id} className="flex items-center gap-2">
-                      {/* Checkbox */}
                       <input
                         type="checkbox"
                         checked={!!checkedRefs[ref.id]}
@@ -151,7 +140,6 @@ const CommitNode: React.FC<CommitNodeProps> = ({
           </Drawer>
         </div>
 
-        {/* Inline slider alinhado à direita com tooltip */}
         <div className="flex flex-col items-end ml-3" style={{ minWidth: 56 }}>
           <Tooltip>
             <TooltipTrigger asChild>

@@ -60,7 +60,7 @@ const EvaluationModal: React.FC<EvaluationModalProps> = ({
               onClick={() => onEvaluate('sometimes')}
             >
               <CircleMinus className="h-6 w-6 mb-2 text-yellow-500" />
-              <span className="text-sm">Às vezes</span>
+              <span className="text-sm">Inconsistentemente</span>
               <span className="text-xs text-gray-500 mt-1">1 ponto</span>
             </Button>
             
@@ -70,7 +70,7 @@ const EvaluationModal: React.FC<EvaluationModalProps> = ({
               onClick={() => onEvaluate('always')}
             >
               <Check className="h-6 w-6 mb-2 text-green-500" />
-              <span className="text-sm">Sempre</span>
+              <span className="text-sm">Consistentemente</span>
               <span className="text-xs text-gray-500 mt-1">2 pontos</span>
             </Button>
           </div>
