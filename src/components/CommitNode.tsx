@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Commit } from '@/data/skillData';
 import { GitCommitHorizontal, BookOpen } from 'lucide-react';
@@ -23,7 +24,7 @@ interface CommitNodeProps {
 
 const evaluationValues = [
   { label: 'Nunca', value: 0, color: 'border-red-400 text-red-600' },
-  { label: 'Inconsistentemente', value: 1, color: 'border-yellow-400 text-yellow-600' },
+  { label: 'Às Vezes', value: 1, color: 'border-yellow-400 text-yellow-600' },
   { label: 'Consistentemente', value: 2, color: 'border-green-400 text-green-600' }
 ];
 
