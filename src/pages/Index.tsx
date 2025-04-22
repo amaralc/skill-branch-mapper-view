@@ -1,11 +1,11 @@
-
 import React, { useState } from 'react';
-import { Branch, Commit, SkillPath, careerPaths } from '@/data/skillData';
+import { Branch, SkillPath, careerPaths } from '@/data/skillData';
 import BranchView from '@/components/BranchView';
 import ProgressSummary from '@/components/ProgressSummary';
 import { Button } from '@/components/ui/button';
 import { GraduationCap } from 'lucide-react';
 import { Select, SelectGroup, SelectTrigger, SelectContent, SelectItem, SelectValue, SelectLabel } from '@/components/ui/select';
+import { useEvaluationState } from '@/hooks/useEvaluationState';
 
 const Index = () => {
   // Carreiras disponíveis
@@ -20,33 +20,18 @@ const Index = () => {
   const defaultCareer = careerOptions.find(path => path.label === "Engenharia de Software") || careerOptions[0];
 
   const [selectedCareerId, setSelectedCareerId] = useState(defaultCareer.id);
-  const [skillPath, setSkillPath] = useState<SkillPath>(defaultCareer.skillPath);
+  const { skillPath, evaluateCommit, resetAllEvaluations, isLoading } = useEvaluationState(defaultCareer.skillPath);
   const [currentBranchId, setCurrentBranchId] = useState<string | null>(null);
 
   // Quando carreira mudar, redefinir a trilha e branch selecionada
   const handleCareerChange = (careerId: string) => {
     const found = careerOptions.find(x => x.id === careerId);
     setSelectedCareerId(careerId);
-    setSkillPath(found ? found.skillPath : careerOptions[0].skillPath);
     setCurrentBranchId(null);
   };
 
   const handleEvaluateCommit = (branchId: string, commitId: string, evaluation: 'never' | 'sometimes' | 'always') => {
-    setSkillPath(prev => ({
-      ...prev,
-      branches: prev.branches.map(branch => {
-        if (branch.id === branchId) {
-          return {
-            ...branch,
-            commits: branch.commits.map(commit => commit.id === commitId ? {
-              ...commit,
-              evaluation
-            } : commit)
-          };
-        }
-        return branch;
-      })
-    }));
+    evaluateCommit(branchId, commitId, evaluation);
   };
 
   const getBranchName = (branchId: string): string => {
@@ -80,18 +65,16 @@ const Index = () => {
     );
   };
 
-  const resetEvaluations = () => {
-    setSkillPath(prev => ({
-      ...prev,
-      branches: prev.branches.map(branch => ({
-        ...branch,
-        commits: branch.commits.map(commit => ({
-          ...commit,
-          evaluation: null
-        }))
-      }))
-    }));
-  };
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Carregando avaliação...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -146,7 +129,7 @@ const Index = () => {
                 </button>
               ))}
             </div>
-            <Button variant="outline" className="w-full mt-4" onClick={resetEvaluations}>
+            <Button variant="outline" className="w-full mt-4" onClick={resetAllEvaluations}>
               Reiniciar Avaliação
             </Button>
             {renderTagsSection()}
@@ -175,5 +158,5 @@ const Index = () => {
     </>
   );
 };
-export default Index;
 
+export default Index;
