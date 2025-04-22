@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Branch, SkillPath, careerPaths } from '@/data/skillData';
 import BranchView from '@/components/BranchView';
 import ProgressSummary from '@/components/ProgressSummary';
 import { Button } from '@/components/ui/button';
-import { GraduationCap } from 'lucide-react';
+import { GraduationCap, Import, Export } from 'lucide-react';
 import { Select, SelectGroup, SelectTrigger, SelectContent, SelectItem, SelectValue, SelectLabel } from '@/components/ui/select';
 import { useEvaluationState } from '@/hooks/useEvaluationState';
+import { toast } from "sonner";
 
 const Index = () => {
   // Carreiras disponíveis
@@ -22,6 +23,7 @@ const Index = () => {
   const [selectedCareerId, setSelectedCareerId] = useState(defaultCareer.id);
   const { skillPath, evaluateCommit, resetAllEvaluations, isLoading } = useEvaluationState(defaultCareer.skillPath);
   const [currentBranchId, setCurrentBranchId] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Quando carreira mudar, redefinir a trilha e branch selecionada
   const handleCareerChange = (careerId: string) => {
@@ -32,6 +34,54 @@ const Index = () => {
 
   const handleEvaluateCommit = (branchId: string, commitId: string, evaluation: 'never' | 'sometimes' | 'always') => {
     evaluateCommit(branchId, commitId, evaluation);
+  };
+
+  const handleExportEvaluation = () => {
+    const evaluationData = {
+      skillPath,
+      timestamp: Date.now()
+    };
+    
+    const blob = new Blob([JSON.stringify(evaluationData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `evaluation-${Date.now()}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    toast.success("Evaluation exported successfully");
+  };
+
+  const handleImportClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const text = await file.text();
+      const importedData = JSON.parse(text);
+      
+      if (!importedData.skillPath || !importedData.timestamp) {
+        throw new Error("Invalid evaluation file format");
+      }
+
+      // Reset the form with imported data
+      await resetAllEvaluations(importedData.skillPath);
+      toast.success("Evaluation imported successfully");
+    } catch (error) {
+      toast.error("Failed to import evaluation file");
+    }
+
+    // Clear the input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   const getBranchName = (branchId: string): string => {
@@ -80,10 +130,41 @@ const Index = () => {
     <>
       <header className="bg-black text-white p-4">
         <div className="max-w-[1200px] mx-auto">
-          <h1 className="text-xl font-mono font-bold">SKILL BRANCH MAPPER</h1>
-          <p className="text-gray-400 text-sm">
-            Trilhas de conhecimento organizadas por área
-          </p>
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-xl font-mono font-bold">SKILL BRANCH MAPPER</h1>
+              <p className="text-gray-400 text-sm">
+                Trilhas de conhecimento organizadas por área
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="text-white border-white hover:text-white"
+                onClick={handleExportEvaluation}
+              >
+                <Export className="w-4 h-4 mr-2" />
+                Export
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="text-white border-white hover:text-white"
+                onClick={handleImportClick}
+              >
+                <Import className="w-4 h-4 mr-2" />
+                Import
+              </Button>
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileImport}
+                accept=".json"
+                className="hidden"
+              />
+            </div>
+          </div>
         </div>
       </header>
 

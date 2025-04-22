@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { SkillPath } from '@/types/skill';
@@ -52,23 +51,21 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
 
     setSkillPath(updatedSkillPath);
     
-    // Save to IndexedDB
     await saveEvaluation({
       id: evaluationId,
       timestamp: Date.now(),
       skillPath: updatedSkillPath,
     });
 
-    // Update URL if needed
     if (!searchParams.get('eval')) {
       setSearchParams({ eval: evaluationId });
     }
   };
 
-  const resetAllEvaluations = async () => {
+  const resetAllEvaluations = async (newSkillPath?: SkillPath) => {
     const evaluationId = searchParams.get('eval') || generateEvaluationId();
     
-    const updatedSkillPath = {
+    const updatedSkillPath = newSkillPath || {
       ...skillPath,
       branches: skillPath.branches.map(branch => ({
         ...branch,
