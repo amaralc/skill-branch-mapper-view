@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { Branch, SkillPath, Tag, careerPaths, calculatePoints } from '@/data/skillData';
+import { Branch, SkillPath, Tag, calculatePoints } from '@/data/skillData';
 import CommitNode from './CommitNode';
 import TagIllustratedNode from './TagIllustratedNode';
 
@@ -27,6 +28,16 @@ interface CommitLock {
   locked: boolean;
 }
 
+function calculateBranchPoints(branch: Branch): number {
+  let points = 0;
+  branch.commits.forEach(commit => {
+    if (commit.evaluation === 'never') points += 0;
+    else if (commit.evaluation === 'sometimes') points += 1;
+    else if (commit.evaluation === 'always') points += 2;
+  });
+  return points;
+}
+
 function getTagsWithPointThresholds(tags: Tag[]): { pointThreshold: number, tag: Tag }[] {
   return [...tags].sort((a, b) => a.pointsRequired - b.pointsRequired)
     .map(tag => ({ pointThreshold: tag.pointsRequired, tag }));
@@ -42,21 +53,22 @@ function getNextLevelThreshold(currentPoints: number, tags: Tag[]): number | nul
   return null;
 }
 
-function shouldLockCommitsBasedOnPoints(currentPoints: number, tags: Tag[], index: number): boolean {
+function shouldLockCommitsBasedOnPoints(currentBranchPoints: number, tags: Tag[], index: number): boolean {
   const commitsPerLevel = 5;
   const commitLevel = Math.floor(index / commitsPerLevel);
   if (commitLevel === 0) return false;
-  const previousLevelPoints = commitLevel * 10;
-  return currentPoints < previousLevelPoints;
+  
+  const pointsRequiredForCurrentLevel = commitLevel * 10;
+  return currentBranchPoints < pointsRequiredForCurrentLevel;
 }
 
 const BranchView: React.FC<BranchViewProps> = ({ branch, onEvaluateCommit, isCurrentBranch, skillPath }) => {
-  const currentPoints = calculatePoints(skillPath);
+  const branchPoints = calculateBranchPoints(branch);
   const tags = skillPath.tags;
   
   const commitLocks: CommitLock[] = branch.commits.map((_, idx) => ({
     index: idx,
-    locked: shouldLockCommitsBasedOnPoints(currentPoints, tags, idx)
+    locked: shouldLockCommitsBasedOnPoints(branchPoints, tags, idx)
   }));
   
   const shouldShowTags = branch.id === 'qualidade' || branch.id === 'seguranca';
@@ -106,7 +118,7 @@ const BranchView: React.FC<BranchViewProps> = ({ branch, onEvaluateCommit, isCur
                   onEvaluate={evaluation => !lock && onEvaluateCommit(branch.id, item.commit.id, evaluation)}
                   disabled={lock}
                   lockReason={
-                    lock ? "Para avaliar este item, alcance o nível anterior com pontos suficientes." : undefined
+                    lock ? `Para avaliar este item, alcance o nível anterior com ${(Math.floor(commitIdx / 5) * 10)} pontos nesta trilha.` : undefined
                   }
                 />
               );
