@@ -1,13 +1,12 @@
-
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { Branch, SkillPath, careerPaths } from '@/data/skillData';
 import BranchView from '@/components/BranchView';
 import ProgressSummary from '@/components/ProgressSummary';
 import { Button } from '@/components/ui/button';
-import { GraduationCap, Download, Upload } from 'lucide-react';
+import { GraduationCap } from 'lucide-react';
 import { Select, SelectGroup, SelectTrigger, SelectContent, SelectItem, SelectValue, SelectLabel } from '@/components/ui/select';
 import { useEvaluationState } from '@/hooks/useEvaluationState';
-import { toast } from "sonner";
+import ActionsDrawer from '@/components/ActionsDrawer';
 
 const Index = () => {
   // Carreiras disponíveis
@@ -24,7 +23,6 @@ const Index = () => {
   const [selectedCareerId, setSelectedCareerId] = useState(defaultCareer.id);
   const { skillPath, evaluateCommit, resetAllEvaluations, isLoading } = useEvaluationState(defaultCareer.skillPath);
   const [currentBranchId, setCurrentBranchId] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Quando carreira mudar, redefinir a trilha e branch selecionada
   const handleCareerChange = (careerId: string) => {
@@ -52,37 +50,6 @@ const Index = () => {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    
-    toast.success("Evaluation exported successfully");
-  };
-
-  const handleImportClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleFileImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    try {
-      const text = await file.text();
-      const importedData = JSON.parse(text);
-      
-      if (!importedData.skillPath || !importedData.timestamp) {
-        throw new Error("Invalid evaluation file format");
-      }
-
-      // Reset the form with imported data
-      await resetAllEvaluations(importedData.skillPath);
-      toast.success("Evaluation imported successfully");
-    } catch (error) {
-      toast.error("Failed to import evaluation file");
-    }
-
-    // Clear the input
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
   };
 
   const getBranchName = (branchId: string): string => {
@@ -138,33 +105,10 @@ const Index = () => {
                 Trilhas de conhecimento organizadas por área
               </p>
             </div>
-            <div className="flex gap-2">
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="text-white border-white hover:text-white"
-                onClick={handleExportEvaluation}
-              >
-                <Download className="w-4 h-4 mr-2" />
-                Export
-              </Button>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="text-white border-white hover:text-white"
-                onClick={handleImportClick}
-              >
-                <Upload className="w-4 h-4 mr-2" />
-                Import
-              </Button>
-              <input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleFileImport}
-                accept=".json"
-                className="hidden"
-              />
-            </div>
+            <ActionsDrawer 
+              onExport={handleExportEvaluation}
+              onImport={resetAllEvaluations}
+            />
           </div>
         </div>
       </header>
