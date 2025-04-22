@@ -2,7 +2,7 @@
 import React, { useRef } from 'react';
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
-import { Download, Upload } from 'lucide-react';
+import { Download, Upload, Menu } from 'lucide-react';
 import { toast } from "sonner";
 import { SkillPath } from '@/data/skillData';
 
@@ -45,8 +45,12 @@ const ActionsDrawer = ({ onExport, onImport }: ActionsDrawerProps) => {
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button variant="outline" size="sm" className="text-white border-white hover:text-white">
-          Ações
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="text-white hover:bg-white/10 focus:bg-white/10"
+        >
+          <Menu className="h-6 w-6" />
         </Button>
       </DrawerTrigger>
       <DrawerContent className="px-4 pb-6">
