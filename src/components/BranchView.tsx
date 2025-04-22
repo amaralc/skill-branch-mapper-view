@@ -1,10 +1,8 @@
-
 import React from 'react';
 import { Branch, SkillPath, Tag, careerPaths, calculatePoints } from '@/data/skillData';
 import CommitNode from './CommitNode';
 import TagIllustratedNode from './TagIllustratedNode';
 
-// Lista de imagens placeholder para as tags
 const images = [
   "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=160&q=80",
   "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=160&q=80",
@@ -29,14 +27,11 @@ interface CommitLock {
   locked: boolean;
 }
 
-// Helper: Calculate points needed for each tag level
 function getTagsWithPointThresholds(tags: Tag[]): { pointThreshold: number, tag: Tag }[] {
-  // Sort tags by pointsRequired in ascending order
   return [...tags].sort((a, b) => a.pointsRequired - b.pointsRequired)
     .map(tag => ({ pointThreshold: tag.pointsRequired, tag }));
 }
 
-// Helper: Calculate points needed for next level
 function getNextLevelThreshold(currentPoints: number, tags: Tag[]): number | null {
   const sortedTags = [...tags].sort((a, b) => a.pointsRequired - b.pointsRequired);
   for (const tag of sortedTags) {
@@ -44,19 +39,14 @@ function getNextLevelThreshold(currentPoints: number, tags: Tag[]): number | nul
       return tag.pointsRequired;
     }
   }
-  return null; // No next level
+  return null;
 }
 
-// Helper: Should commits be locked based on points
 function shouldLockCommitsBasedOnPoints(currentPoints: number, tags: Tag[], index: number): boolean {
-  // Find which "level range" the current commit is in
-  const commitsPerLevel = 5; // Assuming 5 commits per level
+  const commitsPerLevel = 5;
   const commitLevel = Math.floor(index / commitsPerLevel);
-  // Level 0 (0-4) is always unlocked
   if (commitLevel === 0) return false;
-  
-  // Otherwise, check if the previous level is achieved
-  const previousLevelPoints = commitLevel * 10; // 10 points per level (simplified)
+  const previousLevelPoints = commitLevel * 10;
   return currentPoints < previousLevelPoints;
 }
 
@@ -64,30 +54,23 @@ const BranchView: React.FC<BranchViewProps> = ({ branch, onEvaluateCommit, isCur
   const currentPoints = calculatePoints(skillPath);
   const tags = skillPath.tags;
   
-  // Calculate locks for commits
   const commitLocks: CommitLock[] = branch.commits.map((_, idx) => ({
     index: idx,
     locked: shouldLockCommitsBasedOnPoints(currentPoints, tags, idx)
   }));
   
-  // Determine if tags should be shown in this branch
-  // For simplicity, we'll show all level tags in the first branch only
-  const shouldShowTags = branch.id === 'qualidade';
+  const shouldShowTags = branch.id === 'qualidade' || branch.id === 'seguranca';
   const tagsToShow = shouldShowTags ? tags : [];
   
-  // Distribute tags visually throughout the branch commits
   const commitTagPairs: { commit?: Branch['commits'][0], tag?: Tag, commitIndex: number }[] = [];
   
-  // First add all commits
   branch.commits.forEach((commit, idx) => {
     commitTagPairs.push({ commit, commitIndex: idx });
   });
   
-  // Now insert tags at logical positions (e.g., every 5 commits)
   if (shouldShowTags) {
     tags.forEach((tag, tagIdx) => {
-      // Position tags every 5 commits
-      const position = (tagIdx + 1) * 5 - 1; // Positions 4, 9, 14, 19, 24
+      const position = (tagIdx + 1) * 5 - 1;
       if (position < branch.commits.length) {
         commitTagPairs.splice(position + tagIdx + 1, 0, { tag, commitIndex: position });
       }
@@ -105,12 +88,10 @@ const BranchView: React.FC<BranchViewProps> = ({ branch, onEvaluateCommit, isCur
         </div>
       </div>
       <div className="relative">
-        {/* Linha vertical da branch */}
         <div 
           className="absolute left-4 top-4 h-[calc(100%-8px)] w-1 z-0" 
           style={{ backgroundColor: branch.color }}
         ></div>
-        {/* Commits e tags ilustradas */}
         <div className="relative z-10">
           {commitTagPairs.map((item, idx) => {
             if (item.commit) {
