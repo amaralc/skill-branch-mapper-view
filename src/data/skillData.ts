@@ -161,44 +161,51 @@ const softwareCareerPath: SkillPath = {
     {
       id: "ic01",
       name: "IC01",
-      level: "Iniciante",
+      level: "Júnior",
       pointsRequired: 10,
       description: "Nível de senioridade inicial - Demonstra comportamentos básicos em todas as áreas"
     },
     {
       id: "ic02",
       name: "IC02",
-      level: "Intermediário",
+      level: "Pleno",
       pointsRequired: 20,
       description: "Nível de senioridade intermediário - Demonstra comportamentos consistentes em todas as áreas"
     },
     {
       id: "ic03",
       name: "IC03",
-      level: "Avançado",
+      level: "Sênior",
       pointsRequired: 30,
       description: "Nível de senioridade avançado - Demonstra comportamentos avançados em todas as áreas"
     },
     {
       id: "ic04",
       name: "IC04",
-      level: "Especialista",
+      level: "Staff",
       pointsRequired: 40,
       description: "Nível de senioridade especialista - Demonstra comportamentos de liderança técnica"
     },
     {
       id: "ic05",
       name: "IC05",
-      level: "Liderança",
+      level: "Principal",
       pointsRequired: 50,
       description: "Nível de senioridade sênior - Demonstra comportamentos de liderança e influência"
     },
     {
       id: "em01",
       name: "EM01",
-      level: "Gestor",
+      level: "Coordenador",
       pointsRequired: 60,
       description: "Nível de gestão - Demonstra capacidade de gestão de equipes e processos"
+    },
+    {
+      id: "em02",
+      name: "EM02",
+      level: "Gerente",
+      pointsRequired: 70,
+      description: "Nível de gestão avançado - Demonstra capacidade de gestão estratégica"
     }
   ]
 };
