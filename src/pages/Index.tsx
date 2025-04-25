@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Branch, SkillPath, careerPaths } from '@/data/skillData';
 import BranchView from '@/components/BranchView';
@@ -93,14 +92,22 @@ const Index = () => {
     );
   };
 
+  const baseTracks = ['qualidade', 'seguranca', 'engenharia-software', 'entrega-continua'];
+  
   const filteredBranches = skillPath.branches.filter(branch => {
-    // Base tracks are always included
-    if (['qualidade', 'seguranca', 'engenharia-software', 'entrega-continua'].includes(branch.id)) {
+    if (baseTracks.includes(branch.id)) {
       return true;
     }
     
-    // Include the specialization track if a specialization is selected
-    return selectedEmphasis && branch.id === selectedEmphasis;
+    if (selectedEmphasis && branch.id === selectedEmphasis) {
+      return true;
+    }
+    
+    if (branch.id === 'especialidade' && selectedEmphasis) {
+      return true;
+    }
+    
+    return false;
   });
 
   if (isLoading) {
@@ -189,11 +196,11 @@ const Index = () => {
                         backgroundColor: branch.color
                       }}></div>
                       {branch.name}
-                      {selectedEmphasis && branch.id === selectedEmphasis && (
+                      {branch.id === selectedEmphasis || branch.id === 'especialidade' ? (
                         <span className="ml-2 text-xs text-gray-500">
                           (Especialidade)
                         </span>
-                      )}
+                      ) : null}
                     </button>
                   ))}
                 </div>
@@ -229,7 +236,7 @@ const Index = () => {
           </>
         ) : (
           <div className="text-center py-12 text-gray-500">
-            Selecione uma ênfase para visualizar as trilhas de competência
+            Selecione uma carreira para visualizar as trilhas de competência
           </div>
         )}
       </main>
