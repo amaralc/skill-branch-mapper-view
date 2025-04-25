@@ -4,6 +4,7 @@ import BranchView from '@/components/BranchView';
 import ProgressSummary from '@/components/ProgressSummary';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Select, SelectGroup, SelectTrigger, SelectContent, SelectItem, SelectValue, SelectLabel } from '@/components/ui/select';
 import { useEvaluationState } from '@/hooks/useEvaluationState';
 import ActionsDrawer from '@/components/ActionsDrawer';
@@ -164,28 +165,30 @@ const Index = () => {
                 <h2 className="text-lg font-bold mb-3">Trilhas de Competência</h2>
                 
                 <Tabs defaultValue={filteredBranches[0]?.id} className="w-full">
-                  <TabsList className="w-full justify-start mb-4 bg-transparent gap-2">
-                    {filteredBranches.map(branch => (
-                      <TabsTrigger
-                        key={branch.id}
-                        value={branch.id}
-                        className="data-[state=active]:bg-gray-100 data-[state=active]:shadow-none px-4"
-                      >
-                        <div className="flex items-center gap-2">
-                          <div 
-                            className="w-3 h-3 rounded-full" 
-                            style={{ backgroundColor: branch.color }}
-                          />
-                          <span>{branch.name}</span>
-                          {branch.id === selectedEmphasis && (
-                            <span className="ml-1 text-xs text-gray-500">
-                              (Especialidade)
-                            </span>
-                          )}
-                        </div>
-                      </TabsTrigger>
-                    ))}
-                  </TabsList>
+                  <ScrollArea className="w-full pb-4">
+                    <TabsList className="w-full justify-start mb-4 bg-transparent gap-2 inline-flex">
+                      {filteredBranches.map(branch => (
+                        <TabsTrigger
+                          key={branch.id}
+                          value={branch.id}
+                          className="data-[state=active]:bg-gray-100 data-[state=active]:shadow-none px-4 shrink-0"
+                        >
+                          <div className="flex items-center gap-2">
+                            <div 
+                              className="w-3 h-3 rounded-full" 
+                              style={{ backgroundColor: branch.color }}
+                            />
+                            <span>{branch.name}</span>
+                            {branch.id === selectedEmphasis && (
+                              <span className="ml-1 text-xs text-gray-500">
+                                (Especialidade)
+                              </span>
+                            )}
+                          </div>
+                        </TabsTrigger>
+                      ))}
+                    </TabsList>
+                  </ScrollArea>
 
                   {filteredBranches.map(branch => (
                     <TabsContent key={branch.id} value={branch.id}>
