@@ -329,7 +329,7 @@ const backEndTrack: Branch = {
     },
     {
       id: 'be-3',
- message: 'Modela bancos de dados relacionais de forma eficiente',
+      message: 'Modela bancos de dados relacionais de forma eficiente',
       description: 'Cria schemas otimizados e implementa índices adequados',
       evaluation: null
     },
@@ -518,40 +518,54 @@ const softwareCareerPath: SkillPath = {
   ],
   tags: [
     {
-      id: 'ic00',
-      name: 'IC0',
-      level: 'Júnior',
-      pointsRequired: 0,
-      description: 'Primeiro nível da carreira de engenharia de software'
-    },
-    {
       id: 'ic01',
-      name: 'IC1',
+      name: 'IC01',
       level: 'Júnior',
       pointsRequired: 10,
-      description: 'Segundo nível da carreira de engenharia de software'
+      description: 'Júnior - Demonstra comportamentos básicos em todas as áreas'
     },
     {
       id: 'ic02',
-      name: 'IC2',
+      name: 'IC02',
       level: 'Pleno',
       pointsRequired: 20,
-      description: 'Terceiro nível da carreira de engenharia de software'
+      description: 'Pleno - Demonstra comportamentos consistentes em todas as áreas'
     },
     {
       id: 'ic03',
-      name: 'IC3',
-      level: 'Pleno',
+      name: 'IC03',
+      level: 'Sênior',
       pointsRequired: 30,
-      description: 'Quarto nível da carreira de engenharia de software'
+      description: 'Sênior - Demonstra comportamentos avançados em todas as áreas'
     },
     {
       id: 'ic04',
-      name: 'IC4',
-      level: 'Sênior',
+      name: 'IC04',
+      level: 'Staff',
       pointsRequired: 40,
-      description: 'Quinto nível da carreira de engenharia de software'
+      description: 'Staff - Demonstra comportamentos de liderança técnica'
     },
+    {
+      id: 'ic05',
+      name: 'IC05',
+      level: 'Principal',
+      pointsRequired: 50,
+      description: 'Principal - Demonstra comportamentos de liderança e influência'
+    },
+    {
+      id: 'em01',
+      name: 'EM01',
+      level: 'Coordenador',
+      pointsRequired: 60,
+      description: 'Coordenador - Demonstra capacidade de gestão de equipes e processos'
+    },
+    {
+      id: 'em02',
+      name: 'EM02',
+      level: 'Gerente',
+      pointsRequired: 70,
+      description: 'Gerente - Demonstra capacidade de gestão estratégica'
+    }
   ]
 };
 
