@@ -189,7 +189,7 @@ const architectureBranch: Branch = {
 };
 
 const qualityBranch: Branch = {
-  id: 'qualidade',
+  id: 'quality',
   name: 'Qualidade',
   color: '#3498db',
   commits: [
@@ -329,7 +329,7 @@ const qualityBranch: Branch = {
 };
 
 const securityBranch: Branch = {
-  id: 'seguranca',
+  id: 'security',
   name: 'Segurança',
   color: '#e74c3c',
   commits: [
@@ -519,7 +519,7 @@ const securityBranch: Branch = {
 };
 
 const continuousDeliveryBranch: Branch = {
-  id: 'entrega-continua',
+  id: 'continuous-delivery',
   name: 'Entrega Contínua',
   color: '#f39c12',
   commits: [
