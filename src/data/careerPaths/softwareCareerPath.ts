@@ -1,3 +1,4 @@
+
 import { Branch, SkillPath } from '@/types/skill';
 
 const architectureBranch: Branch = {
@@ -7,38 +8,32 @@ const architectureBranch: Branch = {
   commits: [
     {
       id: 'architecture-1',
-      message: 'Escreve código legível e idiomático, seguindo padrões e convenções adotadas pelo time',
-      description: '',
+      behaviorDescription: 'Escreve código legível e idiomático, seguindo padrões e convenções adotadas pelo time',
       evaluation: null
     },
     {
       id: 'architecture-2',
-      message: 'Separa responsabilidades para que cada módulo tenha apenas um motivo para mudar',
-      description: '',
+      behaviorDescription: 'Separa responsabilidades para que cada módulo tenha apenas um motivo para mudar',
       evaluation: null
     },
     {
       id: 'architecture-3',
-      message: 'Cria implementações que podem ser substituídas sem afetar o comportamento esperado',
-      description: '',
+      behaviorDescription: 'Cria implementações que podem ser substituídas sem afetar o comportamento esperado',
       evaluation: null
     },
     {
       id: 'architecture-4',
-      message: 'Cria módulos que dependem de interfaces e abstrações, não de implementações concretas',
-      description: '',
+      behaviorDescription: 'Cria módulos que dependem de interfaces e abstrações, não de implementações concretas',
       evaluation: null
     },
     {
       id: 'architecture-5',
-      message: 'Estende funcionalidades sem alterar o código já existente',
-      description: '',
+      behaviorDescription: 'Estende funcionalidades sem alterar o código já existente',
       evaluation: null
     },
     {
       id: 'architecture-6',
-      message: 'Cria interfaces enxutas, contendo apenas atributos relevantes para cada uso',
-      description: '',
+      behaviorDescription: 'Cria interfaces enxutas, contendo apenas atributos relevantes para cada uso',
       evaluation: null
     }
   ]
@@ -51,152 +46,127 @@ const qualityBranch: Branch = {
   commits: [
     {
       id: 'quality-01',
-      message: 'Testa como o usuário final e busca aprender com falhas que poderiam passar despercebidas',
-      description: '',
+      behaviorDescription: 'Testa como o usuário final e busca aprender com falhas que poderiam passar despercebidas',
       evaluation: null
     },
     {
       id: 'quality-02',
-      message: 'Revisa sua entrega com atenção, corrigindo falhas e aprendendo com os próprios erros',
-      description: '',
+      behaviorDescription: 'Revisa sua entrega com atenção, corrigindo falhas e aprendendo com os próprios erros',
       evaluation: null
     },
     {
       id: 'quality-03',
-      message: 'Escreve testes úteis e entende melhor o comportamento esperado do sistema',
-      description: '',
+      behaviorDescription: 'Escreve testes úteis e entende melhor o comportamento esperado do sistema',
       evaluation: null
     },
     {
       id: 'quality-04',
-      message: 'Cria testes para falhas encontradas, aprendendo a evitar regressões com confiança',
-      description: '',
+      behaviorDescription: 'Cria testes para falhas encontradas, aprendendo a evitar regressões com confiança',
       evaluation: null
     },
     {
       id: 'quality-05',
-      message: 'Participa de revisões e pares com atenção, aprendendo e aplicando padrões de qualidade do time',
-      description: '',
+      behaviorDescription: 'Participa de revisões e pares com atenção, aprendendo e aplicando padrões de qualidade do time',
       evaluation: null
     },
     {
       id: 'quality-06',
-      message: 'Garante por conta própria que o usuário final não perceba falhas na experiência',
-      description: '',
+      behaviorDescription: 'Garante por conta própria que o usuário final não perceba falhas na experiência',
       evaluation: null
     },
     {
       id: 'quality-07',
-      message: 'Valida a qualidade da entrega com rigor antes de envolver QA ou revisão técnica',
-      description: '',
+      behaviorDescription: 'Valida a qualidade da entrega com rigor antes de envolver QA ou revisão técnica',
       evaluation: null
     },
     {
       id: 'quality-08',
-      message: 'Escreve testes claros e confiáveis para validar os cenários que entrega',
-      description: '',
+      behaviorDescription: 'Escreve testes claros e confiáveis para validar os cenários que entrega',
       evaluation: null
     },
     {
       id: 'quality-09',
-      message: 'Reproduz falhas reportadas com testes e ajuda colegas a evitar regressões',
-      description: '',
+      behaviorDescription: 'Reproduz falhas reportadas com testes e ajuda colegas a evitar regressões',
       evaluation: null
     },
     {
       id: 'quality-10',
-      message: 'Revisa com critério e orienta colegas em pares para elevar o padrão do time',
-      description: '',
+      behaviorDescription: 'Revisa com critério e orienta colegas em pares para elevar o padrão do time',
       evaluation: null
     },
     {
       id: 'quality-11',
-      message: 'Antecipa falhas que afetariam o usuário e ajusta a entrega antes que elas ocorram',
-      description: '',
+      behaviorDescription: 'Antecipa falhas que afetariam o usuário e ajusta a entrega antes que elas ocorram',
       evaluation: null
     },
     {
       id: 'quality-12',
-      message: 'Garante qualidade de ponta a ponta com autonomia, mesmo em cenários ambíguos',
-      description: '',
+      behaviorDescription: 'Garante qualidade de ponta a ponta com autonomia, mesmo em cenários ambíguos',
       evaluation: null
     },
     {
       id: 'quality-13',
-      message: 'Escreve testes completos, legíveis e sustentáveis para o time',
-      description: '',
+      behaviorDescription: 'Escreve testes completos, legíveis e sustentáveis para o time',
       evaluation: null
     },
     {
       id: 'quality-14',
-      message: 'Traduz falhas reais em testes robustos e compartilha o aprendizado com o time',
-      description: '',
+      behaviorDescription: 'Traduz falhas reais em testes robustos e compartilha o aprendizado com o time',
       evaluation: null
     },
     {
       id: 'quality-15',
-      message: 'Conduz revisões e pares com profundidade, formando o critério técnico do time',
-      description: '',
+      behaviorDescription: 'Conduz revisões e pares com profundidade, formando o critério técnico do time',
       evaluation: null
     },
     {
       id: 'quality-16',
-      message: 'Estabelece práticas que evitam falhas perceptíveis em escala, com foco na experiência do usuário',
-      description: '',
+      behaviorDescription: 'Estabelece práticas que evitam falhas perceptíveis em escala, com foco na experiência do usuário',
       evaluation: null
     },
     {
       id: 'quality-17',
-      message: 'Cria padrões e ferramentas que tornam a qualidade parte natural do fluxo de entrega',
-      description: '',
+      behaviorDescription: 'Cria padrões e ferramentas que tornam a qualidade parte natural do fluxo de entrega',
       evaluation: null
     },
     {
       id: 'quality-18',
-      message: 'Define critérios e estruturas de teste que fortalecem a confiabilidade do sistema',
-      description: '',
+      behaviorDescription: 'Define critérios e estruturas de teste que fortalecem a confiabilidade do sistema',
       evaluation: null
     },
     {
       id: 'quality-19',
-      message: 'Sistematiza testes para falhas críticas e orienta prevenção em escala no time',
-      description: '',
+      behaviorDescription: 'Sistematiza testes para falhas críticas e orienta prevenção em escala no time',
       evaluation: null
     },
     {
       id: 'quality-20',
-      message: 'Promove revisões e pares intencionais para desenvolver critério técnico no time',
-      description: '',
+      behaviorDescription: 'Promove revisões e pares intencionais para desenvolver critério técnico no time',
       evaluation: null
     },
     {
       id: 'quality-21',
-      message: 'Garante que falhas perceptíveis ao usuário sejam raras e evitadas sistemicamente',
-      description: '',
+      behaviorDescription: 'Garante que falhas perceptíveis ao usuário sejam raras e evitadas sistemicamente',
       evaluation: null
     },
     {
       id: 'quality-22',
-      message: 'Influencia times e áreas a tornarem a qualidade parte natural do fluxo de entrega',
-      description: '',
+      behaviorDescription: 'Influencia times e áreas a tornarem a qualidade parte natural do fluxo de entrega',
       evaluation: null
     },
     {
       id: 'quality-23',
-      message: 'Evolui critérios de testabilidade e práticas que aumentam a confiança em sistemas críticos',
-      description: '',
+      behaviorDescription: 'Evolui critérios de testabilidade e práticas que aumentam a confiança em sistemas críticos',
       evaluation: null
     },
     {
       id: 'quality-24',
-      message: 'Estabelece padrões de prevenção e resposta a falhas com impacto além do próprio time',
-      description: '',
+      behaviorDescription: 'Estabelece padrões de prevenção e resposta a falhas com impacto além do próprio time',
       evaluation: null
     },
     {
       id: 'quality-25',
-      message: 'Constrói uma cultura de revisão e pairing que eleva o nível técnico da organização',
-      description: '',
+      behaviorDescription: 'Constrói uma cultura de revisão e pairing que eleva o nível técnico da organização',
       evaluation: null
     }
   ]
@@ -209,212 +179,177 @@ const securityBranch: Branch = {
   commits: [
     {
       id: 'security-01',
-      message: 'Evita expor dados sensíveis e aplica variáveis de ambiente com apoio e atenção ao detalhe',
-      description: '',
+      behaviorDescription: 'Evita expor dados sensíveis e aplica variáveis de ambiente com apoio e atenção ao detalhe',
       evaluation: 'sometimes'
     },
     {
       id: 'security-02',
-      message: 'Lê relatórios de SAST e busca entender vulnerabilidades OWASP, com ajuda, corrigindo o que entrega',
-      description: '',
+      behaviorDescription: 'Lê relatórios de SAST e busca entender vulnerabilidades OWASP, com ajuda, corrigindo o que entrega',
       evaluation: 'always'
     },
     {
       id: 'security-03',
-      message: 'Usa autenticação e permissões com apoio, e entende seu papel nos fluxos seguros do time',
-      description: '',
+      behaviorDescription: 'Usa autenticação e permissões com apoio, e entende seu papel nos fluxos seguros do time',
       evaluation: null
     },
     {
       id: 'security-04',
-      message: 'Cria testes para falhas conhecidas que entregou, com supervisão, garantindo que não voltem',
-      description: '',
+      behaviorDescription: 'Cria testes para falhas conhecidas que entregou, com supervisão, garantindo que não voltem',
       evaluation: 'always'
     },
     {
       id: 'security-05',
-      message: 'Reporta falhas com clareza, busca entender causas e aprende com o time como preveni-las',
-      description: '',
+      behaviorDescription: 'Reporta falhas com clareza, busca entender causas e aprende com o time como preveni-las',
       evaluation: null
     },
     {
       id: 'security-06',
-      message: 'Garante que tokens e dados sensíveis não sejam expostos em commits, logs ou respostas HTTP',
-      description: '',
+      behaviorDescription: 'Garante que tokens e dados sensíveis não sejam expostos em commits, logs ou respostas HTTP',
       evaluation: null
     },
     {
       id: 'security-07',
-      message: 'Monitora alertas de SAST e previne riscos conhecidos com base no OWASP Top 10',
-      description: '',
+      behaviorDescription: 'Monitora alertas de SAST e previne riscos conhecidos com base no OWASP Top 10',
       evaluation: null
     },
     {
       id: 'security-08',
-      message: 'Usa e configura corretamente autenticação, RBAC e ferramentas de scan e segurança exigidas',
-      description: '',
+      behaviorDescription: 'Usa e configura corretamente autenticação, RBAC e ferramentas de scan e segurança exigidas',
       evaluation: null
     },
     {
       id: 'security-09',
-      message: 'Cria testes automatizados para cobrir falhas reportadas e prevenir reincidência',
-      description: '',
+      behaviorDescription: 'Cria testes automatizados para cobrir falhas reportadas e prevenir reincidência',
       evaluation: null
     },
     {
       id: 'security-10',
-      message: 'Corrige falhas com agilidade e compartilha aprendizados com o time em revisão ou retro',
-      description: '',
+      behaviorDescription: 'Corrige falhas com agilidade e compartilha aprendizados com o time em revisão ou retro',
       evaluation: null
     },
     {
       id: 'security-11',
-      message: 'Garante que não haja vazamento de segredos em nenhum ponto da stack sob sua responsabilidade',
-      description: '',
+      behaviorDescription: 'Garante que não haja vazamento de segredos em nenhum ponto da stack sob sua responsabilidade',
       evaluation: null
     },
     {
       id: 'security-12',
-      message: 'Interpreta alertas de SAST e previne vulnerabilidades OWASP com ações corretivas antes do deploy',
-      description: '',
+      behaviorDescription: 'Interpreta alertas de SAST e previne vulnerabilidades OWASP com ações corretivas antes do deploy',
       evaluation: null
     },
     {
       id: 'security-13',
-      message: 'Implementa e reforça o uso correto de autenticação, RBAC e scanners em serviços sob responsabilidade de sua equipe',
-      description: '',
+      behaviorDescription: 'Implementa e reforça o uso correto de autenticação, RBAC e scanners em serviços sob responsabilidade de sua equipe',
       evaluation: null
     },
     {
       id: 'security-14',
-      message: 'Automatiza testes para falhas críticas e orienta o time na construção de simulações seguras',
-      description: '',
+      behaviorDescription: 'Automatiza testes para falhas críticas e orienta o time na construção de simulações seguras',
       evaluation: null
     },
     {
       id: 'security-15',
-      message: 'Lidera atuação rápida em falhas, propõe melhorias e promove compartilhamento de aprendizados ativamente',
-      description: '',
+      behaviorDescription: 'Lidera atuação rápida em falhas, propõe melhorias e promove compartilhamento de aprendizados ativamente',
       evaluation: null
     },
     {
       id: 'security-16',
-      message: 'Define e audita práticas seguras de gestão de segredos em todo o time ou domínio técnico',
-      description: '',
+      behaviorDescription: 'Define e audita práticas seguras de gestão de segredos em todo o time ou domínio técnico',
       evaluation: null
     },
     {
       id: 'security-17',
-      message: 'Garante que relatórios de SAST sejam tratados com prioridade e que riscos OWASP sejam mitigados',
-      description: '',
+      behaviorDescription: 'Garante que relatórios de SAST sejam tratados com prioridade e que riscos OWASP sejam mitigados',
       evaluation: null
     },
     {
       id: 'security-18',
-      message: 'Promove a adoção consistente de controles como RBAC, SCA, SSO, MFA e scanners de vulnerabilidade',
-      description: '',
+      behaviorDescription: 'Promove a adoção consistente de controles como RBAC, SCA, SSO, MFA e scanners de vulnerabilidade',
       evaluation: null
     },
     {
       id: 'security-19',
-      message: 'Estabelece padrões de testabilidade em segurança e cria exemplos para serem replicados',
-      description: '',
+      behaviorDescription: 'Estabelece padrões de testabilidade em segurança e cria exemplos para serem replicados',
       evaluation: null
     },
     {
       id: 'security-20',
-      message: 'Conduz análises pós-incidente, catalisa ações corretivas e institucionaliza aprendizados',
-      description: '',
+      behaviorDescription: 'Conduz análises pós-incidente, catalisa ações corretivas e institucionaliza aprendizados',
       evaluation: null
     },
     {
       id: 'security-21',
-      message: 'Define padrões e ferramentas seguras para gestão de segredos em escala organizacional',
-      description: '',
+      behaviorDescription: 'Define padrões e ferramentas seguras para gestão de segredos em escala organizacional',
       evaluation: null
     },
     {
       id: 'security-22',
-      message: 'Influencia processos de tratamento de vulnerabilidades e incorpora OWASP em revisões e projetos',
-      description: '',
+      behaviorDescription: 'Influencia processos de tratamento de vulnerabilidades e incorpora OWASP em revisões e projetos',
       evaluation: null
     },
     {
       id: 'security-23',
-      message: 'Garante adoção consistente de controles em sistemas críticos e orienta decisões de arquitetura',
-      description: '',
+      behaviorDescription: 'Garante adoção consistente de controles em sistemas críticos e orienta decisões de arquitetura',
       evaluation: null
     },
     {
       id: 'security-24',
-      message: 'Estabelece práticas de testabilidade em segurança aplicáveis a múltiplos times ou produtos',
-      description: '',
+      behaviorDescription: 'Estabelece práticas de testabilidade em segurança aplicáveis a múltiplos times ou produtos',
       evaluation: null
     },
     {
       id: 'security-25',
-      message: 'Lidera resposta a falhas críticas, compartilha lições e muda processos para prevenir recorrência',
-      description: '',
+      behaviorDescription: 'Lidera resposta a falhas críticas, compartilha lições e muda processos para prevenir recorrência',
       evaluation: null
     },
     {
       id: 'security-26',
-      message: 'Garante que o time use práticas e ferramentas seguras, treinando quem ainda tem lacunas',
-      description: '',
+      behaviorDescription: 'Garante que o time use práticas e ferramentas seguras, treinando quem ainda tem lacunas',
       evaluation: null
     },
     {
       id: 'security-27',
-      message: 'Estimula acompanhamento regular de relatórios e promove aprendizado técnico com base nos alertas',
-      description: '',
+      behaviorDescription: 'Estimula acompanhamento regular de relatórios e promove aprendizado técnico com base nos alertas',
       evaluation: null
     },
     {
       id: 'security-28',
-      message: 'Remove barreiras para adoção dos controles e reforça sua aplicação no dia a dia',
-      description: '',
+      behaviorDescription: 'Remove barreiras para adoção dos controles e reforça sua aplicação no dia a dia',
       evaluation: null
     },
     {
       id: 'security-29',
-      message: 'Incentiva o time a automatizar prevenção com exemplos reais, revisando cobertura junto aos devs',
-      description: '',
+      behaviorDescription: 'Incentiva o time a automatizar prevenção com exemplos reais, revisando cobertura junto aos devs',
       evaluation: null
     },
     {
       id: 'security-30',
-      message: 'Facilita discussões pós-falha, garante ações corretivas e aprendizado distribuído',
-      description: '',
+      behaviorDescription: 'Facilita discussões pós-falha, garante ações corretivas e aprendizado distribuído',
       evaluation: null
     },
     {
       id: 'security-31',
-      message: 'Cria padrões e governança que previnem exposição de dados sensíveis em toda a organização',
-      description: '',
+      behaviorDescription: 'Cria padrões e governança que previnem exposição de dados sensíveis em toda a organização',
       evaluation: null
     },
     {
       id: 'security-32',
-      message: 'Garante que times monitorem vulnerabilidades e que planos de ação estejam integrados à rotina',
-      description: '',
+      behaviorDescription: 'Garante que times monitorem vulnerabilidades e que planos de ação estejam integrados à rotina',
       evaluation: null
     },
     {
       id: 'security-33',
-      message: 'Assegura que ferramentas, práticas e políticas estejam implantadas e operantes em todas as áreas',
-      description: '',
+      behaviorDescription: 'Assegura que ferramentas, práticas e políticas estejam implantadas e operantes em todas as áreas',
       evaluation: null
     },
     {
       id: 'security-34',
-      message: 'Promove cultura de prevenção baseada em testes e simulações, com investimento e apoio transversal',
-      description: '',
+      behaviorDescription: 'Promove cultura de prevenção baseada em testes e simulações, com investimento e apoio transversal',
       evaluation: null
     },
     {
       id: 'security-35',
-      message: 'Estimula aprendizado organizacional a partir de incidentes e define resposta padrão para riscos',
-      description: '',
+      behaviorDescription: 'Estimula aprendizado organizacional a partir de incidentes e define resposta padrão para riscos',
       evaluation: null
     }
   ]
@@ -427,32 +362,27 @@ const continuousDeliveryBranch: Branch = {
   commits: [
     {
       id: 'delivery-1',
-      message: 'Automatiza o processo de build e teste',
-      description: 'Cria scripts para compilar o código, executar testes e gerar relatórios',
+      behaviorDescription: 'Automatiza o processo de build e teste',
       evaluation: null
     },
     {
       id: 'delivery-2',
-      message: 'Automatiza o processo de deploy',
-      description: 'Cria scripts para implantar o sistema em diferentes ambientes',
+      behaviorDescription: 'Automatiza o processo de deploy',
       evaluation: null
     },
     {
       id: 'delivery-3',
-      message: 'Monitora o sistema em produção',
-      description: 'Utiliza ferramentas de monitoramento para identificar problemas e gargalos',
+      behaviorDescription: 'Monitora o sistema em produção',
       evaluation: null
     },
     {
       id: 'delivery-4',
-      message: 'Realiza rollbacks em caso de falha',
-      description: 'Reverte o sistema para uma versão anterior em caso de problemas',
+      behaviorDescription: 'Realiza rollbacks em caso de falha',
       evaluation: null
     },
     {
       id: 'delivery-5',
- message: 'Participa de discussões sobre o processo de entrega contínua',
-      description: 'Colabora com outros membros da equipe para melhorar o processo de entrega contínua',
+      behaviorDescription: 'Participa de discussões sobre o processo de entrega contínua',
       evaluation: null
     }
   ]
@@ -465,32 +395,27 @@ const frontEndTrack: Branch = {
   commits: [
     {
       id: 'fe-1',
-      message: 'Implementa interfaces responsivas seguindo princípios de design mobile-first',
-      description: 'Demonstra capacidade de criar layouts adaptáveis para diferentes dispositivos',
+      behaviorDescription: 'Implementa interfaces responsivas seguindo princípios de design mobile-first',
       evaluation: null
     },
     {
       id: 'fe-2',
-      message: 'Aplica boas práticas de acessibilidade web (WCAG)',
-      description: 'Garante que as interfaces sejam acessíveis para todos os usuários',
+      behaviorDescription: 'Aplica boas práticas de acessibilidade web (WCAG)',
       evaluation: null
     },
     {
       id: 'fe-3',
-      message: 'Otimiza performance do front-end utilizando técnicas modernas',
-      description: 'Implementa lazy loading, code splitting e outras otimizações',
+      behaviorDescription: 'Otimiza performance do front-end utilizando técnicas modernas',
       evaluation: null
     },
     {
       id: 'fe-4',
-      message: 'Desenvolve componentes reutilizáveis e mantém consistência visual',
-      description: 'Cria sistemas de design escaláveis e documenta componentes',
+      behaviorDescription: 'Desenvolve componentes reutilizáveis e mantém consistência visual',
       evaluation: null
     },
     {
       id: 'fe-5',
-      message: 'Implementa integrações com APIs RESTful de forma eficiente',
-      description: 'Gerencia estados, loading e tratamento de erros adequadamente',
+      behaviorDescription: 'Implementa integrações com APIs RESTful de forma eficiente',
       evaluation: null
     }
   ]
@@ -503,32 +428,27 @@ const backEndTrack: Branch = {
   commits: [
     {
       id: 'be-1',
-      message: 'Desenvolve APIs RESTful seguindo padrões e boas práticas',
-      description: 'Implementa endpoints com documentação adequada e versionamento',
+      behaviorDescription: 'Desenvolve APIs RESTful seguindo padrões e boas práticas',
       evaluation: null
     },
     {
       id: 'be-2',
-      message: 'Implementa autenticação e autorização de forma segura',
-      description: 'Utiliza JWT, OAuth e controle de acesso baseado em roles',
+      behaviorDescription: 'Implementa autenticação e autorização de forma segura',
       evaluation: null
     },
     {
       id: 'be-3',
-      message: 'Modela bancos de dados relacionais de forma eficiente',
-      description: 'Cria schemas otimizados e implementa índices adequados',
+      behaviorDescription: 'Modela bancos de dados relacionais de forma eficiente',
       evaluation: null
     },
     {
       id: 'be-4',
-      message: 'Desenvolve serviços com alta disponibilidade e escalabilidade',
-      description: 'Implementa cache, filas e estratégias de resiliência',
+      behaviorDescription: 'Desenvolve serviços com alta disponibilidade e escalabilidade',
       evaluation: null
     },
     {
       id: 'be-5',
-      message: 'Monitora e otimiza performance de aplicações backend',
-      description: 'Utiliza ferramentas de APM e implementa melhorias',
+      behaviorDescription: 'Monitora e otimiza performance de aplicações backend',
       evaluation: null
     }
   ]
@@ -541,32 +461,27 @@ const dataScienceTrack: Branch = {
   commits: [
     {
       id: 'ds-1',
-      message: 'Realiza análise exploratória de dados efetivamente',
-      description: 'Utiliza técnicas estatísticas e visualizações adequadas',
+      behaviorDescription: 'Realiza análise exploratória de dados efetivamente',
       evaluation: null
     },
     {
       id: 'ds-2',
-      message: 'Prepara e limpa dados para análise',
-      description: 'Trata missing values, outliers e normaliza dados',
+      behaviorDescription: 'Prepara e limpa dados para análise',
       evaluation: null
     },
     {
       id: 'ds-3',
-      message: 'Desenvolve modelos de machine learning básicos',
-      description: 'Implementa regressão, classificação e clustering',
+      behaviorDescription: 'Desenvolve modelos de machine learning básicos',
       evaluation: null
     },
     {
       id: 'ds-4',
-      message: 'Avalia e valida modelos adequadamente',
-      description: 'Utiliza métricas apropriadas e cross-validation',
+      behaviorDescription: 'Avalia e valida modelos adequadamente',
       evaluation: null
     },
     {
       id: 'ds-5',
-      message: 'Comunica resultados de forma clara e efetiva',
-      description: 'Cria visualizações e relatórios compreensíveis',
+      behaviorDescription: 'Comunica resultados de forma clara e efetiva',
       evaluation: null
     }
   ]
@@ -579,32 +494,27 @@ const mobileTrack: Branch = {
   commits: [
     {
       id: 'mb-1',
-      message: 'Desenvolve interfaces nativas seguindo guidelines da plataforma',
-      description: 'Implementa UI/UX conforme Material Design e Human Interface Guidelines',
+      behaviorDescription: 'Desenvolve interfaces nativas seguindo guidelines da plataforma',
       evaluation: null
     },
     {
       id: 'mb-2',
-      message: 'Gerencia estados e ciclo de vida de apps mobile',
-      description: 'Lida com background/foreground e preservação de estado',
+      behaviorDescription: 'Gerencia estados e ciclo de vida de apps mobile',
       evaluation: null
     },
     {
       id: 'mb-3',
-      message: 'Implementa features específicas de dispositivos móveis',
-      description: 'Utiliza câmera, GPS, notificações push e sensores',
+      behaviorDescription: 'Implementa features específicas de dispositivos móveis',
       evaluation: null
     },
     {
       id: 'mb-4',
-      message: 'Otimiza performance e consumo de recursos',
-      description: 'Gerencia memória, bateria e dados móveis eficientemente',
+      behaviorDescription: 'Otimiza performance e consumo de recursos',
       evaluation: null
     },
     {
       id: 'mb-5',
-      message: 'Implementa armazenamento local e sincronização offline',
-      description: 'Utiliza SQLite e estratégias de sincronização',
+      behaviorDescription: 'Implementa armazenamento local e sincronização offline',
       evaluation: null
     }
   ]
@@ -617,32 +527,27 @@ const cloudTrack: Branch = {
   commits: [
     {
       id: 'cl-1',
-      message: 'Provisiona e gerencia recursos em nuvem',
-      description: 'Utiliza IaC para criar e manter infraestrutura',
+      behaviorDescription: 'Provisiona e gerencia recursos em nuvem',
       evaluation: null
     },
     {
       id: 'cl-2',
-      message: 'Implementa práticas de segurança em nuvem',
-      description: 'Configura IAM, security groups e encryption',
+      behaviorDescription: 'Implementa práticas de segurança em nuvem',
       evaluation: null
     },
     {
       id: 'cl-3',
-      message: 'Desenvolve arquiteturas serverless básicas',
-      description: 'Utiliza funções lambda e serviços gerenciados',
+      behaviorDescription: 'Desenvolve arquiteturas serverless básicas',
       evaluation: null
     },
     {
       id: 'cl-4',
-      message: 'Configura monitoramento e logging',
-      description: 'Implementa métricas, alertas e centralização de logs',
+      behaviorDescription: 'Configura monitoramento e logging',
       evaluation: null
     },
     {
       id: 'cl-5',
-      message: 'Otimiza custos de recursos em nuvem',
-      description: 'Implementa auto-scaling e gerenciamento de recursos',
+      behaviorDescription: 'Otimiza custos de recursos em nuvem',
       evaluation: null
     }
   ]
@@ -655,32 +560,27 @@ const firmwareTrack: Branch = {
   commits: [
     {
       id: 'fw-1',
-      message: 'Desenvolve código otimizado para sistemas embarcados',
-      description: 'Escreve código eficiente em memória e processamento',
+      behaviorDescription: 'Desenvolve código otimizado para sistemas embarcados',
       evaluation: null
     },
     {
       id: 'fw-2',
-      message: 'Implementa comunicação com periféricos',
-      description: 'Utiliza protocolos como I2C, SPI e UART',
+      behaviorDescription: 'Implementa comunicação com periféricos',
       evaluation: null
     },
     {
       id: 'fw-3',
-      message: 'Desenvolve drivers para hardware específico',
-      description: 'Implementa interfaces com sensores e atuadores',
+      behaviorDescription: 'Desenvolve drivers para hardware específico',
       evaluation: null
     },
     {
       id: 'fw-4',
-      message: 'Implementa tratamento de interrupções e timers',
-      description: 'Gerencia eventos de hardware e temporização',
+      behaviorDescription: 'Implementa tratamento de interrupções e timers',
       evaluation: null
     },
     {
       id: 'fw-5',
-      message: 'Otimiza consumo de energia em sistemas embarcados',
-      description: 'Implementa modos de baixo consumo e sleep',
+      behaviorDescription: 'Otimiza consumo de energia em sistemas embarcados',
       evaluation: null
     }
   ]
@@ -693,32 +593,27 @@ const fullStackTrack: Branch = {
   commits: [
     {
       id: 'fs-01',
-      message: 'Desenvolve interfaces responsivas e componentes reutilizáveis',
-      description: 'Cria UIs modernas seguindo boas práticas de front-end',
+      behaviorDescription: 'Desenvolve interfaces responsivas e componentes reutilizáveis',
       evaluation: null
     },
     {
       id: 'fs-02',
-      message: 'Implementa APIs RESTful seguindo padrões e documentação adequada',
-      description: 'Desenvolve endpoints com autenticação e tratamento de erros',
+      behaviorDescription: 'Implementa APIs RESTful seguindo padrões e documentação adequada',
       evaluation: null
     },
     {
       id: 'fs-03',
-      message: 'Gerencia estado e integração entre front-end e back-end',
-      description: 'Implementa gerenciamento de estado e chamadas API eficientes',
+      behaviorDescription: 'Gerencia estado e integração entre front-end e back-end',
       evaluation: null
     },
     {
       id: 'fs-04',
-      message: 'Modela e otimiza bancos de dados para aplicações full-stack',
-      description: 'Cria schemas eficientes e implementa consultas otimizadas',
+      behaviorDescription: 'Modela e otimiza bancos de dados para aplicações full-stack',
       evaluation: null
     },
     {
       id: 'fs-05',
-      message: 'Implementa deploys e CI/CD para aplicações full-stack',
-      description: 'Configura pipelines e ambientes para entrega contínua',
+      behaviorDescription: 'Implementa deploys e CI/CD para aplicações full-stack',
       evaluation: null
     }
   ]

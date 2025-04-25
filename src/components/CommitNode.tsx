@@ -99,7 +99,7 @@ const CommitNode: React.FC<CommitNodeProps> = ({
       >
         <div className="flex flex-col flex-1 justify-center">
           <h4 className={`font-medium text-sm leading-tight ${borderTextClass.replace('border-', 'text-')}`}>
-            {commit.message}
+            {commit.behaviorDescription}
           </h4>
         </div>
 
