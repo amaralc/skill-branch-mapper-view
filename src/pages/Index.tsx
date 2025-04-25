@@ -2,12 +2,10 @@ import React, { useState } from 'react';
 import { Branch, SkillPath, careerPaths } from '@/data/skillData';
 import BranchView from '@/components/BranchView';
 import ProgressSummary from '@/components/ProgressSummary';
-import { Button } from '@/components/ui/button';
 import { Select, SelectGroup, SelectTrigger, SelectContent, SelectItem, SelectValue, SelectLabel } from '@/components/ui/select';
 import { useEvaluationState } from '@/hooks/useEvaluationState';
 import ActionsDrawer from '@/components/ActionsDrawer';
 import { emphasisOptions } from '@/types/emphasis';
-import SeniorityLevelsSheet from '@/components/SeniorityLevelsSheet';
 
 const Index = () => {
   const careerOptions = careerPaths.map(path => ({
@@ -105,6 +103,8 @@ const Index = () => {
             <ActionsDrawer 
               onExport={handleExportEvaluation}
               onImport={handleImportEvaluation}
+              onReset={resetAllEvaluations}
+              skillPath={skillPath}
             />
           </div>
         </div>
@@ -173,16 +173,6 @@ const Index = () => {
                       ) : null}
                     </button>
                   ))}
-                </div>
-                <div className="space-y-4 mt-4">
-                  <Button 
-                    variant="outline" 
-                    className="w-full" 
-                    onClick={() => resetAllEvaluations()}
-                  >
-                    Reiniciar Avaliação
-                  </Button>
-                  <SeniorityLevelsSheet skillPath={skillPath} />
                 </div>
               </div>
 
