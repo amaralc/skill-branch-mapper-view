@@ -2,6 +2,7 @@ import React from 'react';
 import { Branch, SkillPath, Tag } from '@/types/skill';
 import CommitNode from './CommitNode';
 import TagIllustratedNode from './TagIllustratedNode';
+import { Badge } from '@/components/ui/badge';
 import { calculateBranchPoints } from '@/utils/skillCalculations';
 
 const images = [
@@ -28,31 +29,23 @@ interface CommitLock {
   locked: boolean;
 }
 
-// This function needs to be updated to respect branch-specific level requirements
 function shouldLockCommitBasedOnBranchRequirements(
   commitIndex: number, 
   branch: Branch, 
   currentPoints: number
 ): boolean {
-  // Allow the first 5 commits without locking
   if (commitIndex < 5) return false;
   
-  // For commits 5 and above, check if we have enough points to reach the first level
-  // This should use the branch's specific level requirements
   if (branch.levelRequirements && branch.levelRequirements.length > 0) {
-    // Sort requirements by points ascending to get the first level
     const firstLevel = [...branch.levelRequirements].sort((a, b) => a.pointsRequired - b.pointsRequired)[0];
     
-    // If we have enough points for the first level, don't lock the commit
     if (currentPoints >= firstLevel.pointsRequired) {
       return false;
     }
     
-    // Otherwise, lock it
     return true;
   }
   
-  // Fallback to old behavior if no level requirements are defined
   const commitsPerLevel = 5;
   const commitLevel = Math.floor(commitIndex / commitsPerLevel);
   if (commitLevel === 0) return false;
@@ -62,6 +55,26 @@ function shouldLockCommitBasedOnBranchRequirements(
 }
 
 const BranchView: React.FC<BranchViewProps> = ({ branch, onEvaluateCommit, isCurrentBranch, skillPath }) => {
+  const getBranchStatusCounts = (branch: Branch) => {
+    const counts = {
+      notEvaluated: 0,
+      never: 0,
+      sometimes: 0,
+      always: 0
+    };
+
+    branch.commits.forEach(commit => {
+      if (commit.evaluation === null) counts.notEvaluated++;
+      else if (commit.evaluation === 'never') counts.never++;
+      else if (commit.evaluation === 'sometimes') counts.sometimes++;
+      else if (commit.evaluation === 'always') counts.always++;
+    });
+
+    return counts;
+  };
+
+  const counts = getBranchStatusCounts(branch);
+
   const branchPoints = calculateBranchPoints(branch);
   const tags = skillPath.tags;
   
@@ -90,14 +103,38 @@ const BranchView: React.FC<BranchViewProps> = ({ branch, onEvaluateCommit, isCur
   
   return (
     <div className={`mb-8 ${isCurrentBranch ? 'opacity-100' : 'opacity-60'}`}>
-      <div className="flex items-center mb-2">
+      <div className="flex items-center gap-2 mb-4">
         <div 
-          className="px-3 py-1 rounded text-white font-mono text-sm font-bold inline-flex items-center mr-2" 
+          className="px-3 py-1 rounded text-white font-mono text-sm font-bold inline-flex items-center"
           style={{ backgroundColor: branch.color }}
         >
           {branch.name}
         </div>
+
+        <div className="flex gap-1">
+          {counts.notEvaluated > 0 && (
+            <Badge variant="outline" className="bg-gray-100">
+              {counts.notEvaluated}
+            </Badge>
+          )}
+          {counts.never > 0 && (
+            <Badge className="bg-red-500 hover:bg-red-500">
+              {counts.never}
+            </Badge>
+          )}
+          {counts.sometimes > 0 && (
+            <Badge className="bg-yellow-500 hover:bg-yellow-500">
+              {counts.sometimes}
+            </Badge>
+          )}
+          {counts.always > 0 && (
+            <Badge className="bg-green-500 hover:bg-green-500">
+              {counts.always}
+            </Badge>
+          )}
+        </div>
       </div>
+
       <div className="relative">
         <div 
           className="absolute left-4 top-4 h-[calc(100%-8px)] w-1 z-0" 

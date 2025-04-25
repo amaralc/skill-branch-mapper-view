@@ -186,51 +186,26 @@ const Index = () => {
                 <Tabs defaultValue={filteredBranches[0]?.id} className="w-full">
                   <ScrollArea className="w-full pb-4" orientation="horizontal">
                     <TabsList className="w-full justify-start mb-4 bg-transparent gap-2 inline-flex">
-                      {filteredBranches.map(branch => {
-                        const counts = getBranchStatusCounts(branch);
-                        return (
-                          <TabsTrigger
-                            key={branch.id}
-                            value={branch.id}
-                            className="data-[state=active]:bg-gray-100 data-[state=active]:shadow-none px-4 shrink-0"
-                          >
-                            <div className="flex items-center gap-2">
-                              <div 
-                                className="w-3 h-3 rounded-full" 
-                                style={{ backgroundColor: branch.color }}
-                              />
-                              <span>{branch.name}</span>
-                              {branch.id === selectedEmphasis && (
-                                <span className="ml-1 text-xs text-gray-500">
-                                  (Especialidade)
-                                </span>
-                              )}
-                              <div className="flex gap-1 ml-2">
-                                {counts.notEvaluated > 0 && (
-                                  <Badge variant="outline" className="bg-gray-100">
-                                    {counts.notEvaluated}
-                                  </Badge>
-                                )}
-                                {counts.never > 0 && (
-                                  <Badge className="bg-red-500 hover:bg-red-500">
-                                    {counts.never}
-                                  </Badge>
-                                )}
-                                {counts.sometimes > 0 && (
-                                  <Badge className="bg-yellow-500 hover:bg-yellow-500">
-                                    {counts.sometimes}
-                                  </Badge>
-                                )}
-                                {counts.always > 0 && (
-                                  <Badge className="bg-green-500 hover:bg-green-500">
-                                    {counts.always}
-                                  </Badge>
-                                )}
-                              </div>
-                            </div>
-                          </TabsTrigger>
-                        );
-                      })}
+                      {filteredBranches.map(branch => (
+                        <TabsTrigger
+                          key={branch.id}
+                          value={branch.id}
+                          className="data-[state=active]:bg-gray-100 data-[state=active]:shadow-none px-4 shrink-0"
+                        >
+                          <div className="flex items-center gap-2">
+                            <div 
+                              className="w-3 h-3 rounded-full" 
+                              style={{ backgroundColor: branch.color }}
+                            />
+                            <span>{branch.name}</span>
+                            {branch.id === selectedEmphasis && (
+                              <span className="ml-1 text-xs text-gray-500">
+                                (Especialidade)
+                              </span>
+                            )}
+                          </div>
+                        </TabsTrigger>
+                      ))}
                     </TabsList>
                   </ScrollArea>
 
