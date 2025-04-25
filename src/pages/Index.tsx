@@ -140,16 +140,30 @@ const Index = () => {
 
         <Select value={selectedEmphasis || ''} onValueChange={handleEmphasisChange}>
           <SelectTrigger className="w-[250px]">
-            <SelectValue placeholder="Escolha a ênfase" />
+            <SelectValue placeholder="Escolha a especialidade" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectLabel>Ênfase</SelectLabel>
-              {emphasisOptions.map(emphasis => (
-                <SelectItem value={emphasis.id} key={emphasis.id}>
-                  {emphasis.label}
-                </SelectItem>
-              ))}
+              <SelectLabel>Base</SelectLabel>
+              {emphasisOptions
+                .filter(emphasis => emphasis.group === 'base')
+                .map(emphasis => (
+                  <SelectItem value={emphasis.id} key={emphasis.id}>
+                    {emphasis.label}
+                  </SelectItem>
+                ))
+              }
+            </SelectGroup>
+            <SelectGroup>
+              <SelectLabel>Especialidade</SelectLabel>
+              {emphasisOptions
+                .filter(emphasis => emphasis.group === 'especialidade')
+                .map(emphasis => (
+                  <SelectItem value={emphasis.id} key={emphasis.id}>
+                    {emphasis.label}
+                  </SelectItem>
+                ))
+              }
             </SelectGroup>
           </SelectContent>
         </Select>
