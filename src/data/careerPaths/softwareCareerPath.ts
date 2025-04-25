@@ -1,5 +1,49 @@
 import { Branch, SkillPath } from '@/types/skill';
 
+const architectureBranch: Branch = {
+  id: 'architecture',
+  name: 'Arquitetura',
+  color: '#2ecc71',
+  commits: [
+    {
+      id: 'architecture-1',
+      message: 'Escreve código legível e idiomático, seguindo padrões e convenções adotadas pelo time',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'architecture-2',
+      message: 'Separa responsabilidades para que cada módulo tenha apenas um motivo para mudar',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'architecture-3',
+      message: 'Cria implementações que podem ser substituídas sem afetar o comportamento esperado',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'architecture-4',
+      message: 'Cria módulos que dependem de interfaces e abstrações, não de implementações concretas',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'architecture-5',
+      message: 'Estende funcionalidades sem alterar o código já existente',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'architecture-6',
+      message: 'Cria interfaces enxutas, contendo apenas atributos relevantes para cada uso',
+      description: '',
+      evaluation: null
+    }
+  ]
+};
+
 const qualityBranch: Branch = {
   id: 'qualidade',
   name: 'Qualidade',
@@ -376,50 +420,6 @@ const securityBranch: Branch = {
   ]
 };
 
-const architectureBranch: Branch = {
-  id: 'engenharia-software',
-  name: 'Arquitetura',
-  color: '#2ecc71',
-  commits: [
-    {
-      id: 'architecture-1',
-      message: 'Escreve código legível e idiomático, seguindo padrões e convenções adotadas pelo time',
-      description: '',
-      evaluation: null
-    },
-    {
-      id: 'architecture-2',
-      message: 'Separa responsabilidades para que cada módulo tenha apenas um motivo para mudar',
-      description: '',
-      evaluation: null
-    },
-    {
-      id: 'architecture-3',
-      message: 'Cria implementações que podem ser substituídas sem afetar o comportamento esperado',
-      description: '',
-      evaluation: null
-    },
-    {
-      id: 'architecture-4',
-      message: 'Cria módulos que dependem de interfaces e abstrações, não de implementações concretas',
-      description: '',
-      evaluation: null
-    },
-    {
-      id: 'architecture-5',
-      message: 'Estende funcionalidades sem alterar o código já existente',
-      description: '',
-      evaluation: null
-    },
-    {
-      id: 'architecture-6',
-      message: 'Cria interfaces enxutas, contendo apenas atributos relevantes para cada uso',
-      description: '',
-      evaluation: null
-    }
-  ]
-};
-
 const continuousDeliveryBranch: Branch = {
   id: 'entrega-continua',
   name: 'Entrega Contínua',
@@ -451,7 +451,7 @@ const continuousDeliveryBranch: Branch = {
     },
     {
       id: 'delivery-5',
-      message: 'Participa de discussões sobre o processo de entrega contínua',
+ message: 'Participa de discussões sobre o processo de entrega contínua',
       description: 'Colabora com outros membros da equipe para melhorar o processo de entrega contínua',
       evaluation: null
     }
