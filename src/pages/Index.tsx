@@ -166,7 +166,7 @@ const Index = () => {
                 <h2 className="text-lg font-bold mb-3">Trilhas de Competência</h2>
                 
                 <Tabs defaultValue={filteredBranches[0]?.id} className="w-full">
-                  <ScrollArea className="w-full pb-4">
+                  <ScrollArea className="w-full pb-4" orientation="horizontal">
                     <TabsList className="w-full justify-start mb-4 bg-transparent gap-2 inline-flex">
                       {filteredBranches.map(branch => (
                         <TabsTrigger
