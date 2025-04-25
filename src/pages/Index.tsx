@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Branch, SkillPath, careerPaths } from '@/data/skillData';
 import BranchView from '@/components/BranchView';
@@ -131,9 +132,9 @@ const Index = () => {
         </div>
       </header>
 
-      <div className="max-w-[1200px] mx-auto py-5 flex items-center gap-4 px-[16px]">
+      <div className="max-w-[1200px] mx-auto py-5 px-[16px] flex flex-col gap-4">
         <Select value={selectedCareerId} onValueChange={handleCareerChange}>
-          <SelectTrigger className="w-[250px]">
+          <SelectTrigger className="w-full">
             <SelectValue placeholder="Escolha a carreira" />
           </SelectTrigger>
           <SelectContent>
@@ -147,7 +148,7 @@ const Index = () => {
         </Select>
 
         <Select value={selectedEmphasis || ''} onValueChange={handleEmphasisChange}>
-          <SelectTrigger className="w-[250px]">
+          <SelectTrigger className="w-full">
             <SelectValue placeholder="Escolha a especialidade" />
           </SelectTrigger>
           <SelectContent>
@@ -164,7 +165,7 @@ const Index = () => {
       </div>
 
       <main className="max-w-[1200px] mx-auto py-0 px-4">
-        {selectedCareerId ? (
+        {selectedCareerId && selectedEmphasis ? (
           <>
             <ProgressSummary skillPath={skillPath} />
             
@@ -225,7 +226,7 @@ const Index = () => {
           </>
         ) : (
           <div className="text-center py-12 text-gray-500">
-            Selecione uma carreira para visualizar as trilhas de competência
+            Selecione uma carreira e uma especialidade para visualizar as trilhas de competência
           </div>
         )}
       </main>
