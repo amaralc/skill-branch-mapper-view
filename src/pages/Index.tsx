@@ -93,7 +93,7 @@ const Index = () => {
     );
   };
 
-  const baseTracks = ['qualidade', 'seguranca', 'architecture', 'entrega-continua'];
+  const baseTracks = ['quality', 'security', 'architecture', 'continuous-delivery'];
   
   const filteredBranches = skillPath.branches.filter(branch => {
     // Always show base tracks
