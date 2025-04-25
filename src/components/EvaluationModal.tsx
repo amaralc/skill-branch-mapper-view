@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Commit } from '@/data/skillData';
 import { 
@@ -37,8 +36,7 @@ const EvaluationModal: React.FC<EvaluationModalProps> = ({
         <div className="py-4">
           <div className="mb-4">
             <p className="text-sm text-gray-500">Branch: <span className="font-medium">{branchName}</span></p>
-            <h3 className="font-bold mt-2">{commit.message}</h3>
-            <p className="text-sm text-gray-600 mt-1">{commit.description}</p>
+            <h3 className="font-bold mt-2">{commit.behaviorDescription}</h3>
           </div>
           
           <div className="text-sm font-medium mb-2">Com que frequência você demonstra este comportamento?</div>

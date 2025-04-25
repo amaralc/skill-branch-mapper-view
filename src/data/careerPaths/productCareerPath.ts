@@ -1,4 +1,3 @@
-
 import { SkillPath } from '../../types/skill';
 
 const productManagementPath: SkillPath = {
@@ -13,14 +12,12 @@ const productManagementPath: SkillPath = {
       commits: [
         {
           id: "pcommit1",
-          message: "Entendimento do usuário",
-          description: "Identificar e compreender as necessidades do usuário.",
+          behaviorDescription: "Identificar e compreender as necessidades do usuário.",
           evaluation: null
         },
         {
           id: "pcommit2",
-          message: "Visão de Produto",
-          description: "Definir a visão do produto e alinhar ao negócio.",
+          behaviorDescription: "Definir a visão do produto e alinhar ao negócio.",
           evaluation: null
         }
       ]
