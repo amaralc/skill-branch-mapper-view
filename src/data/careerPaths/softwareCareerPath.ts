@@ -378,7 +378,7 @@ const securityBranch: Branch = {
 
 const architectureBranch: Branch = {
   id: 'engenharia-software',
-  name: 'Engenharia de Software',
+  name: 'Arquitetura',
   color: '#2ecc71',
   commits: [
     {
