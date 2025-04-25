@@ -329,7 +329,7 @@ const backEndTrack: Branch = {
     },
     {
       id: 'be-3',
-      message: 'Modela bancos de dados relacionais de forma eficiente',
+ message: 'Modela bancos de dados relacionais de forma eficiente',
       description: 'Cria schemas otimizados e implementa índices adequados',
       evaluation: null
     },
@@ -500,6 +500,44 @@ const firmwareTrack: Branch = {
   ]
 };
 
+const fullStackTrack: Branch = {
+  id: 'full-stack',
+  name: 'Full-Stack Development',
+  color: '#8854d0',
+  commits: [
+    {
+      id: 'fs-01',
+      message: 'Desenvolve interfaces responsivas e componentes reutilizáveis',
+      description: 'Cria UIs modernas seguindo boas práticas de front-end',
+      evaluation: null
+    },
+    {
+      id: 'fs-02',
+      message: 'Implementa APIs RESTful seguindo padrões e documentação adequada',
+      description: 'Desenvolve endpoints com autenticação e tratamento de erros',
+      evaluation: null
+    },
+    {
+      id: 'fs-03',
+      message: 'Gerencia estado e integração entre front-end e back-end',
+      description: 'Implementa gerenciamento de estado e chamadas API eficientes',
+      evaluation: null
+    },
+    {
+      id: 'fs-04',
+      message: 'Modela e otimiza bancos de dados para aplicações full-stack',
+      description: 'Cria schemas eficientes e implementa consultas otimizadas',
+      evaluation: null
+    },
+    {
+      id: 'fs-05',
+      message: 'Implementa deploys e CI/CD para aplicações full-stack',
+      description: 'Configura pipelines e ambientes para entrega contínua',
+      evaluation: null
+    }
+  ]
+};
+
 const softwareCareerPath: SkillPath = {
   id: 'software-engineering',
   name: 'Engenharia de Software',
@@ -511,6 +549,7 @@ const softwareCareerPath: SkillPath = {
     continuousDeliveryBranch,
     frontEndTrack,
     backEndTrack,
+    fullStackTrack,
     dataScienceTrack,
     mobileTrack,
     cloudTrack,
