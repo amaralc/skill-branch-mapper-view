@@ -5,11 +5,17 @@ export interface Commit {
   evaluation: 'never' | 'sometimes' | 'always' | null;
 }
 
+export interface BranchTag {
+  tagId: string;
+  pointsRequired: number;
+}
+
 export interface Branch {
   id: string;
   name: string;
   color: string;
   commits: Commit[];
+  levelRequirements: BranchTag[];
 }
 
 export interface Tag {

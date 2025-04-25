@@ -21,6 +21,10 @@ const productManagementPath: SkillPath = {
           behaviorDescription: "Definir a visão do produto e alinhar ao negócio.",
           evaluation: null
         }
+      ],
+      levelRequirements: [
+        { tagId: "nivel1", pointsRequired: 1 },
+        { tagId: "nivel2", pointsRequired: 3 }
       ]
     }
   ],
