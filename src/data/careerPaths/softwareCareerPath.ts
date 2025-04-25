@@ -524,29 +524,29 @@ const continuousDeliveryBranch: Branch = {
   color: '#f39c12',
   commits: [
     {
-      id: 'delivery-1',
-      behaviorDescription: 'Automatiza o processo de build e teste',
-      evaluation: null
+      "id": "continuous-delivery-1",
+      "behaviorDescription": "Entrega partes simples do sistema com apoio, focando em pequenas entregas úteis",
+      "evaluation": null
     },
     {
-      id: 'delivery-2',
-      behaviorDescription: 'Automatiza o processo de deploy',
-      evaluation: null
+      "id": "continuous-delivery-2",
+      "behaviorDescription": "Aprende a integrar mudanças com frequência, com apoio para manter o sistema estável",
+      "evaluation": null
     },
     {
-      id: 'delivery-3',
-      behaviorDescription: 'Monitora o sistema em produção',
-      evaluation: null
+      "id": "continuous-delivery-3",
+      "behaviorDescription": "Corrige falhas simples com orientação, aprendendo a monitorar seu impacto após o deploy",
+      "evaluation": null
     },
     {
-      id: 'delivery-4',
-      behaviorDescription: 'Realiza rollbacks em caso de falha',
-      evaluation: null
+      "id": "continuous-delivery-4",
+      "behaviorDescription": "Compreende os recursos da infraestrutura e pede apoio ao identificar problemas básicos",
+      "evaluation": null
     },
     {
-      id: 'delivery-5',
-      behaviorDescription: 'Participa de discussões sobre o processo de entrega contínua',
-      evaluation: null
+      "id": "continuous-delivery-5",
+      "behaviorDescription": "Refatora partes do código com apoio, mantendo clareza e simplicidade em pequenas tarefas",
+      "evaluation": null
     }
   ],
   levelRequirements: [
