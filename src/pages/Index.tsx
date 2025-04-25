@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Branch, SkillPath, careerPaths } from '@/data/skillData';
 import BranchView from '@/components/BranchView';
@@ -95,12 +96,12 @@ const Index = () => {
   const baseTracks = ['qualidade', 'seguranca', 'engenharia-software', 'entrega-continua'];
   
   const filteredBranches = skillPath.branches.filter(branch => {
-    // Show base tracks
+    // Always show base tracks
     if (baseTracks.includes(branch.id)) {
       return true;
     }
     
-    // Show only the selected specialization track
+    // Show only the selected specialization track if one is selected
     if (selectedEmphasis && branch.id === selectedEmphasis) {
       return true;
     }
@@ -194,7 +195,7 @@ const Index = () => {
                         backgroundColor: branch.color
                       }}></div>
                       {branch.name}
-                      {branch.id === selectedEmphasis || branch.id === 'especialidade' ? (
+                      {branch.id === selectedEmphasis ? (
                         <span className="ml-2 text-xs text-gray-500">
                           (Especialidade)
                         </span>
