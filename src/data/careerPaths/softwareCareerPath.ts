@@ -164,33 +164,213 @@ const securityBranch: Branch = {
   color: '#e74c3c',
   commits: [
     {
-      id: 'security-1',
-      message: 'Aplica princípios de segurança no desenvolvimento de software',
-      description: 'Implementa medidas de segurança para proteger o sistema contra ameaças',
+      id: 'security-01',
+      message: 'Evita expor dados sensíveis e aplica variáveis de ambiente com apoio e atenção ao detalhe',
+      description: '',
+      evaluation: 'sometimes'
+    },
+    {
+      id: 'security-02',
+      message: 'Lê relatórios de SAST e busca entender vulnerabilidades OWASP, com ajuda, corrigindo o que entrega',
+      description: '',
+      evaluation: 'always'
+    },
+    {
+      id: 'security-03',
+      message: 'Usa autenticação e permissões com apoio, e entende seu papel nos fluxos seguros do time',
+      description: '',
       evaluation: null
     },
     {
-      id: 'security-2',
-      message: 'Realiza testes de segurança para identificar vulnerabilidades',
-      description: 'Utiliza ferramentas de teste de segurança para encontrar falhas no sistema',
+      id: 'security-04',
+      message: 'Cria testes para falhas conhecidas que entregou, com supervisão, garantindo que não voltem',
+      description: '',
+      evaluation: 'always'
+    },
+    {
+      id: 'security-05',
+      message: 'Reporta falhas com clareza, busca entender causas e aprende com o time como preveni-las',
+      description: '',
       evaluation: null
     },
     {
-      id: 'security-3',
-      message: 'Implementa medidas de proteção contra ataques de injeção de código',
-      description: 'Valida e sanitiza os dados de entrada para evitar ataques de injeção',
+      id: 'security-06',
+      message: 'Garante que tokens e dados sensíveis não sejam expostos em commits, logs ou respostas HTTP',
+      description: '',
       evaluation: null
     },
     {
-      id: 'security-4',
-      message: 'Utiliza criptografia para proteger os dados confidenciais',
-      description: 'Criptografa os dados em repouso e em trânsito para evitar o acesso não autorizado',
+      id: 'security-07',
+      message: 'Monitora alertas de SAST e previne riscos conhecidos com base no OWASP Top 10',
+      description: '',
       evaluation: null
     },
     {
-      id: 'security-5',
-      message: 'Implementa autenticação e autorização para controlar o acesso ao sistema',
-      description: 'Verifica a identidade dos usuários e controla o acesso aos recursos do sistema',
+      id: 'security-08',
+      message: 'Usa e configura corretamente autenticação, RBAC e ferramentas de scan e segurança exigidas',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'security-09',
+      message: 'Cria testes automatizados para cobrir falhas reportadas e prevenir reincidência',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'security-10',
+      message: 'Corrige falhas com agilidade e compartilha aprendizados com o time em revisão ou retro',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'security-11',
+      message: 'Garante que não haja vazamento de segredos em nenhum ponto da stack sob sua responsabilidade',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'security-12',
+      message: 'Interpreta alertas de SAST e previne vulnerabilidades OWASP com ações corretivas antes do deploy',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'security-13',
+      message: 'Implementa e reforça o uso correto de autenticação, RBAC e scanners em serviços sob responsabilidade de sua equipe',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'security-14',
+      message: 'Automatiza testes para falhas críticas e orienta o time na construção de simulações seguras',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'security-15',
+      message: 'Lidera atuação rápida em falhas, propõe melhorias e promove compartilhamento de aprendizados ativamente',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'security-16',
+      message: 'Define e audita práticas seguras de gestão de segredos em todo o time ou domínio técnico',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'security-17',
+      message: 'Garante que relatórios de SAST sejam tratados com prioridade e que riscos OWASP sejam mitigados',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'security-18',
+      message: 'Promove a adoção consistente de controles como RBAC, SCA, SSO, MFA e scanners de vulnerabilidade',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'security-19',
+      message: 'Estabelece padrões de testabilidade em segurança e cria exemplos para serem replicados',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'security-20',
+      message: 'Conduz análises pós-incidente, catalisa ações corretivas e institucionaliza aprendizados',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'security-21',
+      message: 'Define padrões e ferramentas seguras para gestão de segredos em escala organizacional',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'security-22',
+      message: 'Influencia processos de tratamento de vulnerabilidades e incorpora OWASP em revisões e projetos',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'security-23',
+      message: 'Garante adoção consistente de controles em sistemas críticos e orienta decisões de arquitetura',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'security-24',
+      message: 'Estabelece práticas de testabilidade em segurança aplicáveis a múltiplos times ou produtos',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'security-25',
+      message: 'Lidera resposta a falhas críticas, compartilha lições e muda processos para prevenir recorrência',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'security-26',
+      message: 'Garante que o time use práticas e ferramentas seguras, treinando quem ainda tem lacunas',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'security-27',
+      message: 'Estimula acompanhamento regular de relatórios e promove aprendizado técnico com base nos alertas',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'security-28',
+      message: 'Remove barreiras para adoção dos controles e reforça sua aplicação no dia a dia',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'security-29',
+      message: 'Incentiva o time a automatizar prevenção com exemplos reais, revisando cobertura junto aos devs',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'security-30',
+      message: 'Facilita discussões pós-falha, garante ações corretivas e aprendizado distribuído',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'security-31',
+      message: 'Cria padrões e governança que previnem exposição de dados sensíveis em toda a organização',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'security-32',
+      message: 'Garante que times monitorem vulnerabilidades e que planos de ação estejam integrados à rotina',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'security-33',
+      message: 'Assegura que ferramentas, práticas e políticas estejam implantadas e operantes em todas as áreas',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'security-34',
+      message: 'Promove cultura de prevenção baseada em testes e simulações, com investimento e apoio transversal',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'security-35',
+      message: 'Estimula aprendizado organizacional a partir de incidentes e define resposta padrão para riscos',
+      description: '',
       evaluation: null
     }
   ]
@@ -329,7 +509,7 @@ const backEndTrack: Branch = {
     },
     {
       id: 'be-3',
- message: 'Modela bancos de dados relacionais de forma eficiente',
+      message: 'Modela bancos de dados relacionais de forma eficiente',
       description: 'Cria schemas otimizados e implementa índices adequados',
       evaluation: null
     },
