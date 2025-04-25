@@ -1,4 +1,3 @@
-
 import { Branch, SkillPath } from '@/types/skill';
 
 const architectureBranch: Branch = {
@@ -36,6 +35,11 @@ const architectureBranch: Branch = {
       behaviorDescription: 'Cria interfaces enxutas, contendo apenas atributos relevantes para cada uso',
       evaluation: null
     }
+  ],
+  levelRequirements: [
+    { tagId: 'ic01', pointsRequired: 3 },
+    { tagId: 'ic02', pointsRequired: 6 },
+    { tagId: 'ic03', pointsRequired: 9 }
   ]
 };
 
@@ -169,6 +173,13 @@ const qualityBranch: Branch = {
       behaviorDescription: 'Constrói uma cultura de revisão e pairing que eleva o nível técnico da organização',
       evaluation: null
     }
+  ],
+  levelRequirements: [
+    { tagId: 'ic01', pointsRequired: 5 },
+    { tagId: 'ic02', pointsRequired: 15 },
+    { tagId: 'ic03', pointsRequired: 25 },
+    { tagId: 'ic04', pointsRequired: 35 },
+    { tagId: 'ic05', pointsRequired: 45 }
   ]
 };
 
@@ -352,6 +363,13 @@ const securityBranch: Branch = {
       behaviorDescription: 'Estimula aprendizado organizacional a partir de incidentes e define resposta padrão para riscos',
       evaluation: null
     }
+  ],
+  levelRequirements: [
+    { tagId: 'ic01', pointsRequired: 5 },
+    { tagId: 'ic02', pointsRequired: 15 },
+    { tagId: 'ic03', pointsRequired: 30 },
+    { tagId: 'ic04', pointsRequired: 45 },
+    { tagId: 'ic05', pointsRequired: 60 }
   ]
 };
 
@@ -385,6 +403,11 @@ const continuousDeliveryBranch: Branch = {
       behaviorDescription: 'Participa de discussões sobre o processo de entrega contínua',
       evaluation: null
     }
+  ],
+  levelRequirements: [
+    { tagId: 'ic01', pointsRequired: 2 },
+    { tagId: 'ic02', pointsRequired: 5 },
+    { tagId: 'ic03', pointsRequired: 8 }
   ]
 };
 
@@ -418,6 +441,11 @@ const frontEndTrack: Branch = {
       behaviorDescription: 'Implementa integrações com APIs RESTful de forma eficiente',
       evaluation: null
     }
+  ],
+  levelRequirements: [
+    { tagId: 'ic01', pointsRequired: 2 },
+    { tagId: 'ic02', pointsRequired: 5 },
+    { tagId: 'ic03', pointsRequired: 8 }
   ]
 };
 
@@ -451,6 +479,11 @@ const backEndTrack: Branch = {
       behaviorDescription: 'Monitora e otimiza performance de aplicações backend',
       evaluation: null
     }
+  ],
+  levelRequirements: [
+    { tagId: 'ic01', pointsRequired: 2 },
+    { tagId: 'ic02', pointsRequired: 5 },
+    { tagId: 'ic03', pointsRequired: 8 }
   ]
 };
 
@@ -484,6 +517,12 @@ const dataScienceTrack: Branch = {
       behaviorDescription: 'Comunica resultados de forma clara e efetiva',
       evaluation: null
     }
+  ],
+  levelRequirements: [
+    { tagId: 'ic01', pointsRequired: 2 },
+    { tagId: 'ic02', pointsRequired: 5 },
+    { tagId: 'ic03', pointsRequired: 8 },
+    { tagId: 'ic04', pointsRequired: 10 }
   ]
 };
 
@@ -517,6 +556,11 @@ const mobileTrack: Branch = {
       behaviorDescription: 'Implementa armazenamento local e sincronização offline',
       evaluation: null
     }
+  ],
+  levelRequirements: [
+    { tagId: 'ic01', pointsRequired: 2 },
+    { tagId: 'ic02', pointsRequired: 5 },
+    { tagId: 'ic03', pointsRequired: 8 }
   ]
 };
 
@@ -550,6 +594,11 @@ const cloudTrack: Branch = {
       behaviorDescription: 'Otimiza custos de recursos em nuvem',
       evaluation: null
     }
+  ],
+  levelRequirements: [
+    { tagId: 'ic01', pointsRequired: 2 },
+    { tagId: 'ic02', pointsRequired: 5 },
+    { tagId: 'ic03', pointsRequired: 8 }
   ]
 };
 
@@ -583,6 +632,11 @@ const firmwareTrack: Branch = {
       behaviorDescription: 'Otimiza consumo de energia em sistemas embarcados',
       evaluation: null
     }
+  ],
+  levelRequirements: [
+    { tagId: 'ic01', pointsRequired: 2 },
+    { tagId: 'ic02', pointsRequired: 5 },
+    { tagId: 'ic03', pointsRequired: 8 }
   ]
 };
 
@@ -616,6 +670,11 @@ const fullStackTrack: Branch = {
       behaviorDescription: 'Implementa deploys e CI/CD para aplicações full-stack',
       evaluation: null
     }
+  ],
+  levelRequirements: [
+    { tagId: 'ic01', pointsRequired: 2 },
+    { tagId: 'ic02', pointsRequired: 6 },
+    { tagId: 'ic03', pointsRequired: 8 }
   ]
 };
 
