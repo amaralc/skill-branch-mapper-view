@@ -1,8 +1,6 @@
-
 export interface Commit {
   id: string;
   message: string;
-  description: string;
   evaluation: 'never' | 'sometimes' | 'always' | null;
 }
 
