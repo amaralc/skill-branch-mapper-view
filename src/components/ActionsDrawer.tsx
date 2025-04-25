@@ -1,19 +1,17 @@
 
 import React, { useRef } from 'react';
-import { Drawer, DrawerContent, DrawerTrigger, DrawerTitle } from "@/components/ui/drawer";
+import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
-import { Download, Upload, Menu, RotateCcw, GraduationCap } from 'lucide-react';
+import { Download, Upload, Menu } from 'lucide-react';
 import { toast } from "sonner";
 import { SkillPath } from '@/data/skillData';
 
 interface ActionsDrawerProps {
   onExport: () => void;
   onImport: (importedData: SkillPath) => void;
-  onReset: () => void;
-  skillPath: SkillPath;
 }
 
-const ActionsDrawer = ({ onExport, onImport, onReset, skillPath }: ActionsDrawerProps) => {
+const ActionsDrawer = ({ onExport, onImport }: ActionsDrawerProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImportClick = () => {
@@ -61,54 +59,11 @@ const ActionsDrawer = ({ onExport, onImport, onReset, skillPath }: ActionsDrawer
             <Button 
               variant="outline" 
               className="w-full"
-              onClick={onReset}
-            >
-              <RotateCcw className="w-4 h-4 mr-2" />
-              Reiniciar Avaliação
-            </Button>
-
-            <Drawer>
-              <DrawerTrigger asChild>
-                <Button variant="outline" className="w-full">
-                  <GraduationCap className="w-4 h-4 mr-2" />
-                  Níveis de Senioridade
-                </Button>
-              </DrawerTrigger>
-              <DrawerContent>
-                <div className="max-w-[600px] mx-auto p-4">
-                  <DrawerTitle className="font-medium text-gray-700 mb-4 flex items-center">
-                    <GraduationCap className="mr-2" size={16} />
-                    Níveis de Senioridade
-                  </DrawerTitle>
-                  <div className="space-y-3">
-                    {skillPath && skillPath.tags && skillPath.tags.map(tag => (
-                      <div key={tag.id} className="bg-gray-50 p-3 rounded border">
-                        <div className="flex items-center">
-                          <span className="font-bold text-sm">{tag.name}</span>
-                          <span className="ml-2 text-xs text-gray-600">({tag.level})</span>
-                        </div>
-                        <div className="text-xs mt-1 text-gray-500">
-                          Requer {tag.pointsRequired} pontos
-                        </div>
-                        {tag.description && (
-                          <div className="text-xs mt-1 text-gray-600">{tag.description}</div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </DrawerContent>
-            </Drawer>
-
-            <Button 
-              variant="outline" 
-              className="w-full"
               onClick={onExport}
             >
               <Download className="w-4 h-4 mr-2" />
               Exportar Avaliação
             </Button>
-
             <Button 
               variant="outline"
               className="w-full"
@@ -117,7 +72,6 @@ const ActionsDrawer = ({ onExport, onImport, onReset, skillPath }: ActionsDrawer
               <Upload className="w-4 h-4 mr-2" />
               Importar Avaliação
             </Button>
-
             <input
               type="file"
               ref={fileInputRef}

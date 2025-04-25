@@ -1,12 +1,13 @@
-
 import React, { useState } from 'react';
 import { Branch, SkillPath, careerPaths } from '@/data/skillData';
 import BranchView from '@/components/BranchView';
 import ProgressSummary from '@/components/ProgressSummary';
+import { Button } from '@/components/ui/button';
 import { Select, SelectGroup, SelectTrigger, SelectContent, SelectItem, SelectValue, SelectLabel } from '@/components/ui/select';
 import { useEvaluationState } from '@/hooks/useEvaluationState';
 import ActionsDrawer from '@/components/ActionsDrawer';
 import { emphasisOptions } from '@/types/emphasis';
+import SeniorityLevelsSheet from '@/components/SeniorityLevelsSheet';
 
 const Index = () => {
   const careerOptions = careerPaths.map(path => ({
@@ -61,15 +62,13 @@ const Index = () => {
   };
 
   const getBranchName = (branchId: string): string => {
-    if (!skillPath || !skillPath.branches) return '';
     const branch = skillPath.branches.find(b => b.id === branchId);
     return branch ? branch.name : '';
   };
 
   const baseTracks = ['quality', 'security', 'architecture', 'continuous-delivery'];
   
-  // Add null check for skillPath.branches to prevent the "undefined.filter" error
-  const filteredBranches = skillPath && skillPath.branches ? skillPath.branches.filter(branch => {
+  const filteredBranches = skillPath.branches.filter(branch => {
     if (baseTracks.includes(branch.id)) {
       return true;
     }
@@ -79,7 +78,7 @@ const Index = () => {
     }
     
     return false;
-  }) : [];
+  });
 
   if (isLoading) {
     return (
@@ -106,8 +105,6 @@ const Index = () => {
             <ActionsDrawer 
               onExport={handleExportEvaluation}
               onImport={handleImportEvaluation}
-              onReset={resetAllEvaluations}
-              skillPath={skillPath}
             />
           </div>
         </div>
@@ -146,7 +143,7 @@ const Index = () => {
       </div>
 
       <main className="max-w-[1200px] mx-auto py-0 px-0">
-        {selectedCareerId && skillPath ? (
+        {selectedCareerId ? (
           <>
             <ProgressSummary skillPath={skillPath} />
 
@@ -177,6 +174,16 @@ const Index = () => {
                     </button>
                   ))}
                 </div>
+                <div className="space-y-4 mt-4">
+                  <Button 
+                    variant="outline" 
+                    className="w-full" 
+                    onClick={() => resetAllEvaluations()}
+                  >
+                    Reiniciar Avaliação
+                  </Button>
+                  <SeniorityLevelsSheet skillPath={skillPath} />
+                </div>
               </div>
 
               <div className="bg-white rounded-lg shadow p-4">
@@ -184,7 +191,7 @@ const Index = () => {
                   {currentBranchId ? `Branch: ${getBranchName(currentBranchId)}` : 'Selecione uma branch para visualizar os commits'}
                 </h2>
 
-                {currentBranchId && skillPath.branches ? (
+                {currentBranchId ? (
                   <BranchView
                     branch={skillPath.branches.find(branch => branch.id === currentBranchId)!}
                     onEvaluateCommit={handleEvaluateCommit}
