@@ -1,6 +1,6 @@
 
 import React, { useRef } from 'react';
-import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
+import { Drawer, DrawerContent, DrawerTrigger, DrawerTitle } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { Download, Upload, Menu, RotateCcw, GraduationCap } from 'lucide-react';
 import { toast } from "sonner";
@@ -76,12 +76,12 @@ const ActionsDrawer = ({ onExport, onImport, onReset, skillPath }: ActionsDrawer
               </DrawerTrigger>
               <DrawerContent>
                 <div className="max-w-[600px] mx-auto p-4">
-                  <h3 className="font-medium text-gray-700 mb-4 flex items-center">
+                  <DrawerTitle className="font-medium text-gray-700 mb-4 flex items-center">
                     <GraduationCap className="mr-2" size={16} />
                     Níveis de Senioridade
-                  </h3>
+                  </DrawerTitle>
                   <div className="space-y-3">
-                    {skillPath.tags.map(tag => (
+                    {skillPath && skillPath.tags && skillPath.tags.map(tag => (
                       <div key={tag.id} className="bg-gray-50 p-3 rounded border">
                         <div className="flex items-center">
                           <span className="font-bold text-sm">{tag.name}</span>

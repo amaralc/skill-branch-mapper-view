@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Branch, SkillPath, careerPaths } from '@/data/skillData';
 import BranchView from '@/components/BranchView';
@@ -60,13 +61,15 @@ const Index = () => {
   };
 
   const getBranchName = (branchId: string): string => {
+    if (!skillPath || !skillPath.branches) return '';
     const branch = skillPath.branches.find(b => b.id === branchId);
     return branch ? branch.name : '';
   };
 
   const baseTracks = ['quality', 'security', 'architecture', 'continuous-delivery'];
   
-  const filteredBranches = skillPath.branches.filter(branch => {
+  // Add null check for skillPath.branches to prevent the "undefined.filter" error
+  const filteredBranches = skillPath && skillPath.branches ? skillPath.branches.filter(branch => {
     if (baseTracks.includes(branch.id)) {
       return true;
     }
@@ -76,7 +79,7 @@ const Index = () => {
     }
     
     return false;
-  });
+  }) : [];
 
   if (isLoading) {
     return (
@@ -143,7 +146,7 @@ const Index = () => {
       </div>
 
       <main className="max-w-[1200px] mx-auto py-0 px-0">
-        {selectedCareerId ? (
+        {selectedCareerId && skillPath ? (
           <>
             <ProgressSummary skillPath={skillPath} />
 
@@ -181,7 +184,7 @@ const Index = () => {
                   {currentBranchId ? `Branch: ${getBranchName(currentBranchId)}` : 'Selecione uma branch para visualizar os commits'}
                 </h2>
 
-                {currentBranchId ? (
+                {currentBranchId && skillPath.branches ? (
                   <BranchView
                     branch={skillPath.branches.find(branch => branch.id === currentBranchId)!}
                     onEvaluateCommit={handleEvaluateCommit}
