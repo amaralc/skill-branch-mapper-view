@@ -376,39 +376,45 @@ const securityBranch: Branch = {
   ]
 };
 
-const softwareEngineeringBranch: Branch = {
+const architectureBranch: Branch = {
   id: 'engenharia-software',
   name: 'Engenharia de Software',
   color: '#2ecc71',
   commits: [
     {
-      id: 'software-1',
-      message: 'Escreve código limpo e legível',
-      description: 'Utiliza nomes significativos, formatação consistente e comentários claros',
+      id: 'architecture-1',
+      message: 'Escreve código legível e idiomático, seguindo padrões e convenções adotadas pelo time',
+      description: '',
       evaluation: null
     },
     {
-      id: 'software-2',
-      message: 'Aplica princípios de design de software',
-      description: 'Utiliza padrões de projeto, SOLID e outros princípios para criar um sistema flexível e manutenível',
+      id: 'architecture-2',
+      message: 'Separa responsabilidades para que cada módulo tenha apenas um motivo para mudar',
+      description: '',
       evaluation: null
     },
     {
-      id: 'software-3',
-      message: 'Utiliza controle de versão para gerenciar o código',
-      description: 'Cria branches, faz commits e merge de código utilizando Git',
+      id: 'architecture-3',
+      message: 'Cria implementações que podem ser substituídas sem afetar o comportamento esperado',
+      description: '',
       evaluation: null
     },
     {
-      id: 'software-4',
-      message: 'Participa de discussões técnicas para definir a arquitetura do sistema',
-      description: 'Colabora com outros membros da equipe para tomar decisões sobre a estrutura do sistema',
+      id: 'architecture-4',
+      message: 'Cria módulos que dependem de interfaces e abstrações, não de implementações concretas',
+      description: '',
       evaluation: null
     },
     {
-      id: 'software-5',
-      message: 'Resolve problemas de forma eficiente',
-      description: 'Analisa o problema, propõe soluções e implementa a melhor solução',
+      id: 'architecture-5',
+      message: 'Estende funcionalidades sem alterar o código já existente',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'architecture-6',
+      message: 'Cria interfaces enxutas, contendo apenas atributos relevantes para cada uso',
+      description: '',
       evaluation: null
     }
   ]
@@ -725,7 +731,7 @@ const softwareCareerPath: SkillPath = {
   branches: [
     qualityBranch,
     securityBranch,
-    softwareEngineeringBranch,
+    architectureBranch,
     continuousDeliveryBranch,
     frontEndTrack,
     backEndTrack,
