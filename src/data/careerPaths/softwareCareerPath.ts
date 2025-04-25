@@ -160,7 +160,7 @@ const qualityBranch: Branch = {
 
 const securityBranch: Branch = {
   id: 'seguranca',
-  name: 'Segurança de Software',
+  name: 'Segurança',
   color: '#e74c3c',
   commits: [
     {
