@@ -741,49 +741,49 @@ const softwareCareerPath: SkillPath = {
       name: 'IC01',
       level: 'Júnior',
       pointsRequired: 10,
-      description: 'Júnior - Demonstra comportamentos básicos em todas as áreas'
+      description: 'Júnior - Atua com orientação em tarefas com estrutura e baixa ambiguidade'
     },
     {
       id: 'ic02',
       name: 'IC02',
       level: 'Pleno',
       pointsRequired: 20,
-      description: 'Pleno - Demonstra comportamentos consistentes em todas as áreas'
+      description: 'Pleno - Atua com autonomia em tarefas completas e colabora com o time'
     },
     {
       id: 'ic03',
       name: 'IC03',
       level: 'Sênior',
       pointsRequired: 30,
-      description: 'Sênior - Demonstra comportamentos avançados em todas as áreas'
+      description: 'Sênior - Resolve problemas complexos e guia tecnicamente outras pessoas'
     },
     {
       id: 'ic04',
       name: 'IC04',
       level: 'Staff',
       pointsRequired: 40,
-      description: 'Staff - Demonstra comportamentos de liderança técnica'
+      description: 'Staff - Atua em decisões técnicas amplas, influencia padrões e arquitetura'
     },
     {
       id: 'ic05',
       name: 'IC05',
       level: 'Principal',
       pointsRequired: 50,
-      description: 'Principal - Demonstra comportamentos de liderança e influência'
+      description: 'Principal - Lidera técnica e estrategicamente múltiplos times ou domínios'
     },
     {
       id: 'em01',
       name: 'EM01',
       level: 'Coordenador',
       pointsRequired: 60,
-      description: 'Coordenador - Demonstra capacidade de gestão de equipes e processos'
+      description: 'Coordenador - Mesmo escopo que Staff, com foco em coordenação de pessoas e processos'
     },
     {
       id: 'em02',
       name: 'EM02',
       level: 'Gerente',
       pointsRequired: 70,
-      description: 'Gerente - Demonstra capacidade de gestão estratégica'
+      description: 'Gerente - Mesmo escopo que Principal, com foco em direção técnica e organizacional'
     }
   ]
 };
