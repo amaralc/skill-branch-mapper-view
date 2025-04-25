@@ -15,4 +15,3 @@ export const emphasisOptions: Emphasis[] = [
   { id: 'cloud', label: 'Cloud Infrastructure', icon: 'cloud', group: 'especialidade' },
   { id: 'firmware', label: 'Firmware', icon: 'firmware', group: 'especialidade' }
 ];
-
