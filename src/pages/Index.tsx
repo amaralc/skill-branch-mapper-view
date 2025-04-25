@@ -1,14 +1,13 @@
-
 import React, { useState } from 'react';
 import { Branch, SkillPath, careerPaths } from '@/data/skillData';
 import BranchView from '@/components/BranchView';
 import ProgressSummary from '@/components/ProgressSummary';
 import { Button } from '@/components/ui/button';
-import { GraduationCap } from 'lucide-react';
 import { Select, SelectGroup, SelectTrigger, SelectContent, SelectItem, SelectValue, SelectLabel } from '@/components/ui/select';
 import { useEvaluationState } from '@/hooks/useEvaluationState';
 import ActionsDrawer from '@/components/ActionsDrawer';
 import { emphasisOptions } from '@/types/emphasis';
+import SeniorityLevelsSheet from '@/components/SeniorityLevelsSheet';
 
 const Index = () => {
   const careerOptions = careerPaths.map(path => ({
@@ -67,41 +66,13 @@ const Index = () => {
     return branch ? branch.name : '';
   };
 
-  const renderTagsSection = () => {
-    if (!skillPath.tags || skillPath.tags.length === 0) return null;
-    return (
-      <div className="mb-6 my-[24px]">
-        <h3 className="font-medium text-gray-700 mb-2 flex items-center">
-          <GraduationCap className="mr-2" size={16} />
-          Níveis de Senioridade
-        </h3>
-        <div className="pl-4 border-l-2 border-gray-300">
-          {skillPath.tags.map(tag => (
-            <div key={tag.id} className="mb-2 bg-gray-50 p-2 rounded border">
-              <div className="flex items-center">
-                <span className="font-bold text-sm">{tag.name}</span>
-                <span className="ml-2 text-xs text-gray-600">({tag.level})</span>
-              </div>
-              <div className="text-xs mt-1 text-gray-500">
-                Requer {tag.pointsRequired} pontos
-              </div>
-              {tag.description && <div className="text-xs mt-1 text-gray-600">{tag.description}</div>}
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  };
-
   const baseTracks = ['quality', 'security', 'architecture', 'continuous-delivery'];
   
   const filteredBranches = skillPath.branches.filter(branch => {
-    // Always show base tracks
     if (baseTracks.includes(branch.id)) {
       return true;
     }
     
-    // Show only the selected specialization track if one is selected
     if (selectedEmphasis && branch.id === selectedEmphasis) {
       return true;
     }
@@ -203,14 +174,16 @@ const Index = () => {
                     </button>
                   ))}
                 </div>
-                <Button 
-                  variant="outline" 
-                  className="w-full mt-4" 
-                  onClick={() => resetAllEvaluations()}
-                >
-                  Reiniciar Avaliação
-                </Button>
-                {renderTagsSection()}
+                <div className="space-y-4 mt-4">
+                  <Button 
+                    variant="outline" 
+                    className="w-full" 
+                    onClick={() => resetAllEvaluations()}
+                  >
+                    Reiniciar Avaliação
+                  </Button>
+                  <SeniorityLevelsSheet skillPath={skillPath} />
+                </div>
               </div>
 
               <div className="bg-white rounded-lg shadow p-4">
