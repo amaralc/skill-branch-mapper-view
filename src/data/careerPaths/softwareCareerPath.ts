@@ -6,33 +6,153 @@ const qualityBranch: Branch = {
   color: '#3498db',
   commits: [
     {
-      id: 'quality-1',
-      message: 'Escreve testes unitários para garantir o comportamento correto das funções',
-      description: 'Implementa testes que cobrem os casos de uso mais comuns e os casos de borda',
+      id: 'quality-01',
+      message: 'Testa como o usuário final e busca aprender com falhas que poderiam passar despercebidas',
+      description: '',
       evaluation: null
     },
     {
-      id: 'quality-2',
-      message: 'Realiza testes de integração para validar a interação entre diferentes componentes',
-      description: 'Testa o fluxo de dados e a comunicação entre módulos',
+      id: 'quality-02',
+      message: 'Revisa sua entrega com atenção, corrigindo falhas e aprendendo com os próprios erros',
+      description: '',
       evaluation: null
     },
     {
-      id: 'quality-3',
-      message: 'Utiliza ferramentas de análise estática de código para identificar possíveis problemas',
-      description: 'Configura e executa linters e analisadores de código para encontrar erros e inconsistências',
+      id: 'quality-03',
+      message: 'Escreve testes úteis e entende melhor o comportamento esperado do sistema',
+      description: '',
       evaluation: null
     },
     {
-      id: 'quality-4',
-      message: 'Participa de revisões de código para garantir a qualidade e a legibilidade do código',
-      description: 'Analisa o código de outros membros da equipe e fornece feedback construtivo',
+      id: 'quality-04',
+      message: 'Cria testes para falhas encontradas, aprendendo a evitar regressões com confiança',
+      description: '',
       evaluation: null
     },
     {
-      id: 'quality-5',
-      message: 'Documenta o código e os testes para facilitar a manutenção e a compreensão',
-      description: 'Escreve comentários claros e concisos e mantém a documentação atualizada',
+      id: 'quality-05',
+      message: 'Participa de revisões e pares com atenção, aprendendo e aplicando padrões de qualidade do time',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'quality-06',
+      message: 'Garante por conta própria que o usuário final não perceba falhas na experiência',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'quality-07',
+      message: 'Valida a qualidade da entrega com rigor antes de envolver QA ou revisão técnica',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'quality-08',
+      message: 'Escreve testes claros e confiáveis para validar os cenários que entrega',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'quality-09',
+      message: 'Reproduz falhas reportadas com testes e ajuda colegas a evitar regressões',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'quality-10',
+      message: 'Revisa com critério e orienta colegas em pares para elevar o padrão do time',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'quality-11',
+      message: 'Antecipa falhas que afetariam o usuário e ajusta a entrega antes que elas ocorram',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'quality-12',
+      message: 'Garante qualidade de ponta a ponta com autonomia, mesmo em cenários ambíguos',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'quality-13',
+      message: 'Escreve testes completos, legíveis e sustentáveis para o time',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'quality-14',
+      message: 'Traduz falhas reais em testes robustos e compartilha o aprendizado com o time',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'quality-15',
+      message: 'Conduz revisões e pares com profundidade, formando o critério técnico do time',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'quality-16',
+      message: 'Estabelece práticas que evitam falhas perceptíveis em escala, com foco na experiência do usuário',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'quality-17',
+      message: 'Cria padrões e ferramentas que tornam a qualidade parte natural do fluxo de entrega',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'quality-18',
+      message: 'Define critérios e estruturas de teste que fortalecem a confiabilidade do sistema',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'quality-19',
+      message: 'Sistematiza testes para falhas críticas e orienta prevenção em escala no time',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'quality-20',
+      message: 'Promove revisões e pares intencionais para desenvolver critério técnico no time',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'quality-21',
+      message: 'Garante que falhas perceptíveis ao usuário sejam raras e evitadas sistemicamente',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'quality-22',
+      message: 'Influencia times e áreas a tornarem a qualidade parte natural do fluxo de entrega',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'quality-23',
+      message: 'Evolui critérios de testabilidade e práticas que aumentam a confiança em sistemas críticos',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'quality-24',
+      message: 'Estabelece padrões de prevenção e resposta a falhas com impacto além do próprio time',
+      description: '',
+      evaluation: null
+    },
+    {
+      id: 'quality-25',
+      message: 'Constrói uma cultura de revisão e pairing que eleva o nível técnico da organização',
+      description: '',
       evaluation: null
     }
   ]
@@ -209,7 +329,7 @@ const backEndTrack: Branch = {
     },
     {
       id: 'be-3',
-      message: 'Modela bancos de dados relacionais de forma eficiente',
+ message: 'Modela bancos de dados relacionais de forma eficiente',
       description: 'Cria schemas otimizados e implementa índices adequados',
       evaluation: null
     },
