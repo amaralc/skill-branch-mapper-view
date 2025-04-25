@@ -1,8 +1,8 @@
-
 import React from 'react';
-import { Branch, SkillPath, Tag, calculatePoints } from '@/data/skillData';
+import { Branch, SkillPath, Tag } from '@/types/skill';
 import CommitNode from './CommitNode';
 import TagIllustratedNode from './TagIllustratedNode';
+import { calculateBranchPoints } from '@/utils/skillCalculations';
 
 const images = [
   "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=160&q=80",
@@ -28,38 +28,37 @@ interface CommitLock {
   locked: boolean;
 }
 
-function calculateBranchPoints(branch: Branch): number {
-  let points = 0;
-  branch.commits.forEach(commit => {
-    if (commit.evaluation === 'never') points += 0;
-    else if (commit.evaluation === 'sometimes') points += 1;
-    else if (commit.evaluation === 'always') points += 2;
-  });
-  return points;
-}
-
-function getTagsWithPointThresholds(tags: Tag[]): { pointThreshold: number, tag: Tag }[] {
-  return [...tags].sort((a, b) => a.pointsRequired - b.pointsRequired)
-    .map(tag => ({ pointThreshold: tag.pointsRequired, tag }));
-}
-
-function getNextLevelThreshold(currentPoints: number, tags: Tag[]): number | null {
-  const sortedTags = [...tags].sort((a, b) => a.pointsRequired - b.pointsRequired);
-  for (const tag of sortedTags) {
-    if (tag.pointsRequired > currentPoints) {
-      return tag.pointsRequired;
+// This function needs to be updated to respect branch-specific level requirements
+function shouldLockCommitBasedOnBranchRequirements(
+  commitIndex: number, 
+  branch: Branch, 
+  currentPoints: number
+): boolean {
+  // Allow the first 5 commits without locking
+  if (commitIndex < 5) return false;
+  
+  // For commits 5 and above, check if we have enough points to reach the first level
+  // This should use the branch's specific level requirements
+  if (branch.levelRequirements && branch.levelRequirements.length > 0) {
+    // Sort requirements by points ascending to get the first level
+    const firstLevel = [...branch.levelRequirements].sort((a, b) => a.pointsRequired - b.pointsRequired)[0];
+    
+    // If we have enough points for the first level, don't lock the commit
+    if (currentPoints >= firstLevel.pointsRequired) {
+      return false;
     }
+    
+    // Otherwise, lock it
+    return true;
   }
-  return null;
-}
-
-function shouldLockCommitsBasedOnPoints(currentBranchPoints: number, tags: Tag[], index: number): boolean {
+  
+  // Fallback to old behavior if no level requirements are defined
   const commitsPerLevel = 5;
-  const commitLevel = Math.floor(index / commitsPerLevel);
+  const commitLevel = Math.floor(commitIndex / commitsPerLevel);
   if (commitLevel === 0) return false;
   
   const pointsRequiredForCurrentLevel = commitLevel * 10;
-  return currentBranchPoints < pointsRequiredForCurrentLevel;
+  return currentPoints < pointsRequiredForCurrentLevel;
 }
 
 const BranchView: React.FC<BranchViewProps> = ({ branch, onEvaluateCommit, isCurrentBranch, skillPath }) => {
@@ -68,7 +67,7 @@ const BranchView: React.FC<BranchViewProps> = ({ branch, onEvaluateCommit, isCur
   
   const commitLocks: CommitLock[] = branch.commits.map((_, idx) => ({
     index: idx,
-    locked: shouldLockCommitsBasedOnPoints(branchPoints, tags, idx)
+    locked: shouldLockCommitBasedOnBranchRequirements(idx, branch, branchPoints)
   }));
   
   const shouldShowTags = branch.id === 'qualidade' || branch.id === 'seguranca';
@@ -118,7 +117,7 @@ const BranchView: React.FC<BranchViewProps> = ({ branch, onEvaluateCommit, isCur
                   onEvaluate={evaluation => !lock && onEvaluateCommit(branch.id, item.commit.id, evaluation)}
                   disabled={lock}
                   lockReason={
-                    lock ? `Para avaliar este item, alcance o nível anterior com ${(Math.floor(commitIdx / 5) * 10)} pontos nesta trilha.` : undefined
+                    lock ? `Para avaliar este item, alcance o nível mínimo de ${branch.levelRequirements[0].pointsRequired} pontos nesta trilha.` : undefined
                   }
                 />
               );
