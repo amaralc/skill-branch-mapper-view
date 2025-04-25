@@ -182,9 +182,9 @@ const architectureBranch: Branch = {
     }
   ],
   levelRequirements: [
-    { tagId: 'ic01', pointsRequired: 12 },
-    { tagId: 'ic02', pointsRequired: 24 },
-    { tagId: 'ic03', pointsRequired: 36 }
+    { tagId: 'ic01', pointsRequired: 10 },
+    { tagId: 'ic02', pointsRequired: 20 },
+    { tagId: 'ic03', pointsRequired: 30 }
   ]
 };
 
