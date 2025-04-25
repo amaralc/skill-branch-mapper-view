@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Branch, SkillPath, careerPaths } from '@/data/skillData';
 import BranchView from '@/components/BranchView';
@@ -146,12 +147,33 @@ const Index = () => {
         {selectedCareerId ? (
           <>
             <ProgressSummary skillPath={skillPath} />
+            
+            <div className="flex gap-4 px-4 mb-6">
+              <Button 
+                variant="outline" 
+                className="flex-1" 
+                onClick={() => resetAllEvaluations()}
+              >
+                Reiniciar Avaliação
+              </Button>
+              <SeniorityLevelsSheet skillPath={skillPath} />
+            </div>
 
             <div className="flex flex-col">
               <div className="bg-white rounded-lg shadow p-4 mb-6 shadow-none border-none">
                 <h2 className="text-lg font-bold mb-3">Trilhas de Competência</h2>
                 <div className="space-y-2">
-                  {filteredBranches.map(branch => (
+                  {skillPath?.branches?.filter(branch => {
+                    if (baseTracks.includes(branch.id)) {
+                      return true;
+                    }
+                    
+                    if (selectedEmphasis && branch.id === selectedEmphasis) {
+                      return true;
+                    }
+                    
+                    return false;
+                  }).map(branch => (
                     <button
                       key={branch.id}
                       className={`w-full text-left px-3 py-2 rounded flex items-center text-sm
@@ -174,16 +196,6 @@ const Index = () => {
                     </button>
                   ))}
                 </div>
-                <div className="space-y-4 mt-4">
-                  <Button 
-                    variant="outline" 
-                    className="w-full" 
-                    onClick={() => resetAllEvaluations()}
-                  >
-                    Reiniciar Avaliação
-                  </Button>
-                  <SeniorityLevelsSheet skillPath={skillPath} />
-                </div>
               </div>
 
               <div className="bg-white rounded-lg shadow p-4">
@@ -193,7 +205,7 @@ const Index = () => {
 
                 {currentBranchId ? (
                   <BranchView
-                    branch={skillPath.branches.find(branch => branch.id === currentBranchId)!}
+                    branch={skillPath?.branches?.find(branch => branch.id === currentBranchId)!}
                     onEvaluateCommit={handleEvaluateCommit}
                     isCurrentBranch={true}
                     skillPath={skillPath}
