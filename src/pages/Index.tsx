@@ -8,9 +8,9 @@ import { GraduationCap } from 'lucide-react';
 import { Select, SelectGroup, SelectTrigger, SelectContent, SelectItem, SelectValue, SelectLabel } from '@/components/ui/select';
 import { useEvaluationState } from '@/hooks/useEvaluationState';
 import ActionsDrawer from '@/components/ActionsDrawer';
+import { emphasisOptions } from '@/types/emphasis';
 
 const Index = () => {
-  // Carreiras disponíveis
   const careerOptions = careerPaths.map(path => ({
     id: path.id,
     label: path.name,
@@ -18,17 +18,22 @@ const Index = () => {
     skillPath: path
   }));
 
-  // Busca a carreira Engenharia de Software para padrão
   const defaultCareer = careerOptions.find(path => path.label === "Engenharia de Software") || careerOptions[0];
 
   const [selectedCareerId, setSelectedCareerId] = useState(defaultCareer.id);
+  const [selectedEmphasis, setSelectedEmphasis] = useState<string | null>(null);
   const { skillPath, evaluateCommit, resetAllEvaluations, isLoading } = useEvaluationState(defaultCareer.skillPath);
   const [currentBranchId, setCurrentBranchId] = useState<string | null>(null);
 
-  // Quando carreira mudar, redefinir a trilha e branch selecionada
   const handleCareerChange = (careerId: string) => {
     const found = careerOptions.find(x => x.id === careerId);
     setSelectedCareerId(careerId);
+    setCurrentBranchId(null);
+    setSelectedEmphasis(null);
+  };
+
+  const handleEmphasisChange = (emphasisId: string) => {
+    setSelectedEmphasis(emphasisId);
     setCurrentBranchId(null);
   };
 
@@ -118,7 +123,6 @@ const Index = () => {
         </div>
       </header>
 
-      {/* Seletor de carreira */}
       <div className="max-w-[1200px] mx-auto py-5 flex items-center gap-4 px-[16px]">
         <Select value={selectedCareerId} onValueChange={handleCareerChange}>
           <SelectTrigger className="w-[250px]">
@@ -133,62 +137,86 @@ const Index = () => {
             </SelectGroup>
           </SelectContent>
         </Select>
+
+        <Select value={selectedEmphasis || ''} onValueChange={handleEmphasisChange}>
+          <SelectTrigger className="w-[250px]">
+            <SelectValue placeholder="Escolha a ênfase" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Ênfase</SelectLabel>
+              {emphasisOptions.map(emphasis => (
+                <SelectItem value={emphasis.id} key={emphasis.id}>
+                  {emphasis.label}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       </div>
 
       <main className="max-w-[1200px] mx-auto py-0 px-0">
-        <ProgressSummary skillPath={skillPath} />
+        {selectedEmphasis ? (
+          <>
+            <ProgressSummary skillPath={skillPath} />
 
-        <div className="flex flex-col">
-          <div className="bg-white rounded-lg shadow p-4 mb-6 shadow-none border-none">
-            <h2 className="text-lg font-bold mb-3">Trilhas de Competência</h2>
-            <div className="space-y-2">
-              {skillPath.branches.map(branch => (
-                <button
-                  key={branch.id}
-                  className={`w-full text-left px-3 py-2 rounded flex items-center text-sm
-                    ${currentBranchId === branch.id ? 'bg-gray-100 border-l-4 font-medium' : 'hover:bg-gray-50'}`}
-                  style={{
-                    borderLeftColor: currentBranchId === branch.id ? branch.color : 'transparent',
-                    borderLeftWidth: currentBranchId === branch.id ? '4px' : '0px'
-                  }}
-                  onClick={() => setCurrentBranchId(branch.id)}
+            <div className="flex flex-col">
+              <div className="bg-white rounded-lg shadow p-4 mb-6 shadow-none border-none">
+                <h2 className="text-lg font-bold mb-3">Trilhas de Competência</h2>
+                <div className="space-y-2">
+                  {skillPath.branches.map(branch => (
+                    <button
+                      key={branch.id}
+                      className={`w-full text-left px-3 py-2 rounded flex items-center text-sm
+                        ${currentBranchId === branch.id ? 'bg-gray-100 border-l-4 font-medium' : 'hover:bg-gray-50'}`}
+                      style={{
+                        borderLeftColor: currentBranchId === branch.id ? branch.color : 'transparent',
+                        borderLeftWidth: currentBranchId === branch.id ? '4px' : '0px'
+                      }}
+                      onClick={() => setCurrentBranchId(branch.id)}
+                    >
+                      <div className="w-3 h-3 rounded-full mr-2" style={{
+                        backgroundColor: branch.color
+                      }}></div>
+                      {branch.name}
+                    </button>
+                  ))}
+                </div>
+                <Button 
+                  variant="outline" 
+                  className="w-full mt-4" 
+                  onClick={() => resetAllEvaluations()}
                 >
-                  <div className="w-3 h-3 rounded-full mr-2" style={{
-                    backgroundColor: branch.color
-                  }}></div>
-                  {branch.name}
-                </button>
-              ))}
-            </div>
-            <Button 
-              variant="outline" 
-              className="w-full mt-4" 
-              onClick={() => resetAllEvaluations()}
-            >
-              Reiniciar Avaliação
-            </Button>
-            {renderTagsSection()}
-          </div>
-
-          <div className="bg-white rounded-lg shadow p-4">
-            <h2 className="text-lg font-bold mb-4">
-              {currentBranchId ? `Branch: ${getBranchName(currentBranchId)}` : 'Selecione uma branch para visualizar os commits'}
-            </h2>
-
-            {currentBranchId ? (
-              <BranchView
-                branch={skillPath.branches.find(branch => branch.id === currentBranchId)!}
-                onEvaluateCommit={handleEvaluateCommit}
-                isCurrentBranch={true}
-                skillPath={skillPath}
-              />
-            ) : (
-              <div className="text-center py-12 text-gray-500">
-                Selecione uma branch no menu ao lado para visualizar os commits
+                  Reiniciar Avaliação
+                </Button>
+                {renderTagsSection()}
               </div>
-            )}
+
+              <div className="bg-white rounded-lg shadow p-4">
+                <h2 className="text-lg font-bold mb-4">
+                  {currentBranchId ? `Branch: ${getBranchName(currentBranchId)}` : 'Selecione uma branch para visualizar os commits'}
+                </h2>
+
+                {currentBranchId ? (
+                  <BranchView
+                    branch={skillPath.branches.find(branch => branch.id === currentBranchId)!}
+                    onEvaluateCommit={handleEvaluateCommit}
+                    isCurrentBranch={true}
+                    skillPath={skillPath}
+                  />
+                ) : (
+                  <div className="text-center py-12 text-gray-500">
+                    Selecione uma branch no menu ao lado para visualizar os commits
+                  </div>
+                )}
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className="text-center py-12 text-gray-500">
+            Selecione uma ênfase para visualizar as trilhas de competência
           </div>
-        </div>
+        )}
       </main>
     </>
   );
