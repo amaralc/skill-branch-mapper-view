@@ -1,181 +1,437 @@
-import { SkillPath } from '../../types/skill';
+import { Branch, SkillPath } from '@/types/skill';
+
+const qualityBranch: Branch = {
+  id: 'qualidade',
+  name: 'Qualidade de Software',
+  color: '#3498db',
+  commits: [
+    {
+      id: 'quality-1',
+      message: 'Escreve testes unitários para garantir o comportamento correto das funções',
+      description: 'Implementa testes que cobrem os casos de uso mais comuns e os casos de borda',
+      evaluation: null
+    },
+    {
+      id: 'quality-2',
+      message: 'Realiza testes de integração para validar a interação entre diferentes componentes',
+      description: 'Testa o fluxo de dados e a comunicação entre módulos',
+      evaluation: null
+    },
+    {
+      id: 'quality-3',
+      message: 'Utiliza ferramentas de análise estática de código para identificar possíveis problemas',
+      description: 'Configura e executa linters e analisadores de código para encontrar erros e inconsistências',
+      evaluation: null
+    },
+    {
+      id: 'quality-4',
+      message: 'Participa de revisões de código para garantir a qualidade e a legibilidade do código',
+      description: 'Analisa o código de outros membros da equipe e fornece feedback construtivo',
+      evaluation: null
+    },
+    {
+      id: 'quality-5',
+      message: 'Documenta o código e os testes para facilitar a manutenção e a compreensão',
+      description: 'Escreve comentários claros e concisos e mantém a documentação atualizada',
+      evaluation: null
+    }
+  ]
+};
+
+const securityBranch: Branch = {
+  id: 'seguranca',
+  name: 'Segurança de Software',
+  color: '#e74c3c',
+  commits: [
+    {
+      id: 'security-1',
+      message: 'Aplica princípios de segurança no desenvolvimento de software',
+      description: 'Implementa medidas de segurança para proteger o sistema contra ameaças',
+      evaluation: null
+    },
+    {
+      id: 'security-2',
+      message: 'Realiza testes de segurança para identificar vulnerabilidades',
+      description: 'Utiliza ferramentas de teste de segurança para encontrar falhas no sistema',
+      evaluation: null
+    },
+    {
+      id: 'security-3',
+      message: 'Implementa medidas de proteção contra ataques de injeção de código',
+      description: 'Valida e sanitiza os dados de entrada para evitar ataques de injeção',
+      evaluation: null
+    },
+    {
+      id: 'security-4',
+      message: 'Utiliza criptografia para proteger os dados confidenciais',
+      description: 'Criptografa os dados em repouso e em trânsito para evitar o acesso não autorizado',
+      evaluation: null
+    },
+    {
+      id: 'security-5',
+      message: 'Implementa autenticação e autorização para controlar o acesso ao sistema',
+      description: 'Verifica a identidade dos usuários e controla o acesso aos recursos do sistema',
+      evaluation: null
+    }
+  ]
+};
+
+const softwareEngineeringBranch: Branch = {
+  id: 'engenharia-software',
+  name: 'Engenharia de Software',
+  color: '#2ecc71',
+  commits: [
+    {
+      id: 'software-1',
+      message: 'Escreve código limpo e legível',
+      description: 'Utiliza nomes significativos, formatação consistente e comentários claros',
+      evaluation: null
+    },
+    {
+      id: 'software-2',
+      message: 'Aplica princípios de design de software',
+      description: 'Utiliza padrões de projeto, SOLID e outros princípios para criar um sistema flexível e manutenível',
+      evaluation: null
+    },
+    {
+      id: 'software-3',
+      message: 'Utiliza controle de versão para gerenciar o código',
+      description: 'Cria branches, faz commits e merge de código utilizando Git',
+      evaluation: null
+    },
+    {
+      id: 'software-4',
+      message: 'Participa de discussões técnicas para definir a arquitetura do sistema',
+      description: 'Colabora com outros membros da equipe para tomar decisões sobre a estrutura do sistema',
+      evaluation: null
+    },
+    {
+      id: 'software-5',
+      message: 'Resolve problemas de forma eficiente',
+      description: 'Analisa o problema, propõe soluções e implementa a melhor solução',
+      evaluation: null
+    }
+  ]
+};
+
+const continuousDeliveryBranch: Branch = {
+  id: 'entrega-continua',
+  name: 'Entrega Contínua',
+  color: '#f39c12',
+  commits: [
+    {
+      id: 'delivery-1',
+      message: 'Automatiza o processo de build e teste',
+      description: 'Cria scripts para compilar o código, executar testes e gerar relatórios',
+      evaluation: null
+    },
+    {
+      id: 'delivery-2',
+      message: 'Automatiza o processo de deploy',
+      description: 'Cria scripts para implantar o sistema em diferentes ambientes',
+      evaluation: null
+    },
+    {
+      id: 'delivery-3',
+      message: 'Monitora o sistema em produção',
+      description: 'Utiliza ferramentas de monitoramento para identificar problemas e gargalos',
+      evaluation: null
+    },
+    {
+      id: 'delivery-4',
+      message: 'Realiza rollbacks em caso de falha',
+      description: 'Reverte o sistema para uma versão anterior em caso de problemas',
+      evaluation: null
+    },
+    {
+      id: 'delivery-5',
+      message: 'Participa de discussões sobre o processo de entrega contínua',
+      description: 'Colabora com outros membros da equipe para melhorar o processo de entrega contínua',
+      evaluation: null
+    }
+  ]
+};
+
+const frontEndTrack: Branch = {
+  id: 'front-end',
+  name: 'Front-End Development',
+  color: '#FF6B6B',
+  commits: [
+    {
+      id: 'fe-1',
+      message: 'Implementa interfaces responsivas seguindo princípios de design mobile-first',
+      description: 'Demonstra capacidade de criar layouts adaptáveis para diferentes dispositivos',
+      evaluation: null
+    },
+    {
+      id: 'fe-2',
+      message: 'Aplica boas práticas de acessibilidade web (WCAG)',
+      description: 'Garante que as interfaces sejam acessíveis para todos os usuários',
+      evaluation: null
+    },
+    {
+      id: 'fe-3',
+      message: 'Otimiza performance do front-end utilizando técnicas modernas',
+      description: 'Implementa lazy loading, code splitting e outras otimizações',
+      evaluation: null
+    },
+    {
+      id: 'fe-4',
+      message: 'Desenvolve componentes reutilizáveis e mantém consistência visual',
+      description: 'Cria sistemas de design escaláveis e documenta componentes',
+      evaluation: null
+    },
+    {
+      id: 'fe-5',
+      message: 'Implementa integrações com APIs RESTful de forma eficiente',
+      description: 'Gerencia estados, loading e tratamento de erros adequadamente',
+      evaluation: null
+    }
+  ]
+};
+
+const backEndTrack: Branch = {
+  id: 'back-end',
+  name: 'Back-End Development',
+  color: '#4ECDC4',
+  commits: [
+    {
+      id: 'be-1',
+      message: 'Desenvolve APIs RESTful seguindo padrões e boas práticas',
+      description: 'Implementa endpoints com documentação adequada e versionamento',
+      evaluation: null
+    },
+    {
+      id: 'be-2',
+      message: 'Implementa autenticação e autorização de forma segura',
+      description: 'Utiliza JWT, OAuth e controle de acesso baseado em roles',
+      evaluation: null
+    },
+    {
+      id: 'be-3',
+      message: 'Modela bancos de dados relacionais de forma eficiente',
+      description: 'Cria schemas otimizados e implementa índices adequados',
+      evaluation: null
+    },
+    {
+      id: 'be-4',
+      message: 'Desenvolve serviços com alta disponibilidade e escalabilidade',
+      description: 'Implementa cache, filas e estratégias de resiliência',
+      evaluation: null
+    },
+    {
+      id: 'be-5',
+      message: 'Monitora e otimiza performance de aplicações backend',
+      description: 'Utiliza ferramentas de APM e implementa melhorias',
+      evaluation: null
+    }
+  ]
+};
+
+const dataScienceTrack: Branch = {
+  id: 'data-science',
+  name: 'Data Science',
+  color: '#9B59B6',
+  commits: [
+    {
+      id: 'ds-1',
+      message: 'Realiza análise exploratória de dados efetivamente',
+      description: 'Utiliza técnicas estatísticas e visualizações adequadas',
+      evaluation: null
+    },
+    {
+      id: 'ds-2',
+      message: 'Prepara e limpa dados para análise',
+      description: 'Trata missing values, outliers e normaliza dados',
+      evaluation: null
+    },
+    {
+      id: 'ds-3',
+      message: 'Desenvolve modelos de machine learning básicos',
+      description: 'Implementa regressão, classificação e clustering',
+      evaluation: null
+    },
+    {
+      id: 'ds-4',
+      message: 'Avalia e valida modelos adequadamente',
+      description: 'Utiliza métricas apropriadas e cross-validation',
+      evaluation: null
+    },
+    {
+      id: 'ds-5',
+      message: 'Comunica resultados de forma clara e efetiva',
+      description: 'Cria visualizações e relatórios compreensíveis',
+      evaluation: null
+    }
+  ]
+};
+
+const mobileTrack: Branch = {
+  id: 'mobile',
+  name: 'Mobile Development',
+  color: '#3498DB',
+  commits: [
+    {
+      id: 'mb-1',
+      message: 'Desenvolve interfaces nativas seguindo guidelines da plataforma',
+      description: 'Implementa UI/UX conforme Material Design e Human Interface Guidelines',
+      evaluation: null
+    },
+    {
+      id: 'mb-2',
+      message: 'Gerencia estados e ciclo de vida de apps mobile',
+      description: 'Lida com background/foreground e preservação de estado',
+      evaluation: null
+    },
+    {
+      id: 'mb-3',
+      message: 'Implementa features específicas de dispositivos móveis',
+      description: 'Utiliza câmera, GPS, notificações push e sensores',
+      evaluation: null
+    },
+    {
+      id: 'mb-4',
+      message: 'Otimiza performance e consumo de recursos',
+      description: 'Gerencia memória, bateria e dados móveis eficientemente',
+      evaluation: null
+    },
+    {
+      id: 'mb-5',
+      message: 'Implementa armazenamento local e sincronização offline',
+      description: 'Utiliza SQLite e estratégias de sincronização',
+      evaluation: null
+    }
+  ]
+};
+
+const cloudTrack: Branch = {
+  id: 'cloud',
+  name: 'Cloud Infrastructure',
+  color: '#E67E22',
+  commits: [
+    {
+      id: 'cl-1',
+      message: 'Provisiona e gerencia recursos em nuvem',
+      description: 'Utiliza IaC para criar e manter infraestrutura',
+      evaluation: null
+    },
+    {
+      id: 'cl-2',
+      message: 'Implementa práticas de segurança em nuvem',
+      description: 'Configura IAM, security groups e encryption',
+      evaluation: null
+    },
+    {
+      id: 'cl-3',
+      message: 'Desenvolve arquiteturas serverless básicas',
+      description: 'Utiliza funções lambda e serviços gerenciados',
+      evaluation: null
+    },
+    {
+      id: 'cl-4',
+      message: 'Configura monitoramento e logging',
+      description: 'Implementa métricas, alertas e centralização de logs',
+      evaluation: null
+    },
+    {
+      id: 'cl-5',
+      message: 'Otimiza custos de recursos em nuvem',
+      description: 'Implementa auto-scaling e gerenciamento de recursos',
+      evaluation: null
+    }
+  ]
+};
+
+const firmwareTrack: Branch = {
+  id: 'firmware',
+  name: 'Firmware Development',
+  color: '#8E44AD',
+  commits: [
+    {
+      id: 'fw-1',
+      message: 'Desenvolve código otimizado para sistemas embarcados',
+      description: 'Escreve código eficiente em memória e processamento',
+      evaluation: null
+    },
+    {
+      id: 'fw-2',
+      message: 'Implementa comunicação com periféricos',
+      description: 'Utiliza protocolos como I2C, SPI e UART',
+      evaluation: null
+    },
+    {
+      id: 'fw-3',
+      message: 'Desenvolve drivers para hardware específico',
+      description: 'Implementa interfaces com sensores e atuadores',
+      evaluation: null
+    },
+    {
+      id: 'fw-4',
+      message: 'Implementa tratamento de interrupções e timers',
+      description: 'Gerencia eventos de hardware e temporização',
+      evaluation: null
+    },
+    {
+      id: 'fw-5',
+      message: 'Otimiza consumo de energia em sistemas embarcados',
+      description: 'Implementa modos de baixo consumo e sleep',
+      evaluation: null
+    }
+  ]
+};
 
 const softwareCareerPath: SkillPath = {
-  id: "software-career-path",
-  name: "Engenharia de Software",
-  description: "Trilhas de conhecimento em Qualidade, Segurança, Engenharia, Entrega Contínua e Full-Stack",
+  id: 'software-engineering',
+  name: 'Engenharia de Software',
+  description: 'Trilha de desenvolvimento para Engenheiros de Software',
   branches: [
-    {
-      id: "qualidade",
-      name: "Qualidade",
-      color: "#4CAF50",
-      commits: [
-        { id: "q1", message: "Testa como o usuário final e busca aprender com falhas que poderiam passar despercebidas", description: "", evaluation: 'never' },
-        { id: "q2", message: "Revisa sua entrega com atenção, corrigindo falhas e aprendendo com os próprios erros", description: "", evaluation: 'never' },
-        { id: "q3", message: "Escreve testes úteis e entende melhor o comportamento esperado do sistema", description: "", evaluation: 'never' },
-        { id: "q4", message: "Cria testes para falhas encontradas, aprendendo a evitar regressões com confiança", description: "", evaluation: 'never' },
-        { id: "q5", message: "Participa de revisões e pares com atenção, aprendendo e aplicando padrões de qualidade do time", description: "", evaluation: 'never' },
-
-        { id: "q6", message: "Garante por conta própria que o usuário final não perceba falhas na experiência", description: "", evaluation: 'never' },
-        { id: "q7", message: "Valida a qualidade da entrega com rigor antes de envolver QA ou revisão técnica", description: "", evaluation: 'never' },
-        { id: "q8", message: "Escreve testes claros e confiáveis para validar os cenários que entrega", description: "", evaluation: 'never' },
-        { id: "q9", message: "Reproduz falhas reportadas com testes e ajuda colegas a evitar regressões", description: "", evaluation: 'never' },
-        { id: "q10", message: "Revisa com critério e orienta colegas em pares para elevar o padrão do time", description: "", evaluation: 'never' },
-
-        { id: "q11", message: "Antecipa falhas que afetariam o usuário e ajusta a entrega antes que elas ocorram", description: "", evaluation: 'never' },
-        { id: "q12", message: "Garante qualidade de ponta a ponta com autonomia, mesmo em cenários ambíguos", description: "", evaluation: 'never' },
-        { id: "q13", message: "Escreve testes completos, legíveis e sustentáveis para o time", description: "", evaluation: 'never' },
-        { id: "q14", message: "Traduz falhas reais em testes robustos e compartilha o aprendizado com o time", description: "", evaluation: 'never' },
-        { id: "q15", message: "Conduz revisões e pares com profundidade, formando o critério técnico do time", description: "", evaluation: 'never' },
-
-        { id: "q16", message: "Estabelece práticas que evitam falhas perceptíveis em escala, com foco na experiência do usuário", description: "", evaluation: 'never' },
-        { id: "q17", message: "Cria padrões e ferramentas que tornam a qualidade parte natural do fluxo de entrega", description: "", evaluation: 'never' },
-        { id: "q18", message: "Define critérios e estruturas de teste que fortalecem a confiabilidade do sistema", description: "", evaluation: 'never' },
-        { id: "q19", message: "Sistematiza testes para falhas críticas e orienta prevenção em escala no time", description: "", evaluation: 'never' },
-        { id: "q20", message: "Promove revisões e pares intencionais para desenvolver critério técnico no time", description: "", evaluation: 'never' },
-
-        { id: "q21", message: "Garante que falhas perceptíveis ao usuário sejam raras e evitadas sistemicamente", description: "", evaluation: 'never' },
-        { id: "q22", message: "Influencia times e áreas a tornarem a qualidade parte natural do fluxo de entrega", description: "", evaluation: 'never' },
-        { id: "q23", message: "Evolui critérios de testabilidade e práticas que aumentam a confiança em sistemas críticos", description: "", evaluation: 'never' },
-        { id: "q24", message: "Estabelece padrões de prevenção e resposta a falhas com impacto além do próprio time", description: "", evaluation: 'never' },
-        { id: "q25", message: "Constrói uma cultura de revisão e pairing que eleva o nível técnico da organização", description: "", evaluation: 'never' }
-      ]
-    },
-    {
-      id: "seguranca",
-      name: "Segurança",
-      color: "#EF4444",
-      commits: [
-        { id: "s1", message: "Evita expor dados sensíveis e aplica variáveis de ambiente com apoio e atenção ao detalhe", description: "", evaluation: null },
-        { id: "s2", message: "Lê relatórios de SAST e busca entender vulnerabilidades OWASP, com ajuda, corrigindo o que entrega", description: "", evaluation: null },
-        { id: "s3", message: "Usa autenticação e permissões com apoio, e entende seu papel nos fluxos seguros do time", description: "", evaluation: null },
-        { id: "s4", message: "Cria testes para falhas conhecidas que entregou, com supervisão, garantindo que não voltem", description: "", evaluation: null },
-        { id: "s5", message: "Reporta falhas com clareza, busca entender causas e aprende com o time como preveni-las", description: "", evaluation: null },
-        
-        { id: "s6", message: "Garante que tokens e dados sensíveis não sejam expostos em commits, logs ou respostas HTTP", description: "", evaluation: null },
-        { id: "s7", message: "Monitora alertas de SAST e previne riscos conhecidos com base no OWASP Top 10", description: "", evaluation: null },
-        { id: "s8", message: "Usa e configura corretamente autenticação, RBAC e ferramentas de scan e segurança exigidas", description: "", evaluation: null },
-        { id: "s9", message: "Cria testes automatizados para cobrir falhas reportadas e prevenir reincidência", description: "", evaluation: null },
-        { id: "s10", message: "Corrige falhas com agilidade e compartilha aprendizados com o time em revisão ou retro", description: "", evaluation: null },
-        
-        { id: "s11", message: "Garante que não haja vazamento de segredos em nenhum ponto da stack sob sua responsabilidade", description: "", evaluation: null },
-        { id: "s12", message: "Interpreta alertas de SAST e previne vulnerabilidades OWASP com ações corretivas antes do deploy", description: "", evaluation: null },
-        { id: "s13", message: "Implementa e reforça o uso correto de autenticação, RBAC e scanners em serviços sob responsabilidade de sua equipe", description: "", evaluation: null },
-        { id: "s14", message: "Automatiza testes para falhas críticas e orienta o time na construção de simulações seguras", description: "", evaluation: null },
-        { id: "s15", message: "Lidera atuação rápida em falhas, propõe melhorias e promove compartilhamento de aprendizados ativamente", description: "", evaluation: null },
-        
-        { id: "s16", message: "Define e audita práticas seguras de gestão de segredos em todo o time ou domínio técnico", description: "", evaluation: null },
-        { id: "s17", message: "Garante que relatórios de SAST sejam tratados com prioridade e que riscos OWASP sejam mitigados", description: "", evaluation: null },
-        { id: "s18", message: "Promove a adoção consistente de controles como RBAC, SCA, SSO, MFA e scanners de vulnerabilidade", description: "", evaluation: null },
-        { id: "s19", message: "Estabelece padrões de testabilidade em segurança e cria exemplos para serem replicados", description: "", evaluation: null },
-        { id: "s20", message: "Conduz análises pós-incidente, catalisa ações corretivas e institucionaliza aprendizados", description: "", evaluation: null },
-        
-        { id: "s21", message: "Define padrões e ferramentas seguras para gestão de segredos em escala organizacional", description: "", evaluation: null },
-        { id: "s22", message: "Influencia processos de tratamento de vulnerabilidades e incorpora OWASP em revisões e projetos", description: "", evaluation: null },
-        { id: "s23", message: "Garante adoção consistente de controles em sistemas críticos e orienta decisões de arquitetura", description: "", evaluation: null },
-        { id: "s24", message: "Estabelece práticas de testabilidade em segurança aplicáveis a múltiplos times ou produtos", description: "", evaluation: null },
-        { id: "s25", message: "Lidera resposta a falhas críticas, compartilha lições e muda processos para prevenir recorrência", description: "", evaluation: null },
-        
-        { id: "s26", message: "Garante que o time use práticas e ferramentas seguras, treinando quem ainda tem lacunas", description: "", evaluation: null },
-        { id: "s27", message: "Estimula acompanhamento regular de relatórios e promove aprendizado técnico com base nos alertas", description: "", evaluation: null },
-        { id: "s28", message: "Remove barreiras para adoção dos controles e reforça sua aplicação no dia a dia", description: "", evaluation: null },
-        { id: "s29", message: "Incentiva o time a automatizar prevenção com exemplos reais, revisando cobertura junto aos devs", description: "", evaluation: null },
-        { id: "s30", message: "Facilita discussões pós-falha, garante ações corretivas e aprendizado distribuído", description: "", evaluation: null },
-        
-        { id: "s31", message: "Cria padrões e governança que previnem exposição de dados sensíveis em toda a organização", description: "", evaluation: null },
-        { id: "s32", message: "Garante que times monitorem vulnerabilidades e que planos de ação estejam integrados à rotina", description: "", evaluation: null },
-        { id: "s33", message: "Assegura que ferramentas, práticas e políticas estejam implantadas e operantes em todas as áreas", description: "", evaluation: null },
-        { id: "s34", message: "Promove cultura de prevenção baseada em testes e simulações, com investimento e apoio transversal", description: "", evaluation: null },
-        { id: "s35", message: "Estimula aprendizado organizacional a partir de incidentes e define resposta padrão para riscos", description: "", evaluation: null }
-      ]
-    },
-    {
-      id: "engenharia",
-      name: "Engenharia de Software",
-      color: "#6366F1",
-      commits: [
-        { id: "e1", message: "Domina versionamento com Git", description: "", evaluation: 'never' },
-        { id: "e2", message: "Pratica arquitetura modular", description: "", evaluation: 'never' },
-        { id: "e3", message: "Aplica princípios SOLID", description: "", evaluation: 'never' },
-        { id: "e4", message: "Faz code review construtivo", description: "", evaluation: 'never' },
-        { id: "e5", message: "Participa ativamente de cerimônias técnicas", description: "", evaluation: 'never' }
-      ]
-    },
-    {
-      id: "entrega-continua",
-      name: "Entrega Contínua",
-      color: "#F59E42",
-      commits: [
-        { id: "ec1", message: "Utiliza pipelines de CI/CD", description: "", evaluation: 'never' },
-        { id: "ec2", message: "Gerencia releases de forma incremental", description: "", evaluation: 'never' },
-        { id: "ec3", message: "Implementa observabilidade", description: "", evaluation: 'never' },
-        { id: "ec4", message: "Realiza rollback com segurança", description: "", evaluation: 'never' },
-        { id: "ec5", message: "Valida entregas em ambiente de staging", description: "", evaluation: 'never' }
-      ]
-    },
-    {
-      id: "especialidade",
-      name: "Especialidade (Full-Stack)",
-      color: "#22C55E",
-      commits: [
-        { id: "es1", message: "Desenvolve backend escalável", description: "", evaluation: 'never' },
-        { id: "es2", message: "Estrutura frontends modernos", description: "", evaluation: 'never' },
-        { id: "es3", message: "Integra soluções de banco de dados", description: "", evaluation: 'never' },
-        { id: "es4", message: "Realiza deploy full-stack", description: "", evaluation: 'never' },
-        { id: "es5", message: "Interage com times multidisciplinares", description: "", evaluation: 'never' }
-      ]
-    }
+    qualityBranch,
+    securityBranch,
+    softwareEngineeringBranch,
+    continuousDeliveryBranch,
+    frontEndTrack,
+    backEndTrack,
+    dataScienceTrack,
+    mobileTrack,
+    cloudTrack,
+    firmwareTrack,
   ],
   tags: [
     {
-      id: "ic01",
-      name: "IC01",
-      level: "Júnior",
+      id: 'ic00',
+      name: 'IC0',
+      level: 'Júnior',
+      pointsRequired: 0,
+      description: 'Primeiro nível da carreira de engenharia de software'
+    },
+    {
+      id: 'ic01',
+      name: 'IC1',
+      level: 'Júnior',
       pointsRequired: 10,
-      description: "Júnior - Demonstra comportamentos básicos em todas as áreas"
+      description: 'Segundo nível da carreira de engenharia de software'
     },
     {
-      id: "ic02",
-      name: "IC02",
-      level: "Pleno",
+      id: 'ic02',
+      name: 'IC2',
+      level: 'Pleno',
       pointsRequired: 20,
-      description: "Pleno - Demonstra comportamentos consistentes em todas as áreas"
+      description: 'Terceiro nível da carreira de engenharia de software'
     },
     {
-      id: "ic03",
-      name: "IC03",
-      level: "Sênior",
+      id: 'ic03',
+      name: 'IC3',
+      level: 'Pleno',
       pointsRequired: 30,
-      description: "Sênior - Demonstra comportamentos avançados em todas as áreas"
+      description: 'Quarto nível da carreira de engenharia de software'
     },
     {
-      id: "ic04",
-      name: "IC04",
-      level: "Staff",
+      id: 'ic04',
+      name: 'IC4',
+      level: 'Sênior',
       pointsRequired: 40,
-      description: "Staff - Demonstra comportamentos de liderança técnica"
+      description: 'Quinto nível da carreira de engenharia de software'
     },
-    {
-      id: "ic05",
-      name: "IC05",
-      level: "Principal",
-      pointsRequired: 50,
-      description: "Principal - Demonstra comportamentos de liderança e influência"
-    },
-    {
-      id: "em01",
-      name: "EM01",
-      level: "Coordenador",
-      pointsRequired: 60,
-      description: "Coordenador - Demonstra capacidade de gestão de equipes e processos"
-    },
-    {
-      id: "em02",
-      name: "EM02",
-      level: "Gerente",
-      pointsRequired: 70,
-      description: "Gerente - Demonstra capacidade de gestão estratégica"
-    }
   ]
 };
 

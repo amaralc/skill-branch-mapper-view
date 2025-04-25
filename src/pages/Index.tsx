@@ -95,15 +95,13 @@ const Index = () => {
   const baseTracks = ['qualidade', 'seguranca', 'engenharia-software', 'entrega-continua'];
   
   const filteredBranches = skillPath.branches.filter(branch => {
+    // Show base tracks
     if (baseTracks.includes(branch.id)) {
       return true;
     }
     
+    // Show only the selected specialization track
     if (selectedEmphasis && branch.id === selectedEmphasis) {
-      return true;
-    }
-    
-    if (branch.id === 'especialidade' && selectedEmphasis) {
       return true;
     }
     
