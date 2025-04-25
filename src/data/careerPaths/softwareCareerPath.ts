@@ -37,9 +37,9 @@ const architectureBranch: Branch = {
     }
   ],
   levelRequirements: [
-    { tagId: 'ic01', pointsRequired: 3 },
-    { tagId: 'ic02', pointsRequired: 6 },
-    { tagId: 'ic03', pointsRequired: 9 }
+    { tagId: 'ic01', pointsRequired: 12 },
+    { tagId: 'ic02', pointsRequired: 24 },
+    { tagId: 'ic03', pointsRequired: 36 }
   ]
 };
 
@@ -175,11 +175,11 @@ const qualityBranch: Branch = {
     }
   ],
   levelRequirements: [
-    { tagId: 'ic01', pointsRequired: 5 },
-    { tagId: 'ic02', pointsRequired: 15 },
-    { tagId: 'ic03', pointsRequired: 25 },
-    { tagId: 'ic04', pointsRequired: 35 },
-    { tagId: 'ic05', pointsRequired: 45 }
+    { tagId: 'ic01', pointsRequired: 10 },
+    { tagId: 'ic02', pointsRequired: 20 },
+    { tagId: 'ic03', pointsRequired: 30 },
+    { tagId: 'ic04', pointsRequired: 40 },
+    { tagId: 'ic05', pointsRequired: 50 }
   ]
 };
 
@@ -365,11 +365,11 @@ const securityBranch: Branch = {
     }
   ],
   levelRequirements: [
-    { tagId: 'ic01', pointsRequired: 5 },
-    { tagId: 'ic02', pointsRequired: 15 },
+    { tagId: 'ic01', pointsRequired: 10 },
+    { tagId: 'ic02', pointsRequired: 20 },
     { tagId: 'ic03', pointsRequired: 30 },
-    { tagId: 'ic04', pointsRequired: 45 },
-    { tagId: 'ic05', pointsRequired: 60 }
+    { tagId: 'ic04', pointsRequired: 40 },
+    { tagId: 'ic05', pointsRequired: 50 }
   ]
 };
 
@@ -405,9 +405,11 @@ const continuousDeliveryBranch: Branch = {
     }
   ],
   levelRequirements: [
-    { tagId: 'ic01', pointsRequired: 2 },
-    { tagId: 'ic02', pointsRequired: 5 },
-    { tagId: 'ic03', pointsRequired: 8 }
+    { tagId: 'ic01', pointsRequired: 10 },
+    { tagId: 'ic02', pointsRequired: 20 },
+    { tagId: 'ic03', pointsRequired: 30 },
+    { tagId: 'ic04', pointsRequired: 40 },
+    { tagId: 'ic05', pointsRequired: 50 }
   ]
 };
 
@@ -443,9 +445,11 @@ const frontEndTrack: Branch = {
     }
   ],
   levelRequirements: [
-    { tagId: 'ic01', pointsRequired: 2 },
-    { tagId: 'ic02', pointsRequired: 5 },
-    { tagId: 'ic03', pointsRequired: 8 }
+    { tagId: 'ic01', pointsRequired: 10 },
+    { tagId: 'ic02', pointsRequired: 20 },
+    { tagId: 'ic03', pointsRequired: 30 },
+    { tagId: 'ic04', pointsRequired: 40 },
+    { tagId: 'ic05', pointsRequired: 50 }
   ]
 };
 
@@ -481,9 +485,11 @@ const backEndTrack: Branch = {
     }
   ],
   levelRequirements: [
-    { tagId: 'ic01', pointsRequired: 2 },
-    { tagId: 'ic02', pointsRequired: 5 },
-    { tagId: 'ic03', pointsRequired: 8 }
+    { tagId: 'ic01', pointsRequired: 10 },
+    { tagId: 'ic02', pointsRequired: 20 },
+    { tagId: 'ic03', pointsRequired: 30 },
+    { tagId: 'ic04', pointsRequired: 40 },
+    { tagId: 'ic05', pointsRequired: 50 }
   ]
 };
 
@@ -519,10 +525,11 @@ const dataScienceTrack: Branch = {
     }
   ],
   levelRequirements: [
-    { tagId: 'ic01', pointsRequired: 2 },
-    { tagId: 'ic02', pointsRequired: 5 },
-    { tagId: 'ic03', pointsRequired: 8 },
-    { tagId: 'ic04', pointsRequired: 10 }
+    { tagId: 'ic01', pointsRequired: 10 },
+    { tagId: 'ic02', pointsRequired: 20 },
+    { tagId: 'ic03', pointsRequired: 30 },
+    { tagId: 'ic04', pointsRequired: 40 },
+    { tagId: 'ic05', pointsRequired: 50 }
   ]
 };
 
@@ -558,9 +565,11 @@ const mobileTrack: Branch = {
     }
   ],
   levelRequirements: [
-    { tagId: 'ic01', pointsRequired: 2 },
-    { tagId: 'ic02', pointsRequired: 5 },
-    { tagId: 'ic03', pointsRequired: 8 }
+    { tagId: 'ic01', pointsRequired: 10 },
+    { tagId: 'ic02', pointsRequired: 20 },
+    { tagId: 'ic03', pointsRequired: 30 },
+    { tagId: 'ic04', pointsRequired: 40 },
+    { tagId: 'ic05', pointsRequired: 50 }
   ]
 };
 
@@ -596,9 +605,11 @@ const cloudTrack: Branch = {
     }
   ],
   levelRequirements: [
-    { tagId: 'ic01', pointsRequired: 2 },
-    { tagId: 'ic02', pointsRequired: 5 },
-    { tagId: 'ic03', pointsRequired: 8 }
+    { tagId: 'ic01', pointsRequired: 10 },
+    { tagId: 'ic02', pointsRequired: 20 },
+    { tagId: 'ic03', pointsRequired: 30 },
+    { tagId: 'ic04', pointsRequired: 40 },
+    { tagId: 'ic05', pointsRequired: 50 }
   ]
 };
 
@@ -634,9 +645,11 @@ const firmwareTrack: Branch = {
     }
   ],
   levelRequirements: [
-    { tagId: 'ic01', pointsRequired: 2 },
-    { tagId: 'ic02', pointsRequired: 5 },
-    { tagId: 'ic03', pointsRequired: 8 }
+    { tagId: 'ic01', pointsRequired: 10 },
+    { tagId: 'ic02', pointsRequired: 20 },
+    { tagId: 'ic03', pointsRequired: 30 },
+    { tagId: 'ic04', pointsRequired: 40 },
+    { tagId: 'ic05', pointsRequired: 50 }
   ]
 };
 
@@ -672,9 +685,11 @@ const fullStackTrack: Branch = {
     }
   ],
   levelRequirements: [
-    { tagId: 'ic01', pointsRequired: 2 },
-    { tagId: 'ic02', pointsRequired: 6 },
-    { tagId: 'ic03', pointsRequired: 8 }
+    { tagId: 'ic01', pointsRequired: 10 },
+    { tagId: 'ic02', pointsRequired: 20 },
+    { tagId: 'ic03', pointsRequired: 30 },
+    { tagId: 'ic04', pointsRequired: 40 },
+    { tagId: 'ic05', pointsRequired: 50 }
   ]
 };
 
