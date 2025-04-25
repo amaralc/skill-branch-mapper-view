@@ -1,9 +1,9 @@
-
 import React, { useState } from 'react';
 import { Branch, SkillPath, careerPaths } from '@/data/skillData';
 import BranchView from '@/components/BranchView';
 import ProgressSummary from '@/components/ProgressSummary';
 import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectGroup, SelectTrigger, SelectContent, SelectItem, SelectValue, SelectLabel } from '@/components/ui/select';
 import { useEvaluationState } from '@/hooks/useEvaluationState';
 import ActionsDrawer from '@/components/ActionsDrawer';
@@ -69,7 +69,7 @@ const Index = () => {
 
   const baseTracks = ['quality', 'security', 'architecture', 'continuous-delivery'];
   
-  const filteredBranches = skillPath.branches.filter(branch => {
+  const filteredBranches = skillPath?.branches?.filter(branch => {
     if (baseTracks.includes(branch.id)) {
       return true;
     }
@@ -79,7 +79,7 @@ const Index = () => {
     }
     
     return false;
-  });
+  }) || [];
 
   if (isLoading) {
     return (
@@ -143,12 +143,12 @@ const Index = () => {
         </Select>
       </div>
 
-      <main className="max-w-[1200px] mx-auto py-0 px-0">
+      <main className="max-w-[1200px] mx-auto py-0 px-4">
         {selectedCareerId ? (
           <>
             <ProgressSummary skillPath={skillPath} />
             
-            <div className="flex gap-4 px-4 mb-6">
+            <div className="flex gap-4 mb-6">
               <Button 
                 variant="outline" 
                 className="flex-1" 
@@ -160,61 +160,44 @@ const Index = () => {
             </div>
 
             <div className="flex flex-col">
-              <div className="bg-white rounded-lg shadow p-4 mb-6 shadow-none border-none">
+              <div className="bg-white rounded-lg shadow p-4 mb-6">
                 <h2 className="text-lg font-bold mb-3">Trilhas de Competência</h2>
-                <div className="space-y-2">
-                  {skillPath?.branches?.filter(branch => {
-                    if (baseTracks.includes(branch.id)) {
-                      return true;
-                    }
-                    
-                    if (selectedEmphasis && branch.id === selectedEmphasis) {
-                      return true;
-                    }
-                    
-                    return false;
-                  }).map(branch => (
-                    <button
-                      key={branch.id}
-                      className={`w-full text-left px-3 py-2 rounded flex items-center text-sm
-                        ${currentBranchId === branch.id ? 'bg-gray-100 border-l-4 font-medium' : 'hover:bg-gray-50'}`}
-                      style={{
-                        borderLeftColor: currentBranchId === branch.id ? branch.color : 'transparent',
-                        borderLeftWidth: currentBranchId === branch.id ? '4px' : '0px'
-                      }}
-                      onClick={() => setCurrentBranchId(branch.id)}
-                    >
-                      <div className="w-3 h-3 rounded-full mr-2" style={{
-                        backgroundColor: branch.color
-                      }}></div>
-                      {branch.name}
-                      {branch.id === selectedEmphasis ? (
-                        <span className="ml-2 text-xs text-gray-500">
-                          (Especialidade)
-                        </span>
-                      ) : null}
-                    </button>
+                
+                <Tabs defaultValue={filteredBranches[0]?.id} className="w-full">
+                  <TabsList className="w-full justify-start mb-4 bg-transparent gap-2">
+                    {filteredBranches.map(branch => (
+                      <TabsTrigger
+                        key={branch.id}
+                        value={branch.id}
+                        className="data-[state=active]:bg-gray-100 data-[state=active]:shadow-none px-4"
+                      >
+                        <div className="flex items-center gap-2">
+                          <div 
+                            className="w-3 h-3 rounded-full" 
+                            style={{ backgroundColor: branch.color }}
+                          />
+                          <span>{branch.name}</span>
+                          {branch.id === selectedEmphasis && (
+                            <span className="ml-1 text-xs text-gray-500">
+                              (Especialidade)
+                            </span>
+                          )}
+                        </div>
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
+
+                  {filteredBranches.map(branch => (
+                    <TabsContent key={branch.id} value={branch.id}>
+                      <BranchView
+                        branch={branch}
+                        onEvaluateCommit={handleEvaluateCommit}
+                        isCurrentBranch={true}
+                        skillPath={skillPath}
+                      />
+                    </TabsContent>
                   ))}
-                </div>
-              </div>
-
-              <div className="bg-white rounded-lg shadow p-4">
-                <h2 className="text-lg font-bold mb-4">
-                  {currentBranchId ? `Branch: ${getBranchName(currentBranchId)}` : 'Selecione uma branch para visualizar os commits'}
-                </h2>
-
-                {currentBranchId ? (
-                  <BranchView
-                    branch={skillPath?.branches?.find(branch => branch.id === currentBranchId)!}
-                    onEvaluateCommit={handleEvaluateCommit}
-                    isCurrentBranch={true}
-                    skillPath={skillPath}
-                  />
-                ) : (
-                  <div className="text-center py-12 text-gray-500">
-                    Selecione uma branch no menu ao lado para visualizar os commits
-                  </div>
-                )}
+                </Tabs>
               </div>
             </div>
           </>
