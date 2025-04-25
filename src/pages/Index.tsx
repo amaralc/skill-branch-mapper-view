@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Branch, SkillPath, careerPaths } from '@/data/skillData';
 import BranchView from '@/components/BranchView';
@@ -93,6 +92,13 @@ const Index = () => {
     );
   };
 
+  const filteredBranches = skillPath.branches.filter(branch => {
+    if (!selectedEmphasis) {
+      return ['qualidade', 'seguranca', 'engenharia-software', 'entrega-continua'].includes(branch.id);
+    }
+    return branch.id === selectedEmphasis;
+  });
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -144,33 +150,19 @@ const Index = () => {
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectLabel>Base</SelectLabel>
-              {emphasisOptions
-                .filter(emphasis => emphasis.group === 'base')
-                .map(emphasis => (
-                  <SelectItem value={emphasis.id} key={emphasis.id}>
-                    {emphasis.label}
-                  </SelectItem>
-                ))
-              }
-            </SelectGroup>
-            <SelectGroup>
               <SelectLabel>Especialidade</SelectLabel>
-              {emphasisOptions
-                .filter(emphasis => emphasis.group === 'especialidade')
-                .map(emphasis => (
-                  <SelectItem value={emphasis.id} key={emphasis.id}>
-                    {emphasis.label}
-                  </SelectItem>
-                ))
-              }
+              {emphasisOptions.map(emphasis => (
+                <SelectItem value={emphasis.id} key={emphasis.id}>
+                  {emphasis.label}
+                </SelectItem>
+              ))}
             </SelectGroup>
           </SelectContent>
         </Select>
       </div>
 
       <main className="max-w-[1200px] mx-auto py-0 px-0">
-        {selectedEmphasis ? (
+        {selectedCareerId ? (
           <>
             <ProgressSummary skillPath={skillPath} />
 
@@ -178,7 +170,7 @@ const Index = () => {
               <div className="bg-white rounded-lg shadow p-4 mb-6 shadow-none border-none">
                 <h2 className="text-lg font-bold mb-3">Trilhas de Competência</h2>
                 <div className="space-y-2">
-                  {skillPath.branches.map(branch => (
+                  {filteredBranches.map(branch => (
                     <button
                       key={branch.id}
                       className={`w-full text-left px-3 py-2 rounded flex items-center text-sm
@@ -193,6 +185,11 @@ const Index = () => {
                         backgroundColor: branch.color
                       }}></div>
                       {branch.name}
+                      {selectedEmphasis && branch.id === selectedEmphasis && (
+                        <span className="ml-2 text-xs text-gray-500">
+                          (Especialidade)
+                        </span>
+                      )}
                     </button>
                   ))}
                 </div>
