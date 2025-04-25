@@ -2,7 +2,7 @@ import { Branch, SkillPath } from '@/types/skill';
 
 const qualityBranch: Branch = {
   id: 'qualidade',
-  name: 'Qualidade de Software',
+  name: 'Qualidade',
   color: '#3498db',
   commits: [
     {
