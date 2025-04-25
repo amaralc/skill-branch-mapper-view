@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Branch, SkillPath, careerPaths } from '@/data/skillData';
 import BranchView from '@/components/BranchView';
@@ -149,10 +150,10 @@ const Index = () => {
           <>
             <ProgressSummary skillPath={skillPath} />
             
-            <div className="flex gap-4 mb-6">
+            <div className="flex flex-col gap-4 mb-6">
               <Button 
                 variant="outline" 
-                className="flex-1" 
+                className="w-full" 
                 onClick={() => resetAllEvaluations()}
               >
                 Reiniciar Avaliação
