@@ -1572,7 +1572,7 @@ export const commonBranches: Branch[] = [
       { tagId: "pleno", pointsRequired: 20 },
       { tagId: "senior", pointsRequired: 30 }
     ]
-  }
+  },
   {
     id: "PROBLEM-RESOLUTION",
     name: "Resolução de Problemas",
