@@ -1,4 +1,3 @@
-
 import { SkillPath, Tag, Branch } from '../types/skill';
 
 export const calculatePoints = (path: SkillPath): number => {
@@ -6,8 +5,7 @@ export const calculatePoints = (path: SkillPath): number => {
 
   path.branches.forEach(branch => {
     branch.commits.forEach(commit => {
-      if (commit.evaluation === 'never') totalPoints += 0;
-      else if (commit.evaluation === 'sometimes') totalPoints += 1;
+      if (commit.evaluation === 'sometimes') totalPoints += 1;
       else if (commit.evaluation === 'always') totalPoints += 2;
     });
   });
@@ -28,8 +26,7 @@ export const getMaxPoints = (path: SkillPath): number => {
 export const calculateBranchPoints = (branch: Branch): number => {
   let points = 0;
   branch.commits.forEach(commit => {
-    if (commit.evaluation === 'never') points += 0;
-    else if (commit.evaluation === 'sometimes') points += 1;
+    if (commit.evaluation === 'sometimes') points += 1;
     else if (commit.evaluation === 'always') points += 2;
   });
   return points;
