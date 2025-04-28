@@ -45,31 +45,6 @@ export const commonBranches: Branch[] = [
     color: "#0ea1e9",
     commits: [
       {
-        "id": "AC01-BASE-ALL",
-        "behaviorDescription": "Assume responsabilidade por entregas",
-        "evaluation": null
-      },
-      {
-        "id": "AC02-BASE-ALL",
-        "behaviorDescription": "Reconhece erros prontamente",
-        "evaluation": null
-      },
-      {
-        "id": "AC03-BASE-ALL",
-        "behaviorDescription": "Toma decisões com autonomia no seu escopo",
-        "evaluation": null
-      },
-      {
-        "id": "AC04-BASE-ALL",
-        "behaviorDescription": "Define expectativas claras para entregas",
-        "evaluation": null
-      },
-      {
-        "id": "AC05-BASE-ALL",
-        "behaviorDescription": "Prioriza tarefas com foco em valor",
-        "evaluation": null
-      },
-      {
         "id": "AC01-L0-T-ALL",
         "behaviorDescription": "Entrega tarefas designadas com supervisão",
         "evaluation": null
