@@ -47,7 +47,7 @@ const Index = () => {
     resetAllEvaluations(importedSkillPath);
   };
 
-  const baseTracks = ['accountability', 'adaptability', 'communication', 'continuous-development', 'emotional-intelligence', 'results-orientation', 'quality', 'security', 'architecture', 'continuous-delivery'];
+  const baseTracks = ['ACCOUNTABILITY', 'adaptability', 'communication', 'continuous-development', 'emotional-intelligence', 'results-orientation', 'quality', 'security', 'architecture', 'continuous-delivery'];
   
   const filteredBranches = skillPath?.branches?.filter(branch => {
     if (baseTracks.includes(branch.id)) {
