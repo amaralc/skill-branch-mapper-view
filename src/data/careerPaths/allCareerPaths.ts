@@ -220,56 +220,6 @@ export const commonBranches: Branch[] = [
     color: "#0ea1e9",
     commits: [
       {
-        "id": "AC01-L0-T-ALL",
-        "behaviorDescription": "Entrega tarefas designadas com supervisão",
-        "evaluation": null
-      },
-      {
-        "id": "AC02-L0-T-ALL",
-        "behaviorDescription": "Admite erros quando identificados",
-        "evaluation": null
-      },
-      {
-        "id": "AC03-L0-T-ALL",
-        "behaviorDescription": "Toma decisões simples dentro de diretrizes estabelecidas",
-        "evaluation": null
-      },
-      {
-        "id": "AC04-L0-T-ALL",
-        "behaviorDescription": "Define critérios básicos para suas tarefas",
-        "evaluation": null
-      },
-      {
-        "id": "AC05-L0-T-ALL",
-        "behaviorDescription": "Organiza tarefas conforme orientação",
-        "evaluation": null
-      },
-      {
-        "id": "AC01-L1-T-ALL",
-        "behaviorDescription": "Cumpre compromissos de forma autônoma",
-        "evaluation": null
-      },
-      {
-        "id": "AC02-L1-T-ALL",
-        "behaviorDescription": "Reconhece falhas proativamente",
-        "evaluation": null
-      },
-      {
-        "id": "AC03-L1-T-ALL",
-        "behaviorDescription": "Faz escolhas autônomas em seu escopo",
-        "evaluation": null
-      },
-      {
-        "id": "AC04-L1-T-ALL",
-        "behaviorDescription": "Estabelece métricas claras para entregas individuais",
-        "evaluation": null
-      },
-      {
-        "id": "AC05-L1-T-ALL",
-        "behaviorDescription": "Prioriza atividades com autonomia",
-        "evaluation": null
-      },
-      {
         "id": "AC01-L2-T-ALL",
         "behaviorDescription": "Gerencia múltiplas entregas e orienta iniciantes em técnicas de cumprimento de compromissos",
         "evaluation": null
@@ -776,8 +726,8 @@ export const commonBranches: Branch[] = [
     ]
   },
   {
-    id: "PEOPLE MANAGEMENT",
-    name: "People Management",
+    id: "TEAM MANAGEMENT",
+    name: "Gestão de Equipes",
     color: "#03a109",
     commits: [
       {
