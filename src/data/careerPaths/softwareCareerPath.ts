@@ -1,7 +1,7 @@
 import { Branch, SkillPath } from '@/types/skill';
 
 const architectureBranch: Branch = {
-  id: 'architecture',
+  id: 'ARCHITECTURE',
   name: 'Arquitetura',
   color: '#2ecc71',
   commits: [
@@ -189,7 +189,7 @@ const architectureBranch: Branch = {
 };
 
 const qualityBranch: Branch = {
-  id: 'quality',
+  id: 'QUALITY',
   name: 'Qualidade',
   color: '#3498db',
   commits: [
@@ -329,7 +329,7 @@ const qualityBranch: Branch = {
 };
 
 const securityBranch: Branch = {
-  id: 'security',
+  id: 'SECURITY',
   name: 'Segurança',
   color: '#e74c3c',
   commits: [
@@ -519,7 +519,7 @@ const securityBranch: Branch = {
 };
 
 const continuousDeliveryBranch: Branch = {
-  id: 'continuous-delivery',
+  id: 'CONTINUOUS-DELIVERY',
   name: 'Entrega Contínua',
   color: '#f39c12',
   commits: [
@@ -709,7 +709,7 @@ const continuousDeliveryBranch: Branch = {
 };
 
 const frontEndTrack: Branch = {
-  id: 'front-end',
+  id: 'FRONT-END',
   name: 'Front-End Development',
   color: '#FF6B6B',
   commits: [
@@ -749,7 +749,7 @@ const frontEndTrack: Branch = {
 };
 
 const backEndTrack: Branch = {
-  id: 'back-end',
+  id: 'BACK-END',
   name: 'Back-End Development',
   color: '#4ECDC4',
   commits: [
@@ -789,7 +789,7 @@ const backEndTrack: Branch = {
 };
 
 const dataScienceTrack: Branch = {
-  id: 'data-science',
+  id: 'ENGINEERING-AND-DATA-SCIENCE',
   name: 'Data Science',
   color: '#9B59B6',
   commits: [
@@ -829,7 +829,7 @@ const dataScienceTrack: Branch = {
 };
 
 const mobileTrack: Branch = {
-  id: 'mobile',
+  id: 'MOBILE',
   name: 'Mobile Development',
   color: '#3498DB',
   commits: [
@@ -869,7 +869,7 @@ const mobileTrack: Branch = {
 };
 
 const cloudTrack: Branch = {
-  id: 'cloud',
+  id: 'CLOUD-INFRASTRUCTURE',
   name: 'Cloud Infrastructure',
   color: '#E67E22',
   commits: [
@@ -909,7 +909,7 @@ const cloudTrack: Branch = {
 };
 
 const firmwareTrack: Branch = {
-  id: 'firmware',
+  id: 'FIRMWARE',
   name: 'Firmware Development',
   color: '#8E44AD',
   commits: [
@@ -949,7 +949,7 @@ const firmwareTrack: Branch = {
 };
 
 const fullStackTrack: Branch = {
-  id: 'full-stack',
+  id: 'FULL-STACK',
   name: 'Full-Stack Development',
   color: '#8854d0',
   commits: [
