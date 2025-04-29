@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SkillPath } from '@/data/skillData';
 import ProgressSummary from '@/components/ProgressSummary';
 import { Button } from '@/components/ui/button';
@@ -50,11 +50,15 @@ const Index = () => {
   const baseTracks = ['ACCOUNTABILITY', 'ADAPTABILITY', 'COMMUNICATION', 'CONTINUOUS-DEVELOPMENT', 'EMOTIONAL-INTELLIGENCE', 'RESULTS-ORIENTATION', 'QUALITY', 'SECURITY', 'ARCHITECTURE', 'CONTINUOUS-DELIVERY'];
   
   const filteredBranches = skillPath?.branches?.filter(branch => {
+    // Sempre incluir branches base
     if (baseTracks.includes(branch.id)) {
       return true;
     }
     
-    if (selectedEmphasis && branch.id === selectedEmphasis) {
+    // Incluir a branch de especialidade selecionada
+    // Importante: branch.id pode ser 'front-end', 'back-end', 'full-stack', etc.
+    // E selectedEmphasis será o ID correspondente, como 'front-end', 'back-end', 'full-stack'
+    if (selectedEmphasis && branch.id.toLowerCase() === selectedEmphasis.toLowerCase()) {
       return true;
     }
     

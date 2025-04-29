@@ -16,6 +16,15 @@ const SkillBranches: React.FC<SkillBranchesProps> = ({
   skillPath,
   onEvaluateCommit
 }) => {
+  // Verificar se há branches disponíveis para evitar erro
+  if (branches.length === 0) {
+    return (
+      <div className="text-center py-6 text-gray-500">
+        Nenhuma trilha de competência disponível para esta seleção.
+      </div>
+    );
+  }
+  
   return (
     <Tabs defaultValue={branches[0]?.id} className="w-full">
       <ScrollArea className="w-full pb-4" orientation="horizontal">
@@ -32,7 +41,7 @@ const SkillBranches: React.FC<SkillBranchesProps> = ({
                   style={{ backgroundColor: branch.color }}
                 />
                 <span>{branch.name}</span>
-                {branch.id === 'front-end' && (
+                {!['ACCOUNTABILITY', 'ADAPTABILITY', 'COMMUNICATION', 'CONTINUOUS-DEVELOPMENT', 'EMOTIONAL-INTELLIGENCE', 'RESULTS-ORIENTATION', 'QUALITY', 'SECURITY', 'ARCHITECTURE', 'CONTINUOUS-DELIVERY'].includes(branch.id) && (
                   <span className="ml-1 text-xs text-gray-500">
                     (Especialidade)
                   </span>
