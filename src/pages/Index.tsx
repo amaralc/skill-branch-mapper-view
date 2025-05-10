@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { SkillPath } from '@/data/skillData';
 import ProgressSummary from '@/components/ProgressSummary';
@@ -31,11 +30,11 @@ const Index = () => {
   };
 
   const handleLevelChange = (level: string) => {
-    setSelectedLevel(level === selectedLevel ? null : level);
+    setSelectedLevel(level === "" ? null : level);
   };
 
   const handleTrackChange = (track: string) => {
-    setSelectedTrack(track);
+    setSelectedTrack(track === "" ? null : track);
   };
 
   const handleExportEvaluation = () => {

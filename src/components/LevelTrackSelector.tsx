@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Label } from "@/components/ui/label";
-import { Commit, Branch } from '@/types/skill';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Branch } from '@/types/skill';
 
 interface LevelTrackSelectorProps {
   branches: Branch[];
@@ -23,7 +23,10 @@ const LevelTrackSelector: React.FC<LevelTrackSelectorProps> = ({
   const levels = ['L0', 'L1', 'L2', 'L3', 'L4', 'L5', 'L6', 'L7'];
   
   // Available tracks
-  const tracks = ['T', 'M'];
+  const tracks = [
+    { id: 'T', label: 'Técnica' },
+    { id: 'M', label: 'Gestão' }
+  ];
   
   // Get available tracks for the selected level
   const [availableTracks, setAvailableTracks] = useState<string[]>(['T']);
@@ -54,30 +57,44 @@ const LevelTrackSelector: React.FC<LevelTrackSelectorProps> = ({
     <div className="space-y-4">
       <div className="space-y-2">
         <Label>Nível</Label>
-        <ToggleGroup type="single" value={selectedLevel || ''} onValueChange={onLevelChange} className="justify-start flex-wrap">
-          {levels.map(level => (
-            <ToggleGroupItem key={level} value={level} aria-label={`Level ${level}`} className="px-3 py-1">
-              {level}
-            </ToggleGroupItem>
-          ))}
-        </ToggleGroup>
+        <Select value={selectedLevel || ''} onValueChange={onLevelChange}>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Escolha o nível" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Nível</SelectLabel>
+              {levels.map(level => (
+                <SelectItem key={level} value={level}>
+                  {level}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="space-y-2">
         <Label>Trilha</Label>
-        <ToggleGroup type="single" value={selectedTrack || ''} onValueChange={onTrackChange} className="justify-start">
-          {tracks.map(track => (
-            <ToggleGroupItem 
-              key={track} 
-              value={track} 
-              aria-label={`Track ${track}`} 
-              disabled={!availableTracks.includes(track)}
-              className="px-3 py-1"
-            >
-              {track === 'T' ? 'Técnica' : 'Gestão'}
-            </ToggleGroupItem>
-          ))}
-        </ToggleGroup>
+        <Select value={selectedTrack || ''} onValueChange={onTrackChange}>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Escolha a trilha" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Trilha</SelectLabel>
+              {tracks.map(track => (
+                <SelectItem 
+                  key={track.id} 
+                  value={track.id}
+                  disabled={!availableTracks.includes(track.id)}
+                >
+                  {track.label}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       </div>
     </div>
   );
