@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { SkillPath } from '@/data/skillData';
 import ProgressSummary from '@/components/ProgressSummary';
@@ -10,7 +11,6 @@ import EmphasisSelector from '@/components/EmphasisSelector';
 import LevelTrackSelector from '@/components/LevelTrackSelector';
 import SkillBranches from '@/components/SkillBranches';
 import { careerPaths } from '@/data/skillData';
-import { filterCommitsByLevelAndTrack } from '@/utils/filterHelpers';
 
 const Index = () => {
   const defaultCareer = careerPaths.find(path => path.id === "software") || careerPaths[0];
@@ -75,13 +75,6 @@ const Index = () => {
     
     return false;
   }) || [];
-  
-  // Apply level and track filtering to the branches
-  const filteredByLevelAndTrack = filterCommitsByLevelAndTrack(
-    filteredBranches, 
-    selectedLevel, 
-    selectedTrack
-  );
 
   if (isLoading) {
     return (
@@ -154,7 +147,7 @@ const Index = () => {
               <div className="bg-white rounded-lg shadow p-4 mb-6">
                 <h2 className="text-lg font-bold mb-3">Trilhas de Competência</h2>
                 <SkillBranches
-                  branches={filteredByLevelAndTrack}
+                  branches={filteredBranches}
                   skillPath={skillPath}
                   onEvaluateCommit={evaluateCommit}
                 />

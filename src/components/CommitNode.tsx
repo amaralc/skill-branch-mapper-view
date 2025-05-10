@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Commit } from '@/data/skillData';
-import { GitCommitHorizontal, BookOpen } from 'lucide-react';
+import { BookOpen } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import {
   Drawer,
@@ -86,10 +86,12 @@ const CommitNode: React.FC<CommitNodeProps> = ({
   return (
     <div className={`flex items-center mb-2 ${isLast ? '' : 'pb-1'}`}>
       <div
-        className="w-8 h-8 rounded-full flex items-center justify-center mr-3"
+        className="w-6 h-6 rounded-full flex items-center justify-center mr-3 text-xs font-mono"
         style={{ backgroundColor: branchColor }}
       >
-        <GitCommitHorizontal className="text-white" size={16} />
+        <span className="text-white">
+          {commit.metadata?.baseBehavior || ''}
+        </span>
       </div>
       <div
         className={`flex-1 flex items-center rounded border bg-white shadow-sm transition-shadow 
