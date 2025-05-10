@@ -397,13 +397,13 @@ const securityBranch: Branch = {
       id: "security-01",
       behaviorDescription:
         "Evita expor dados sensíveis e aplica variáveis de ambiente com apoio e atenção ao detalhe",
-      evaluation: "sometimes",
+      evaluation: null,
     },
     {
       id: "security-02",
       behaviorDescription:
         "Lê relatórios de SAST e busca entender vulnerabilidades OWASP, com ajuda, corrigindo o que entrega",
-      evaluation: "always",
+      evaluation: null,
     },
     {
       id: "security-03",
@@ -415,7 +415,7 @@ const securityBranch: Branch = {
       id: "security-04",
       behaviorDescription:
         "Cria testes para falhas conhecidas que entregou, com supervisão, garantindo que não voltem",
-      evaluation: "always",
+      evaluation: null,
     },
     {
       id: "security-05",
