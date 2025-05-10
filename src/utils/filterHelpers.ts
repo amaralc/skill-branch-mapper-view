@@ -71,3 +71,22 @@ export const getCommitCounts = (
   
   return counts;
 };
+
+// Helper function to get all available levels from commits
+export const getAvailableLevels = (branches: Branch[]): string[] => {
+  const levels = new Set<string>();
+  
+  branches.forEach(branch => {
+    branch.commits.forEach(commit => {
+      if (commit.metadata?.level) {
+        levels.add(commit.metadata.level);
+      }
+    });
+  });
+  
+  return Array.from(levels).sort((a, b) => {
+    const levelA = parseInt(a.replace(/\D/g, ''));
+    const levelB = parseInt(b.replace(/\D/g, ''));
+    return levelA - levelB;
+  });
+};

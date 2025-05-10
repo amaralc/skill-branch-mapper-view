@@ -4,6 +4,7 @@ import { Branch, SkillPath } from '@/types/skill';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import BranchView from '@/components/BranchView';
+import { filterCommitsByLevelAndTrack } from '@/utils/filterHelpers';
 
 interface SkillBranchesProps {
   branches: Branch[];

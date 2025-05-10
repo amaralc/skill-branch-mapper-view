@@ -86,6 +86,13 @@ const BranchView: React.FC<BranchViewProps> = ({
     const levelB = b.metadata?.level ? parseInt(b.metadata.level.replace(/\D/g, '')) : 0;
     return levelB - levelA; // Descending order
   });
+
+  // Get all unique levels available in this branch's commits
+  const availableLevels = Array.from(new Set(
+    sortedCommits
+      .map(commit => commit.metadata?.level?.replace(/\D/g, ''))
+      .filter(level => level !== undefined)
+  )).sort((a, b) => Number(b) - Number(a)); // Sort in descending order
   
   // Create a map of levels to tags
   const levelTags: Record<string, Tag> = {};
@@ -128,6 +135,11 @@ const BranchView: React.FC<BranchViewProps> = ({
       level: commitLevel
     });
   });
+
+  // Debug to console to check render items
+  console.log('Render items:', renderItems);
+  console.log('Available levels:', availableLevels);
+  console.log('Level tags:', levelTags);
   
   return (
     <div className={`mb-8 ${isCurrentBranch ? 'opacity-100' : 'opacity-60'}`}>
@@ -169,36 +181,42 @@ const BranchView: React.FC<BranchViewProps> = ({
           style={{ backgroundColor: branch.color }}
         ></div>
         <div className="relative z-10">
-          {renderItems.map((item, idx) => {
-            if (item.type === 'commit') {
-              const commit = item.item;
-              const isCommitInSelectedLevel = 
-                !selectedLevel || 
-                (commit.metadata?.level === selectedLevel);
-              
-              return (
-                <CommitNode
-                  key={`commit-${commit.id}`}
-                  commit={commit}
-                  branchColor={branch.color}
-                  isLast={idx === renderItems.length - 1}
-                  onEvaluate={evaluation => onEvaluateCommit(branch.id, commit.id, evaluation)}
-                  dimmed={selectedLevel && !isCommitInSelectedLevel}
-                />
-              );
-            } else if (item.type === 'tag') {
-              const tag = item.item;
-              return (
-                <TagIllustratedNode
-                  key={`tag-${tag.id}`}
-                  tag={tag}
-                  skillPath={skillPath}
-                  imageSrc={images[parseInt(item.level) % images.length]}
-                />
-              );
-            }
-            return null;
-          })}
+          {renderItems.length > 0 ? (
+            renderItems.map((item, idx) => {
+              if (item.type === 'commit') {
+                const commit = item.item;
+                const isCommitInSelectedLevel = 
+                  !selectedLevel || 
+                  (commit.metadata?.level === selectedLevel);
+                
+                return (
+                  <CommitNode
+                    key={`commit-${commit.id}`}
+                    commit={commit}
+                    branchColor={branch.color}
+                    isLast={idx === renderItems.length - 1}
+                    onEvaluate={evaluation => onEvaluateCommit(branch.id, commit.id, evaluation)}
+                    dimmed={selectedLevel && !isCommitInSelectedLevel}
+                  />
+                );
+              } else if (item.type === 'tag') {
+                const tag = item.item;
+                return (
+                  <TagIllustratedNode
+                    key={`tag-${tag.id}-${item.level}`}
+                    tag={tag}
+                    skillPath={skillPath}
+                    imageSrc={images[parseInt(item.level) % images.length]}
+                  />
+                );
+              }
+              return null;
+            })
+          ) : (
+            <div className="text-center py-8 text-gray-500">
+              Nenhum comportamento disponível para esta competência com os filtros atuais.
+            </div>
+          )}
         </div>
       </div>
     </div>
