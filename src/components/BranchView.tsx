@@ -23,10 +23,30 @@ interface BranchViewProps {
   isCurrentBranch: boolean;
   skillPath: SkillPath;
   selectedLevel: string | null;
+  selectedTrack: string | null;
 }
 
-const BranchView: React.FC<BranchViewProps> = ({ branch, onEvaluateCommit, isCurrentBranch, skillPath, selectedLevel }) => {
-  const getBranchStatusCounts = (branch: Branch) => {
+const BranchView: React.FC<BranchViewProps> = ({ 
+  branch, 
+  onEvaluateCommit, 
+  isCurrentBranch, 
+  skillPath, 
+  selectedLevel,
+  selectedTrack 
+}) => {
+  // Filter commits by selected track if both levels and track are specified
+  const filteredCommits = branch.commits.filter(commit => {
+    // If no track selected, show all
+    if (!selectedTrack) return true;
+    
+    // If this commit doesn't specify a track, always show it
+    if (!commit.metadata?.track) return true;
+    
+    // Otherwise, only show commits that match the selected track
+    return commit.metadata.track === selectedTrack;
+  });
+  
+  const getBranchStatusCounts = (commits: Branch['commits']) => {
     const counts = {
       notEvaluated: 0,
       never: 0,
@@ -34,7 +54,7 @@ const BranchView: React.FC<BranchViewProps> = ({ branch, onEvaluateCommit, isCur
       always: 0
     };
 
-    branch.commits.forEach(commit => {
+    commits.forEach(commit => {
       if (commit.evaluation === null) counts.notEvaluated++;
       else if (commit.evaluation === 'never') counts.never++;
       else if (commit.evaluation === 'sometimes') counts.sometimes++;
@@ -44,15 +64,25 @@ const BranchView: React.FC<BranchViewProps> = ({ branch, onEvaluateCommit, isCur
     return counts;
   };
 
-  const counts = getBranchStatusCounts(branch);
+  const counts = getBranchStatusCounts(filteredCommits);
 
-  const branchPoints = calculateBranchPoints(branch);
+  // Calculate points only for filtered commits
+  const calculateFilteredBranchPoints = (commits: Branch['commits']) => {
+    let points = 0;
+    commits.forEach(commit => {
+      if (commit.evaluation === 'sometimes') points += 1;
+      else if (commit.evaluation === 'always') points += 2;
+    });
+    return points;
+  };
+
+  const branchPoints = calculateFilteredBranchPoints(filteredCommits);
   const tags = skillPath.tags;
   
   // Sort commits by level in descending order
-  const sortedCommits = [...branch.commits].sort((a, b) => {
-    const levelA = a.metadata?.level ? parseInt(a.metadata.level) : 0;
-    const levelB = b.metadata?.level ? parseInt(b.metadata.level) : 0;
+  const sortedCommits = [...filteredCommits].sort((a, b) => {
+    const levelA = a.metadata?.level ? parseInt(a.metadata.level.replace(/\D/g, '')) : 0;
+    const levelB = b.metadata?.level ? parseInt(b.metadata.level.replace(/\D/g, '')) : 0;
     return levelB - levelA; // Descending order
   });
   

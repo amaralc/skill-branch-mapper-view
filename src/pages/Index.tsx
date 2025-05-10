@@ -129,7 +129,7 @@ const Index = () => {
       <main className="max-w-[1200px] mx-auto py-0 px-4">
         {selectedCareerId && selectedEmphasis ? (
           <>
-            <ProgressSummary skillPath={skillPath} />
+            <ProgressSummary skillPath={skillPath} selectedTrack={selectedTrack} />
             
             <div className="flex flex-col gap-4 mb-6">
               <Button 
@@ -150,6 +150,7 @@ const Index = () => {
                   skillPath={skillPath}
                   onEvaluateCommit={evaluateCommit}
                   selectedLevel={selectedLevel}
+                  selectedTrack={selectedTrack}
                 />
               </div>
             </div>

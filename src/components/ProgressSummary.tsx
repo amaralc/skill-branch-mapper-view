@@ -1,21 +1,61 @@
 
 import React from 'react';
-import { SkillPath, calculatePoints, getMaxPoints } from '@/data/skillData';
+import { SkillPath } from '@/types/skill';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
+import { calculatePoints, getMaxPoints } from '@/utils/skillCalculations';
 
 interface ProgressSummaryProps {
   skillPath: SkillPath;
+  selectedTrack: string | null;
 }
 
 const ProgressSummary: React.FC<ProgressSummaryProps> = ({
-  skillPath
+  skillPath,
+  selectedTrack
 }) => {
-  const points = calculatePoints(skillPath);
-  const maxPoints = getMaxPoints(skillPath);
-  const percentage = Math.round(points / maxPoints * 100);
+  // Calculate filtered points based on the selected track
+  const calculateFilteredPoints = (skillPath: SkillPath, selectedTrack: string | null) => {
+    let totalPoints = 0;
 
-  // Calculate total counts of behavior evaluations
+    skillPath.branches.forEach(branch => {
+      branch.commits.forEach(commit => {
+        // Skip commits that don't match the selected track (if a track is selected)
+        if (selectedTrack && commit.metadata?.track && commit.metadata.track !== selectedTrack) {
+          return;
+        }
+
+        if (commit.evaluation === 'sometimes') totalPoints += 1;
+        else if (commit.evaluation === 'always') totalPoints += 2;
+      });
+    });
+
+    return totalPoints;
+  };
+
+  // Calculate maximum points for commits that match the selected track
+  const getFilteredMaxPoints = (skillPath: SkillPath, selectedTrack: string | null) => {
+    let maxPoints = 0;
+    
+    skillPath.branches.forEach(branch => {
+      branch.commits.forEach(commit => {
+        // Skip commits that don't match the selected track (if a track is selected)
+        if (selectedTrack && commit.metadata?.track && commit.metadata.track !== selectedTrack) {
+          return;
+        }
+        
+        maxPoints += 2; // Each commit can earn up to 2 points
+      });
+    });
+    
+    return maxPoints;
+  };
+
+  const points = calculateFilteredPoints(skillPath, selectedTrack);
+  const maxPoints = getFilteredMaxPoints(skillPath, selectedTrack);
+  const percentage = maxPoints > 0 ? Math.round((points / maxPoints) * 100) : 0;
+
+  // Calculate total counts of behavior evaluations, filtering by track if needed
   const totalCounts = {
     notEvaluated: 0,
     never: 0,
@@ -25,6 +65,11 @@ const ProgressSummary: React.FC<ProgressSummaryProps> = ({
 
   skillPath.branches.forEach(branch => {
     branch.commits.forEach(commit => {
+      // Skip commits that don't match the selected track (if a track is selected)
+      if (selectedTrack && commit.metadata?.track && commit.metadata.track !== selectedTrack) {
+        return;
+      }
+
       if (commit.evaluation === null) totalCounts.notEvaluated++;
       else if (commit.evaluation === 'never') totalCounts.never++;
       else if (commit.evaluation === 'sometimes') totalCounts.sometimes++;

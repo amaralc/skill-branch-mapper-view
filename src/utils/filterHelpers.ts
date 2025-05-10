@@ -22,7 +22,8 @@ export const filterCommitsByLevelAndTrack = (
       const levelMatches = !selectedLevel || commitLevel === selectedLevel;
       
       // Match by track if selected
-      const trackMatches = !selectedTrack || commitTrack === selectedTrack;
+      // If commit doesn't specify track, include it regardless of selected track
+      const trackMatches = !selectedTrack || !commitTrack || commitTrack === selectedTrack;
       
       return levelMatches && trackMatches;
     });
@@ -32,4 +33,35 @@ export const filterCommitsByLevelAndTrack = (
       commits: filteredCommits
     };
   });
+};
+
+// Helper function to count commits and evaluations with track filtering
+export const getCommitCounts = (
+  branches: Branch[],
+  selectedTrack: string | null
+) => {
+  const counts = {
+    notEvaluated: 0,
+    never: 0,
+    sometimes: 0,
+    always: 0,
+    total: 0
+  };
+  
+  branches.forEach(branch => {
+    branch.commits.forEach(commit => {
+      // Skip commits that don't match the selected track
+      if (selectedTrack && commit.metadata?.track && commit.metadata.track !== selectedTrack) {
+        return;
+      }
+      
+      counts.total++;
+      if (commit.evaluation === null) counts.notEvaluated++;
+      else if (commit.evaluation === 'never') counts.never++;
+      else if (commit.evaluation === 'sometimes') counts.sometimes++;
+      else if (commit.evaluation === 'always') counts.always++;
+    });
+  });
+  
+  return counts;
 };
