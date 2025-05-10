@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Branch, SkillPath, Tag } from '@/types/skill';
 import CommitNode from './CommitNode';
@@ -83,23 +84,57 @@ const BranchView: React.FC<BranchViewProps> = ({ branch, onEvaluateCommit, isCur
     locked: shouldLockCommitBasedOnBranchRequirements(idx, branch, branchPoints)
   }));
   
-  const shouldShowTags = branch.id === 'qualidade' || branch.id === 'seguranca';
-  const tagsToShow = shouldShowTags ? tags : [];
-  
-  const commitTagPairs: { commit?: Branch['commits'][0], tag?: Tag, commitIndex: number }[] = [];
-  
-  branch.commits.forEach((commit, idx) => {
-    commitTagPairs.push({ commit, commitIndex: idx });
+  // Sort commits by level in descending order
+  const sortedCommits = [...branch.commits].sort((a, b) => {
+    const levelA = a.metadata?.level ? parseInt(a.metadata.level) : 0;
+    const levelB = b.metadata?.level ? parseInt(b.metadata.level) : 0;
+    return levelB - levelA; // Descending order
   });
   
-  if (shouldShowTags) {
-    tags.forEach((tag, tagIdx) => {
-      const position = (tagIdx + 1) * 5 - 1;
-      if (position < branch.commits.length) {
-        commitTagPairs.splice(position + tagIdx + 1, 0, { tag, commitIndex: position });
+  // Always show tags
+  const shouldShowTags = true;
+  const tagsToShow = shouldShowTags ? tags : [];
+  
+  // Group commits by level to insert tags at level changes
+  const commitsByLevel: Record<string, typeof sortedCommits> = {};
+  sortedCommits.forEach(commit => {
+    const level = commit.metadata?.level || '0';
+    if (!commitsByLevel[level]) {
+      commitsByLevel[level] = [];
+    }
+    commitsByLevel[level].push(commit);
+  });
+  
+  // Create the array for rendering with tags at level changes
+  const commitTagPairs: { commit?: Branch['commits'][0], tag?: Tag, commitIndex: number, level?: string }[] = [];
+  
+  let currentIndex = 0;
+  const levels = Object.keys(commitsByLevel).sort((a, b) => parseInt(b) - parseInt(a)); // Descending order
+  
+  levels.forEach((level, levelIdx) => {
+    // Add tag if it's a new level (except for the first one)
+    if (levelIdx > 0 && shouldShowTags) {
+      const tagForLevel = tags.find(tag => tag.level === `Level ${level}`);
+      if (tagForLevel) {
+        commitTagPairs.push({
+          tag: tagForLevel,
+          commitIndex: currentIndex,
+          level
+        });
+        currentIndex++;
       }
+    }
+    
+    // Add all commits for this level
+    commitsByLevel[level].forEach(commit => {
+      commitTagPairs.push({
+        commit,
+        commitIndex: currentIndex,
+        level
+      });
+      currentIndex++;
     });
-  }
+  });
   
   return (
     <div className={`mb-8 ${isCurrentBranch ? 'opacity-100' : 'opacity-60'}`}>
@@ -143,14 +178,14 @@ const BranchView: React.FC<BranchViewProps> = ({ branch, onEvaluateCommit, isCur
         <div className="relative z-10">
           {commitTagPairs.map((item, idx) => {
             if (item.commit) {
-              const commitIdx = item.commitIndex;
+              const commitIdx = sortedCommits.findIndex(c => c.id === item.commit?.id);
               const lock = commitLocks[commitIdx]?.locked ?? false;
               return (
                 <CommitNode
                   key={`commit-${item.commit.id}`}
                   commit={item.commit}
                   branchColor={branch.color}
-                  isLast={commitIdx === branch.commits.length - 1}
+                  isLast={idx === commitTagPairs.length - 1}
                   onEvaluate={evaluation => !lock && onEvaluateCommit(branch.id, item.commit.id, evaluation)}
                   disabled={lock}
                   lockReason={
