@@ -20,56 +20,30 @@ const CsvUploader: React.FC<CsvUploaderProps> = ({ onImport, onClose }) => {
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
-
+  
     setIsLoading(true);
-    
+  
     try {
-      // Create a new FileReader with explicit UTF-8 encoding
-      const reader = new FileReader();
-      
-      reader.onload = (e) => {
-        try {
-          const text = e.target?.result as string;
-          // Log the raw text for debugging
-          console.log('Raw CSV text sample:', text.substring(0, 200));
-          
-          const csvData = parseCsv(text);
-          
-          if (!csvData || csvData.length === 0) {
-            throw new Error('The CSV file appears to be empty or invalid');
-          }
-          
-          const skillPath = convertCsvToSkillPath(csvData);
-          onImport(skillPath);
-          
-          toast.success('CSV imported successfully');
-          if (onClose) onClose();
-        } catch (error) {
-          console.error('CSV processing error:', error);
-          toast.error('Failed to process CSV file. Please check the format and try again.');
-        } finally {
-          setIsLoading(false);
-          // Reset the file input
-          if (fileInputRef.current) {
-            fileInputRef.current.value = '';
-          }
-        }
-      };
-      
-      reader.onerror = () => {
-        toast.error('Failed to read CSV file');
-        setIsLoading(false);
-        if (fileInputRef.current) {
-          fileInputRef.current.value = '';
-        }
-      };
-      
-      // Explicitly use UTF-8 encoding
-      reader.readAsText(file, 'UTF-8');
-      
+      const arrayBuffer = await file.arrayBuffer();
+      const decoder = new TextDecoder('iso-8859-1'); // You can also try 'iso-8859-1' if needed
+      const text = decoder.decode(arrayBuffer);
+  
+      console.log('Raw CSV text sample:', text.substring(0, 200));
+      const csvData = parseCsv(text);
+  
+      if (!csvData || csvData.length === 0) {
+        throw new Error('The CSV file appears to be empty or invalid');
+      }
+  
+      const skillPath = convertCsvToSkillPath(csvData);
+      onImport(skillPath);
+  
+      toast.success('CSV imported successfully');
+      if (onClose) onClose();
     } catch (error) {
       console.error('CSV import error:', error);
-      toast.error('Failed to import CSV file. Please check the format and try again.');
+      toast.error('Failed to process CSV file. Please check the format and try again.');
+    } finally {
       setIsLoading(false);
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
