@@ -1,3 +1,4 @@
+
 import { Branch, Commit, SkillPath, Tag } from "@/types/skill";
 
 interface CsvRow {
@@ -22,26 +23,30 @@ export const parseCsv = (csvContent: string): CsvRow[] => {
     const matches = line.match(/(".*?"|[^,]+)(?=\s*,|\s*$)/g) || [];
     const values = matches.map(val => val.replace(/^"|"$/g, '').trim());
     
-    const row: Record<string, string> = {};
+    // Create a properly typed CsvRow object with default empty strings
+    const row: CsvRow = {
+      career: '',
+      baseBehavior: '',
+      level: '',
+      track: '',
+      groupCompetence: '',
+      groupCompetenceId: '',
+      groupCompetenceLevelId: '',
+      id: '',
+      description: '',
+      size: ''
+    };
+    
+    // Fill in values from the CSV
     headers.forEach((header, index) => {
-      row[header.trim()] = values[index] || '';
-    });
-    
-    // Check if all required fields exist in the row
-    const requiredFields: (keyof CsvRow)[] = [
-      'career', 'baseBehavior', 'level', 'track', 'groupCompetence', 
-      'groupCompetenceId', 'groupCompetenceLevelId', 'id', 'description', 'size'
-    ];
-    
-    // Ensure all required fields are present
-    requiredFields.forEach(field => {
-      if (row[field] === undefined) {
-        row[field] = ''; // Set default empty string for missing fields
+      const trimmedHeader = header.trim();
+      // Only set values for keys that actually exist in CsvRow type
+      if (trimmedHeader in row) {
+        (row as any)[trimmedHeader] = values[index] || '';
       }
     });
     
-    // Type assertion with 'as' since we've ensured all required fields exist
-    return row as CsvRow;
+    return row;
   });
 };
 
