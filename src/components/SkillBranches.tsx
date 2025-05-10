@@ -9,12 +9,14 @@ interface SkillBranchesProps {
   branches: Branch[];
   skillPath: SkillPath;
   onEvaluateCommit: (branchId: string, commitId: string, evaluation: 'never' | 'sometimes' | 'always') => void;
+  selectedLevel: string | null;
 }
 
 const SkillBranches: React.FC<SkillBranchesProps> = ({
   branches,
   skillPath,
-  onEvaluateCommit
+  onEvaluateCommit,
+  selectedLevel
 }) => {
   // Check for branches with commits
   const branchesWithCommits = branches.filter(branch => branch.commits.length > 0);
@@ -62,6 +64,7 @@ const SkillBranches: React.FC<SkillBranchesProps> = ({
             onEvaluateCommit={onEvaluateCommit}
             isCurrentBranch={true}
             skillPath={skillPath}
+            selectedLevel={selectedLevel}
           />
         </TabsContent>
       ))}

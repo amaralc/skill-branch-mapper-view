@@ -18,8 +18,7 @@ interface CommitNodeProps {
   branchColor: string;
   isLast: boolean;
   onEvaluate: (evaluation: 'never' | 'sometimes' | 'always') => void;
-  disabled?: boolean;
-  lockReason?: string;
+  dimmed?: boolean;
 }
 
 const evaluationValues = [
@@ -40,8 +39,7 @@ const CommitNode: React.FC<CommitNodeProps> = ({
   branchColor,
   isLast,
   onEvaluate,
-  disabled = false,
-  lockReason
+  dimmed = false
 }) => {
   const getValueFromEval = (evalValue: Commit['evaluation']) => {
     if (evalValue === 'sometimes') return 1;
@@ -70,7 +68,6 @@ const CommitNode: React.FC<CommitNodeProps> = ({
   }
 
   const handleValueChange = ([val]: number[]) => {
-    if (disabled) return;
     onEvaluate(getEvalFromValue(val));
   };
 
@@ -87,7 +84,10 @@ const CommitNode: React.FC<CommitNodeProps> = ({
     <div className={`flex items-center mb-2 ${isLast ? '' : 'pb-1'}`}>
       <div
         className="w-6 h-6 rounded-full flex items-center justify-center mr-3 text-xs font-mono"
-        style={{ backgroundColor: branchColor }}
+        style={{ 
+          backgroundColor: branchColor,
+          opacity: dimmed ? 0.5 : 1
+        }}
       >
         <span className="text-white">
           {commit.metadata?.baseBehavior || ''}
@@ -96,7 +96,7 @@ const CommitNode: React.FC<CommitNodeProps> = ({
       <div
         className={`flex-1 flex items-center rounded border bg-white shadow-sm transition-shadow 
           ${borderTextClass}
-          ${disabled ? 'opacity-50 pointer-events-auto' : ''}`}
+          ${dimmed ? 'opacity-60' : ''}`}
         style={{ minHeight: "2.25rem", padding: "0.5rem 1rem" }}
       >
         <div className="flex flex-col flex-1 justify-center">
@@ -153,16 +153,12 @@ const CommitNode: React.FC<CommitNodeProps> = ({
                   step={1}
                   value={sliderValue}
                   onValueChange={handleValueChange}
-                  className={`w-14 ${disabled ? 'cursor-not-allowed' : ''}`}
-                  disabled={disabled}
+                  className="w-14"
                 />
               </div>
             </TooltipTrigger>
             <TooltipContent side="top" align="center">
-              {disabled && lockReason
-                ? <span className="block text-xs font-medium text-red-500">{lockReason}</span>
-                : <span className="block text-xs font-medium">{getCurrentLabel()}</span>
-              }
+              <span className="block text-xs font-medium">{getCurrentLabel()}</span>
             </TooltipContent>
           </Tooltip>
         </div>

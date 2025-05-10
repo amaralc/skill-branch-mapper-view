@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Branch, SkillPath, Tag } from '@/types/skill';
 import CommitNode from './CommitNode';
@@ -23,39 +22,10 @@ interface BranchViewProps {
   onEvaluateCommit: (branchId: string, commitId: string, evaluation: 'never' | 'sometimes' | 'always') => void;
   isCurrentBranch: boolean;
   skillPath: SkillPath;
+  selectedLevel: string | null;
 }
 
-interface CommitLock {
-  index: number;
-  locked: boolean;
-}
-
-function shouldLockCommitBasedOnBranchRequirements(
-  commitIndex: number, 
-  branch: Branch, 
-  currentPoints: number
-): boolean {
-  if (commitIndex < 5) return false;
-  
-  if (branch.levelRequirements && branch.levelRequirements.length > 0) {
-    const firstLevel = [...branch.levelRequirements].sort((a, b) => a.pointsRequired - b.pointsRequired)[0];
-    
-    if (currentPoints >= firstLevel.pointsRequired) {
-      return false;
-    }
-    
-    return true;
-  }
-  
-  const commitsPerLevel = 5;
-  const commitLevel = Math.floor(commitIndex / commitsPerLevel);
-  if (commitLevel === 0) return false;
-  
-  const pointsRequiredForCurrentLevel = commitLevel * 10;
-  return currentPoints < pointsRequiredForCurrentLevel;
-}
-
-const BranchView: React.FC<BranchViewProps> = ({ branch, onEvaluateCommit, isCurrentBranch, skillPath }) => {
+const BranchView: React.FC<BranchViewProps> = ({ branch, onEvaluateCommit, isCurrentBranch, skillPath, selectedLevel }) => {
   const getBranchStatusCounts = (branch: Branch) => {
     const counts = {
       notEvaluated: 0,
@@ -78,11 +48,6 @@ const BranchView: React.FC<BranchViewProps> = ({ branch, onEvaluateCommit, isCur
 
   const branchPoints = calculateBranchPoints(branch);
   const tags = skillPath.tags;
-  
-  const commitLocks: CommitLock[] = branch.commits.map((_, idx) => ({
-    index: idx,
-    locked: shouldLockCommitBasedOnBranchRequirements(idx, branch, branchPoints)
-  }));
   
   // Sort commits by level in descending order
   const sortedCommits = [...branch.commits].sort((a, b) => {
@@ -178,19 +143,18 @@ const BranchView: React.FC<BranchViewProps> = ({ branch, onEvaluateCommit, isCur
         <div className="relative z-10">
           {commitTagPairs.map((item, idx) => {
             if (item.commit) {
-              const commitIdx = sortedCommits.findIndex(c => c.id === item.commit?.id);
-              const lock = commitLocks[commitIdx]?.locked ?? false;
+              const isCommitInSelectedLevel = 
+                !selectedLevel || 
+                (item.commit.metadata?.level === selectedLevel);
+              
               return (
                 <CommitNode
                   key={`commit-${item.commit.id}`}
                   commit={item.commit}
                   branchColor={branch.color}
                   isLast={idx === commitTagPairs.length - 1}
-                  onEvaluate={evaluation => !lock && onEvaluateCommit(branch.id, item.commit.id, evaluation)}
-                  disabled={lock}
-                  lockReason={
-                    lock ? `Para avaliar este item, alcance o nível mínimo de ${branch.levelRequirements[0].pointsRequired} pontos nesta trilha.` : undefined
-                  }
+                  onEvaluate={evaluation => onEvaluateCommit(branch.id, item.commit.id, evaluation)}
+                  dimmed={!isCommitInSelectedLevel}
                 />
               );
             } else if (item.tag) {

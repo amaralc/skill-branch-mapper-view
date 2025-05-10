@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { SkillPath } from '@/data/skillData';
 import ProgressSummary from '@/components/ProgressSummary';
@@ -150,6 +149,7 @@ const Index = () => {
                   branches={filteredBranches}
                   skillPath={skillPath}
                   onEvaluateCommit={evaluateCommit}
+                  selectedLevel={selectedLevel}
                 />
               </div>
             </div>
