@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Branch, SkillPath } from '@/data/skillData';
+import { Branch, SkillPath } from '@/types/skill';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import BranchView from '@/components/BranchView';
@@ -21,7 +21,16 @@ const SkillBranches: React.FC<SkillBranchesProps> = ({
   selectedTrack
 }) => {
   // Filter branches to only include those with commits
-  const branchesWithCommits = branches.filter(branch => branch.commits.length > 0);
+  const branchesWithCommits = branches.filter(branch => {
+    // If filtering by track, only include branches with commits for that track
+    if (selectedTrack) {
+      const hasCommitsForTrack = branch.commits.some(commit => 
+        !commit.metadata?.track || commit.metadata.track === selectedTrack
+      );
+      return branch.commits.length > 0 && hasCommitsForTrack;
+    }
+    return branch.commits.length > 0;
+  });
   
   // Verificar se há branches disponíveis para evitar erro
   if (branchesWithCommits.length === 0) {

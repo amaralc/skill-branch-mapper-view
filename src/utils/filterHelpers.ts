@@ -25,6 +25,12 @@ export const filterCommitsByLevelAndTrack = (
       // If commit doesn't specify track, include it regardless of selected track
       const trackMatches = !selectedTrack || !commitTrack || commitTrack === selectedTrack;
       
+      // When filtering by track, we want to include all levels
+      // When filtering by level, we may also filter by track if specified
+      if (selectedTrack && !selectedLevel) {
+        return trackMatches;
+      }
+      
       return levelMatches && trackMatches;
     });
     

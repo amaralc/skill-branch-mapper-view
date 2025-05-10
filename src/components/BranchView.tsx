@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Branch, SkillPath, Tag } from '@/types/skill';
 import CommitNode from './CommitNode';
@@ -86,48 +87,45 @@ const BranchView: React.FC<BranchViewProps> = ({
     return levelB - levelA; // Descending order
   });
   
-  // Always show tags
-  const shouldShowTags = true;
-  const tagsToShow = shouldShowTags ? tags : [];
-  
-  // Group commits by level to insert tags at level changes
-  const commitsByLevel: Record<string, typeof sortedCommits> = {};
-  sortedCommits.forEach(commit => {
-    const level = commit.metadata?.level || '0';
-    if (!commitsByLevel[level]) {
-      commitsByLevel[level] = [];
+  // Create a map of levels to tags
+  const levelTags: Record<string, Tag> = {};
+  tags.forEach(tag => {
+    const levelMatch = tag.level.match(/Level (\d+)/);
+    if (levelMatch) {
+      const levelNumber = levelMatch[1];
+      levelTags[levelNumber] = tag;
     }
-    commitsByLevel[level].push(commit);
   });
   
-  // Create the array for rendering with tags at level changes
-  const commitTagPairs: { commit?: Branch['commits'][0], tag?: Tag, commitIndex: number, level?: string }[] = [];
+  // Group commits by level and prepare rendering items with level tags
+  const renderItems: Array<{ type: 'commit' | 'tag', item: any, level: string }> = [];
   
-  let currentIndex = 0;
-  const levels = Object.keys(commitsByLevel).sort((a, b) => parseInt(b) - parseInt(a)); // Descending order
+  let currentLevel: string | null = null;
   
-  levels.forEach((level, levelIdx) => {
-    // Add tag if it's a new level (except for the first one)
-    if (levelIdx > 0 && shouldShowTags) {
-      const tagForLevel = tags.find(tag => tag.level === `Level ${level}`);
+  // Process each commit and add level tags when level changes
+  sortedCommits.forEach(commit => {
+    const commitLevel = commit.metadata?.level?.replace(/\D/g, '') || '0';
+    
+    // If we're at a new level, add the corresponding tag first
+    if (commitLevel !== currentLevel) {
+      currentLevel = commitLevel;
+      
+      // Find the tag for this level
+      const tagForLevel = levelTags[commitLevel];
       if (tagForLevel) {
-        commitTagPairs.push({
-          tag: tagForLevel,
-          commitIndex: currentIndex,
-          level
+        renderItems.push({
+          type: 'tag',
+          item: tagForLevel,
+          level: commitLevel
         });
-        currentIndex++;
       }
     }
     
-    // Add all commits for this level
-    commitsByLevel[level].forEach(commit => {
-      commitTagPairs.push({
-        commit,
-        commitIndex: currentIndex,
-        level
-      });
-      currentIndex++;
+    // Add the commit
+    renderItems.push({
+      type: 'commit',
+      item: commit,
+      level: commitLevel
     });
   });
   
@@ -171,29 +169,31 @@ const BranchView: React.FC<BranchViewProps> = ({
           style={{ backgroundColor: branch.color }}
         ></div>
         <div className="relative z-10">
-          {commitTagPairs.map((item, idx) => {
-            if (item.commit) {
+          {renderItems.map((item, idx) => {
+            if (item.type === 'commit') {
+              const commit = item.item;
               const isCommitInSelectedLevel = 
                 !selectedLevel || 
-                (item.commit.metadata?.level === selectedLevel);
+                (commit.metadata?.level === selectedLevel);
               
               return (
                 <CommitNode
-                  key={`commit-${item.commit.id}`}
-                  commit={item.commit}
+                  key={`commit-${commit.id}`}
+                  commit={commit}
                   branchColor={branch.color}
-                  isLast={idx === commitTagPairs.length - 1}
-                  onEvaluate={evaluation => onEvaluateCommit(branch.id, item.commit.id, evaluation)}
-                  dimmed={!isCommitInSelectedLevel}
+                  isLast={idx === renderItems.length - 1}
+                  onEvaluate={evaluation => onEvaluateCommit(branch.id, commit.id, evaluation)}
+                  dimmed={selectedLevel && !isCommitInSelectedLevel}
                 />
               );
-            } else if (item.tag) {
+            } else if (item.type === 'tag') {
+              const tag = item.item;
               return (
                 <TagIllustratedNode
-                  key={`tag-${item.tag.id}`}
-                  tag={item.tag}
+                  key={`tag-${tag.id}`}
+                  tag={tag}
                   skillPath={skillPath}
-                  imageSrc={images[idx % images.length]}
+                  imageSrc={images[parseInt(item.level) % images.length]}
                 />
               );
             }
