@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect } from 'react';
-import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Branch } from '@/types/skill';
 
@@ -54,48 +53,42 @@ const LevelTrackSelector: React.FC<LevelTrackSelectorProps> = ({
   }, [selectedLevel, branches, selectedTrack, onTrackChange]);
 
   return (
-    <div className="space-y-4">
-      <div className="space-y-2">
-        <Label>Nível</Label>
-        <Select value={selectedLevel || ''} onValueChange={onLevelChange}>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Escolha o nível" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Nível</SelectLabel>
-              {levels.map(level => (
-                <SelectItem key={level} value={level}>
-                  {level}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-      </div>
+    <div className="flex flex-col gap-4">
+      <Select value={selectedLevel || ''} onValueChange={onLevelChange}>
+        <SelectTrigger className="w-full">
+          <SelectValue placeholder="Escolha o nível" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Nível</SelectLabel>
+            {levels.map(level => (
+              <SelectItem key={level} value={level}>
+                {level}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
 
-      <div className="space-y-2">
-        <Label>Trilha</Label>
-        <Select value={selectedTrack || ''} onValueChange={onTrackChange}>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Escolha a trilha" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Trilha</SelectLabel>
-              {tracks.map(track => (
-                <SelectItem 
-                  key={track.id} 
-                  value={track.id}
-                  disabled={!availableTracks.includes(track.id)}
-                >
-                  {track.label}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-      </div>
+      <Select value={selectedTrack || ''} onValueChange={onTrackChange}>
+        <SelectTrigger className="w-full">
+          <SelectValue placeholder="Escolha a trilha" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Trilha</SelectLabel>
+            {tracks.map(track => (
+              <SelectItem 
+                key={track.id} 
+                value={track.id}
+                disabled={!availableTracks.includes(track.id)}
+              >
+                {track.label}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
     </div>
   );
 };
