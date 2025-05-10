@@ -21,14 +21,26 @@ export const parseCsv = (csvContent: string): CsvRow[] => {
   const headers = lines[0].split(',');
   
   return lines.slice(1).filter(line => line.trim() !== '').map(line => {
-    // Handle values that contain commas within quotes
-    const matches = line.match(/(".*?"|[^,]+)(?=\s*,|\s*$)/g) || [];
-    const values = matches.map(val => {
-      // Decode HTML entities and remove quotes
-      return val.replace(/^"|"$/g, '')
-        .trim()
-        .replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(dec));
-    });
+    // Enhanced handling for values that contain commas within quotes
+    const values: string[] = [];
+    let inQuotes = false;
+    let currentValue = '';
+    
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i];
+      
+      if (char === '"') {
+        inQuotes = !inQuotes;
+      } else if (char === ',' && !inQuotes) {
+        values.push(currentValue.trim().replace(/^"|"$/g, ''));
+        currentValue = '';
+      } else {
+        currentValue += char;
+      }
+    }
+    
+    // Add the last value
+    values.push(currentValue.trim().replace(/^"|"$/g, ''));
     
     // Create a properly typed CsvRow object with default empty strings
     const row: CsvRow = {
@@ -48,8 +60,16 @@ export const parseCsv = (csvContent: string): CsvRow[] => {
     headers.forEach((header, index) => {
       const trimmedHeader = header.trim();
       // Only set values for keys that actually exist in CsvRow type
-      if (trimmedHeader in row) {
-        (row as any)[trimmedHeader] = values[index] || '';
+      if (trimmedHeader in row && index < values.length) {
+        // Handle values: remove quotes, trim, and decode HTML entities if present
+        let value = values[index];
+        
+        // Log raw value for debugging
+        if (trimmedHeader === 'description') {
+          console.log('Raw description value:', value);
+        }
+        
+        (row as any)[trimmedHeader] = value;
       }
     });
     

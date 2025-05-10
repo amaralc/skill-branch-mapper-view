@@ -24,12 +24,15 @@ const CsvUploader: React.FC<CsvUploaderProps> = ({ onImport, onClose }) => {
     setIsLoading(true);
     
     try {
-      // Read as text with UTF-8 encoding
+      // Create a new FileReader with explicit UTF-8 encoding
       const reader = new FileReader();
       
       reader.onload = (e) => {
         try {
           const text = e.target?.result as string;
+          // Log the raw text for debugging
+          console.log('Raw CSV text sample:', text.substring(0, 200));
+          
           const csvData = parseCsv(text);
           
           if (!csvData || csvData.length === 0) {
@@ -61,7 +64,7 @@ const CsvUploader: React.FC<CsvUploaderProps> = ({ onImport, onClose }) => {
         }
       };
       
-      // Read the file as text with proper encoding
+      // Explicitly use UTF-8 encoding
       reader.readAsText(file, 'UTF-8');
       
     } catch (error) {
