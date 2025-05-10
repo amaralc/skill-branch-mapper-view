@@ -124,15 +124,13 @@ const Index = () => {
         />
         
         {selectedCareerId && selectedEmphasis && (
-          <div className="bg-gray-50 p-4 rounded-lg border">
-            <LevelTrackSelector 
-              branches={filteredBranches}
-              selectedLevel={selectedLevel}
-              selectedTrack={selectedTrack}
-              onLevelChange={handleLevelChange}
-              onTrackChange={handleTrackChange}
-            />
-          </div>
+          <LevelTrackSelector 
+            branches={filteredBranches}
+            selectedLevel={selectedLevel}
+            selectedTrack={selectedTrack}
+            onLevelChange={handleLevelChange}
+            onTrackChange={handleTrackChange}
+          />
         )}
       </div>
 
