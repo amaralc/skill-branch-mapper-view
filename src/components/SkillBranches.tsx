@@ -16,20 +16,23 @@ const SkillBranches: React.FC<SkillBranchesProps> = ({
   skillPath,
   onEvaluateCommit
 }) => {
+  // Check for branches with commits
+  const branchesWithCommits = branches.filter(branch => branch.commits.length > 0);
+  
   // Verificar se há branches disponíveis para evitar erro
-  if (branches.length === 0) {
+  if (branchesWithCommits.length === 0) {
     return (
       <div className="text-center py-6 text-gray-500">
-        Nenhuma trilha de competência disponível para esta seleção.
+        Nenhuma competência disponível para os critérios selecionados.
       </div>
     );
   }
   
   return (
-    <Tabs defaultValue={branches[0]?.id} className="w-full">
+    <Tabs defaultValue={branchesWithCommits[0]?.id} className="w-full">
       <ScrollArea className="w-full pb-4" orientation="horizontal">
         <TabsList className="w-full justify-start mb-4 bg-transparent gap-2 inline-flex">
-          {branches.map(branch => (
+          {branchesWithCommits.map(branch => (
             <TabsTrigger
               key={branch.id}
               value={branch.id}
@@ -52,7 +55,7 @@ const SkillBranches: React.FC<SkillBranchesProps> = ({
         </TabsList>
       </ScrollArea>
 
-      {branches.map(branch => (
+      {branchesWithCommits.map(branch => (
         <TabsContent key={branch.id} value={branch.id}>
           <BranchView
             branch={branch}

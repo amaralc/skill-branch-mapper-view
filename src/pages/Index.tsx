@@ -8,13 +8,17 @@ import ActionsDrawer from '@/components/ActionsDrawer';
 import SeniorityLevelsSheet from '@/components/SeniorityLevelsSheet';
 import CareerSelector from '@/components/CareerSelector';
 import EmphasisSelector from '@/components/EmphasisSelector';
+import LevelTrackSelector from '@/components/LevelTrackSelector';
 import SkillBranches from '@/components/SkillBranches';
 import { careerPaths } from '@/data/skillData';
+import { filterCommitsByLevelAndTrack } from '@/utils/filterHelpers';
 
 const Index = () => {
   const defaultCareer = careerPaths.find(path => path.id === "software") || careerPaths[0];
   const [selectedCareerId, setSelectedCareerId] = useState(defaultCareer.id);
   const [selectedEmphasis, setSelectedEmphasis] = useState<string | null>(null);
+  const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
+  const [selectedTrack, setSelectedTrack] = useState<string | null>('T'); // Default to Technical track
   const { skillPath, evaluateCommit, resetAllEvaluations, isLoading } = useEvaluationState(defaultCareer);
 
   const handleCareerChange = (careerId: string) => {
@@ -24,6 +28,14 @@ const Index = () => {
 
   const handleEmphasisChange = (emphasisId: string) => {
     setSelectedEmphasis(emphasisId);
+  };
+
+  const handleLevelChange = (level: string) => {
+    setSelectedLevel(level === selectedLevel ? null : level);
+  };
+
+  const handleTrackChange = (track: string) => {
+    setSelectedTrack(track);
   };
 
   const handleExportEvaluation = () => {
@@ -64,6 +76,13 @@ const Index = () => {
     
     return false;
   }) || [];
+  
+  // Apply level and track filtering to the branches
+  const filteredByLevelAndTrack = filterCommitsByLevelAndTrack(
+    filteredBranches, 
+    selectedLevel, 
+    selectedTrack
+  );
 
   if (isLoading) {
     return (
@@ -104,6 +123,18 @@ const Index = () => {
           selectedEmphasis={selectedEmphasis}
           onEmphasisChange={handleEmphasisChange}
         />
+        
+        {selectedCareerId && selectedEmphasis && (
+          <div className="bg-gray-50 p-4 rounded-lg border">
+            <LevelTrackSelector 
+              branches={filteredBranches}
+              selectedLevel={selectedLevel}
+              selectedTrack={selectedTrack}
+              onLevelChange={handleLevelChange}
+              onTrackChange={handleTrackChange}
+            />
+          </div>
+        )}
       </div>
 
       <main className="max-w-[1200px] mx-auto py-0 px-4">
@@ -126,7 +157,7 @@ const Index = () => {
               <div className="bg-white rounded-lg shadow p-4 mb-6">
                 <h2 className="text-lg font-bold mb-3">Trilhas de Competência</h2>
                 <SkillBranches
-                  branches={filteredBranches}
+                  branches={filteredByLevelAndTrack}
                   skillPath={skillPath}
                   onEvaluateCommit={evaluateCommit}
                 />
