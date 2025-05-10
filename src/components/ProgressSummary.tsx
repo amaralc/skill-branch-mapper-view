@@ -42,7 +42,7 @@ const ProgressSummary: React.FC<ProgressSummaryProps> = ({
     >
       <div className="p-4 border-none shadow-[0_20px_20px_white]">
         <div className="flex justify-between mb-2">
-          <h2 className="text-lg font-bold">Progresso da Avaliação</h2>
+          <h2 className="text-lg font-bold">Progresso</h2>
           
           <div className="flex gap-1 items-center">
             {totalCounts.notEvaluated > 0 && (
