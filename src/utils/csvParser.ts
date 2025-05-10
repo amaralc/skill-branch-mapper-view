@@ -61,15 +61,7 @@ export const parseCsv = (csvContent: string): CsvRow[] => {
       const trimmedHeader = header.trim();
       // Only set values for keys that actually exist in CsvRow type
       if (trimmedHeader in row && index < values.length) {
-        // Handle values: remove quotes, trim, and decode HTML entities if present
-        let value = values[index];
-        
-        // Log raw value for debugging
-        if (trimmedHeader === 'description') {
-          console.log('Raw description value:', value);
-        }
-        
-        (row as any)[trimmedHeader] = value;
+        (row as any)[trimmedHeader] = values[index];
       }
     });
     
@@ -100,7 +92,17 @@ export const convertCsvToSkillPath = (csvData: CsvRow[]): SkillPath => {
         acc.push({
           id: row.id,
           behaviorDescription: row.description,
-          evaluation: null
+          evaluation: null,
+          // Store all relevant metadata in the commit
+          metadata: {
+            career: row.career,
+            baseBehavior: row.baseBehavior,
+            level: row.level,
+            track: row.track,
+            groupCompetence: row.groupCompetence,
+            groupCompetenceId: row.groupCompetenceId,
+            groupCompetenceLevelId: row.groupCompetenceLevelId
+          }
         });
       }
       return acc;

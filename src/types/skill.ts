@@ -3,6 +3,15 @@ export interface Commit {
   id: string;
   behaviorDescription: string;
   evaluation: 'never' | 'sometimes' | 'always' | null;
+  metadata?: {
+    career?: string;
+    baseBehavior?: string;
+    level?: string;
+    track?: string;
+    groupCompetence?: string;
+    groupCompetenceId?: string;
+    groupCompetenceLevelId?: string;
+  };
 }
 
 export interface BranchTag {
