@@ -15,13 +15,20 @@ interface CsvRow {
 }
 
 export const parseCsv = (csvContent: string): CsvRow[] => {
-  const lines = csvContent.split('\n');
+  // Normalize line breaks for cross-platform compatibility
+  const normalizedContent = csvContent.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  const lines = normalizedContent.split('\n');
   const headers = lines[0].split(',');
   
   return lines.slice(1).filter(line => line.trim() !== '').map(line => {
     // Handle values that contain commas within quotes
     const matches = line.match(/(".*?"|[^,]+)(?=\s*,|\s*$)/g) || [];
-    const values = matches.map(val => val.replace(/^"|"$/g, '').trim());
+    const values = matches.map(val => {
+      // Decode HTML entities and remove quotes
+      return val.replace(/^"|"$/g, '')
+        .trim()
+        .replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(dec));
+    });
     
     // Create a properly typed CsvRow object with default empty strings
     const row: CsvRow = {

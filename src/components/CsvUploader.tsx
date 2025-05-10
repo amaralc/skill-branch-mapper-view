@@ -24,24 +24,50 @@ const CsvUploader: React.FC<CsvUploaderProps> = ({ onImport, onClose }) => {
     setIsLoading(true);
     
     try {
-      const text = await file.text();
-      const csvData = parseCsv(text);
+      // Read as text with UTF-8 encoding
+      const reader = new FileReader();
       
-      if (!csvData || csvData.length === 0) {
-        throw new Error('The CSV file appears to be empty or invalid');
-      }
+      reader.onload = (e) => {
+        try {
+          const text = e.target?.result as string;
+          const csvData = parseCsv(text);
+          
+          if (!csvData || csvData.length === 0) {
+            throw new Error('The CSV file appears to be empty or invalid');
+          }
+          
+          const skillPath = convertCsvToSkillPath(csvData);
+          onImport(skillPath);
+          
+          toast.success('CSV imported successfully');
+          if (onClose) onClose();
+        } catch (error) {
+          console.error('CSV processing error:', error);
+          toast.error('Failed to process CSV file. Please check the format and try again.');
+        } finally {
+          setIsLoading(false);
+          // Reset the file input
+          if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+          }
+        }
+      };
       
-      const skillPath = convertCsvToSkillPath(csvData);
-      onImport(skillPath);
+      reader.onerror = () => {
+        toast.error('Failed to read CSV file');
+        setIsLoading(false);
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+        }
+      };
       
-      toast.success('CSV imported successfully');
-      if (onClose) onClose();
+      // Read the file as text with proper encoding
+      reader.readAsText(file, 'UTF-8');
+      
     } catch (error) {
       console.error('CSV import error:', error);
       toast.error('Failed to import CSV file. Please check the format and try again.');
-    } finally {
       setIsLoading(false);
-      // Reset the file input
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
