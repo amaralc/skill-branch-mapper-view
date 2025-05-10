@@ -1,3 +1,4 @@
+
 import { Branch } from "@/types/skill";
 
 export const commonBranches: Branch[] = [
@@ -99,5 +100,5 @@ export const commonBranches: Branch[] = [
       { tagId: "pleno", pointsRequired: 20 },
       { tagId: "senior", pointsRequired: 30 },
     ],
-  },
+  }
 ];
