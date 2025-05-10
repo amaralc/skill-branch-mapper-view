@@ -1,4 +1,3 @@
-
 import { Branch, Commit, SkillPath, Tag } from "@/types/skill";
 
 interface CsvRow {
@@ -28,6 +27,20 @@ export const parseCsv = (csvContent: string): CsvRow[] => {
       row[header.trim()] = values[index] || '';
     });
     
+    // Check if all required fields exist in the row
+    const requiredFields: (keyof CsvRow)[] = [
+      'career', 'baseBehavior', 'level', 'track', 'groupCompetence', 
+      'groupCompetenceId', 'groupCompetenceLevelId', 'id', 'description', 'size'
+    ];
+    
+    // Ensure all required fields are present
+    requiredFields.forEach(field => {
+      if (row[field] === undefined) {
+        row[field] = ''; // Set default empty string for missing fields
+      }
+    });
+    
+    // Type assertion with 'as' since we've ensured all required fields exist
     return row as CsvRow;
   });
 };
