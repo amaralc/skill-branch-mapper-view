@@ -1,10 +1,13 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Branch, SkillPath, Tag } from '@/types/skill';
 import CommitNode from './CommitNode';
 import TagIllustratedNode from './TagIllustratedNode';
 import { Badge } from '@/components/ui/badge';
 import { calculateBranchPoints } from '@/utils/skillCalculations';
+import { Button } from './ui/button';
+import { ChevronDown, ChevronUp } from 'lucide-react';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible';
 
 const images = [
   "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=160&q=80",
@@ -35,6 +38,12 @@ const BranchView: React.FC<BranchViewProps> = ({
   selectedLevel,
   selectedTrack 
 }) => {
+  // Track which levels are expanded (all others are collapsed)
+  const [expandedLevels, setExpandedLevels] = useState<string[]>(
+    // If a level is selected, it starts expanded
+    selectedLevel ? [selectedLevel] : []
+  );
+
   // Filter commits by selected track if both levels and track are specified
   const filteredCommits = branch.commits.filter(commit => {
     // If no track selected, show all
@@ -104,42 +113,31 @@ const BranchView: React.FC<BranchViewProps> = ({
     }
   });
   
-  // Group commits by level and prepare rendering items with level tags
-  const renderItems: Array<{ type: 'commit' | 'tag', item: any, level: string }> = [];
-  
-  let currentLevel: string | null = null;
-  
-  // Process each commit and add level tags when level changes
+  // Group commits by level
+  const commitsByLevel: Record<string, Array<Commit>> = {};
   sortedCommits.forEach(commit => {
     const commitLevel = commit.metadata?.level?.replace(/\D/g, '') || '0';
-    
-    // If we're at a new level, add the corresponding tag first
-    if (commitLevel !== currentLevel) {
-      currentLevel = commitLevel;
-      
-      // Find the tag for this level
-      const tagForLevel = levelTags[commitLevel];
-      if (tagForLevel) {
-        renderItems.push({
-          type: 'tag',
-          item: tagForLevel,
-          level: commitLevel
-        });
-      }
+    if (!commitsByLevel[commitLevel]) {
+      commitsByLevel[commitLevel] = [];
     }
-    
-    // Add the commit
-    renderItems.push({
-      type: 'commit',
-      item: commit,
-      level: commitLevel
-    });
+    commitsByLevel[commitLevel].push(commit);
   });
 
-  // Debug to console to check render items
-  console.log('Render items:', renderItems);
-  console.log('Available levels:', availableLevels);
-  console.log('Level tags:', levelTags);
+  // Toggle level expansion
+  const toggleLevelExpansion = (level: string) => {
+    setExpandedLevels(prev => {
+      if (prev.includes(level)) {
+        return prev.filter(l => l !== level);
+      } else {
+        return [...prev, level];
+      }
+    });
+  };
+
+  // Check if a level is expanded
+  const isLevelExpanded = (level: string) => {
+    return expandedLevels.includes(level);
+  };
   
   return (
     <div className={`mb-8 ${isCurrentBranch ? 'opacity-100' : 'opacity-60'}`}>
@@ -181,36 +179,73 @@ const BranchView: React.FC<BranchViewProps> = ({
           style={{ backgroundColor: branch.color }}
         ></div>
         <div className="relative z-10">
-          {renderItems.length > 0 ? (
-            renderItems.map((item, idx) => {
-              if (item.type === 'commit') {
-                const commit = item.item;
-                const isCommitInSelectedLevel = 
-                  !selectedLevel || 
-                  (commit.metadata?.level === selectedLevel);
-                
-                return (
-                  <CommitNode
-                    key={`commit-${commit.id}`}
-                    commit={commit}
-                    branchColor={branch.color}
-                    isLast={idx === renderItems.length - 1}
-                    onEvaluate={evaluation => onEvaluateCommit(branch.id, commit.id, evaluation)}
-                    dimmed={selectedLevel && !isCommitInSelectedLevel}
-                  />
-                );
-              } else if (item.type === 'tag') {
-                const tag = item.item;
-                return (
-                  <TagIllustratedNode
-                    key={`tag-${tag.id}-${item.level}`}
-                    tag={tag}
-                    skillPath={skillPath}
-                    imageSrc={images[parseInt(item.level) % images.length]}
-                  />
-                );
-              }
-              return null;
+          {availableLevels.length > 0 ? (
+            availableLevels.map((level, levelIndex) => {
+              const tag = levelTags[level];
+              const commitsForLevel = commitsByLevel[level] || [];
+              const isExpanded = isLevelExpanded(level);
+              const isCurrentLevel = selectedLevel ? level === selectedLevel.replace(/\D/g, '') : false;
+              
+              return (
+                <div key={`level-${level}`} className="mb-4">
+                  {/* Level Tag */}
+                  {tag && (
+                    <TagIllustratedNode
+                      key={`tag-${tag.id}-${level}`}
+                      tag={tag}
+                      skillPath={skillPath}
+                      imageSrc={images[parseInt(level) % images.length]}
+                    />
+                  )}
+                  
+                  {/* Level Header */}
+                  <Collapsible
+                    open={isExpanded}
+                    onOpenChange={() => toggleLevelExpansion(level)}
+                    className="w-full"
+                  >
+                    <div className="flex items-center justify-between mb-2 p-2 bg-gray-50 rounded">
+                      <h3 className="text-sm font-medium">
+                        Nível {level} 
+                        {isCurrentLevel && (
+                          <span className="ml-2 text-xs text-blue-500">(Nível Selecionado)</span>
+                        )}
+                      </h3>
+                      <CollapsibleTrigger asChild>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="h-8 w-8 p-0"
+                        >
+                          {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                        </Button>
+                      </CollapsibleTrigger>
+                    </div>
+                    
+                    {/* Level Content */}
+                    <CollapsibleContent>
+                      {commitsForLevel.length > 0 ? (
+                        <div className="space-y-2 pl-1">
+                          {commitsForLevel.map((commit, commitIndex) => (
+                            <CommitNode
+                              key={`commit-${commit.id}`}
+                              commit={commit}
+                              branchColor={branch.color}
+                              isLast={commitIndex === commitsForLevel.length - 1}
+                              onEvaluate={evaluation => onEvaluateCommit(branch.id, commit.id, evaluation)}
+                              dimmed={false}
+                            />
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="text-center py-4 text-gray-500">
+                          Nenhum comportamento disponível para este nível com os filtros atuais.
+                        </div>
+                      )}
+                    </CollapsibleContent>
+                  </Collapsible>
+                </div>
+              );
             })
           ) : (
             <div className="text-center py-8 text-gray-500">
