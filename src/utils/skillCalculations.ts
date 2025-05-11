@@ -7,8 +7,22 @@ export const calculatePoints = (path: SkillPath, selectedTrack: string | null = 
   path.branches.forEach(branch => {
     branch.commits.forEach(commit => {
       // Skip commits that don't match the selected track
-      if (selectedTrack && commit.metadata?.track && commit.metadata.track !== selectedTrack) {
-        return;
+      if (selectedTrack && commit.metadata?.track) {
+        // Special case for management track
+        if (selectedTrack === "M") {
+          const commitTrack = commit.metadata.track;
+          const commitLevel = commit.metadata.level;
+          
+          // Include technical track for levels up to and including L4
+          if (commitTrack === "T" && commitLevel) {
+            const levelNumber = parseInt(commitLevel.replace(/\D/g, ""));
+            if (levelNumber > 4) return;
+          } else if (commitTrack !== "M") {
+            return;
+          }
+        } else if (commit.metadata.track !== selectedTrack) {
+          return;
+        }
       }
       
       if (commit.evaluation === 'sometimes') totalPoints += 1;
@@ -25,8 +39,22 @@ export const getMaxPoints = (path: SkillPath, selectedTrack: string | null = nul
   path.branches.forEach(branch => {
     branch.commits.forEach(commit => {
       // Skip commits that don't match the selected track
-      if (selectedTrack && commit.metadata?.track && commit.metadata.track !== selectedTrack) {
-        return;
+      if (selectedTrack && commit.metadata?.track) {
+        // Special case for management track
+        if (selectedTrack === "M") {
+          const commitTrack = commit.metadata.track;
+          const commitLevel = commit.metadata.level;
+          
+          // Include technical track for levels up to and including L4
+          if (commitTrack === "T" && commitLevel) {
+            const levelNumber = parseInt(commitLevel.replace(/\D/g, ""));
+            if (levelNumber > 4) return;
+          } else if (commitTrack !== "M") {
+            return;
+          }
+        } else if (commit.metadata.track !== selectedTrack) {
+          return;
+        }
       }
       
       maxPoints += 2;
@@ -40,8 +68,22 @@ export const calculateBranchPoints = (branch: Branch, selectedTrack: string | nu
   let points = 0;
   branch.commits.forEach(commit => {
     // Skip commits that don't match the selected track
-    if (selectedTrack && commit.metadata?.track && commit.metadata.track !== selectedTrack) {
-      return;
+    if (selectedTrack && commit.metadata?.track) {
+      // Special case for management track
+      if (selectedTrack === "M") {
+        const commitTrack = commit.metadata.track;
+        const commitLevel = commit.metadata.level;
+        
+        // Include technical track for levels up to and including L4
+        if (commitTrack === "T" && commitLevel) {
+          const levelNumber = parseInt(commitLevel.replace(/\D/g, ""));
+          if (levelNumber > 4) return;
+        } else if (commitTrack !== "M") {
+          return;
+        }
+      } else if (commit.metadata.track !== selectedTrack) {
+        return;
+      }
     }
     
     if (commit.evaluation === 'sometimes') points += 1;

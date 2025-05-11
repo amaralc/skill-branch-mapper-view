@@ -26,13 +26,13 @@ export function useBranchUtils(
       // If this commit doesn't specify a track, always show it
       if (!commitTrack) return true;
       
-      // Special case for management track - include all technical commits from levels before L5
+      // Special case for management track - include all technical commits from levels up to and including L4
       if (selectedTrack === "M") {
         if (commitTrack === "M") {
           return true; // Show all management commits
         } else if (commitTrack === "T" && commitLevel) {
           const levelNumber = parseInt(commitLevel.replace(/\D/g, ''));
-          return levelNumber < 5; // Include technical track for levels before L5
+          return levelNumber <= 4; // Include technical track for levels up to and including L4
         }
         return false;
       }

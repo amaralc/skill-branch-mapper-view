@@ -1,3 +1,4 @@
+
 import { Branch, Commit } from "@/types/skill";
 
 export const filterCommitsByLevelAndTrack = (
@@ -26,13 +27,13 @@ export const filterCommitsByLevelAndTrack = (
 
       if (selectedTrack) {
         if (selectedTrack === "M") {
-          // For management track: match if commit is management OR if it's technical track from levels before "L5"
+          // For management track: match if commit is management OR if it's technical track from levels L4 and below
           if (commitTrack === "M") {
             trackMatches = true;
           } else if (commitTrack === "T" && commitLevel) {
             const levelNumber = parseInt(commitLevel.replace(/\D/g, ""));
-            // Include technical track commits for levels before L5
-            trackMatches = levelNumber < 5;
+            // Include technical track commits for levels up to and including L4
+            trackMatches = levelNumber <= 4;
           }
         } else {
           // For technical track: only match technical track
@@ -78,10 +79,10 @@ export const getCommitCounts = (
           const commitTrack = commit.metadata.track;
           const commitLevel = commit.metadata.level;
 
-          // Skip if it's technical track at higher levels (L5+)
+          // Include technical track for levels up to and including L4
           if (commitTrack === "T" && commitLevel) {
             const levelNumber = parseInt(commitLevel.replace(/\D/g, ""));
-            if (levelNumber >= 5) return;
+            if (levelNumber > 4) return;
           } else if (commitTrack !== "M") {
             return;
           }
