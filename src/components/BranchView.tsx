@@ -1,14 +1,20 @@
-import React, { useState } from 'react';
-import { Branch, SkillPath, Tag, Commit } from '@/types/skill';
-import CommitNode from './CommitNode';
-import TagIllustratedNode from './TagIllustratedNode';
-import { Badge } from '@/components/ui/badge';
-import { calculateBranchPoints } from '@/utils/skillCalculations';
-import { Button } from './ui/button';
-import { ChevronDown, ChevronUp } from 'lucide-react';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible';
-import { getLevelTitle } from '@/utils/filterHelpers';
 
+import React from 'react';
+import { Branch, SkillPath, Tag } from '@/types/skill';
+import LevelSection from './LevelSection';
+import BranchStatusCounts from './BranchStatusCounts';
+import { useBranchUtils } from '@/hooks/useBranchUtils';
+
+interface BranchViewProps {
+  branch: Branch;
+  onEvaluateCommit: (branchId: string, commitId: string, evaluation: 'never' | 'sometimes' | 'always') => void;
+  isCurrentBranch: boolean;
+  skillPath: SkillPath;
+  selectedLevel: string | null;
+  selectedTrack: string | null;
+}
+
+// Array of sample images for level illustrations
 const images = [
   "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=160&q=80",
   "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=160&q=80",
@@ -21,15 +27,6 @@ const images = [
   "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=160&q=80"
 ];
 
-interface BranchViewProps {
-  branch: Branch;
-  onEvaluateCommit: (branchId: string, commitId: string, evaluation: 'never' | 'sometimes' | 'always') => void;
-  isCurrentBranch: boolean;
-  skillPath: SkillPath;
-  selectedLevel: string | null;
-  selectedTrack: string | null;
-}
-
 const BranchView: React.FC<BranchViewProps> = ({ 
   branch, 
   onEvaluateCommit, 
@@ -38,134 +35,29 @@ const BranchView: React.FC<BranchViewProps> = ({
   selectedLevel,
   selectedTrack 
 }) => {
-  // Track which levels are expanded (all others are collapsed)
-  const [expandedLevels, setExpandedLevels] = useState<string[]>(
-    // If a level is selected, it starts expanded
-    selectedLevel ? [selectedLevel.replace(/\D/g, '')] : []
-  );
+  const {
+    availableLevels,
+    commitsByLevel,
+    counts,
+    isLevelExpanded,
+    toggleLevelExpansion,
+    getLevelDisplay
+  } = useBranchUtils(branch, selectedLevel, selectedTrack);
 
-  // Filter commits by selected track if both levels and track are specified
-  const filteredCommits = branch.commits.filter(commit => {
-    // If no track selected, show all
-    if (!selectedTrack) return true;
-    
-    // Get track and level info from commit
-    const commitTrack = commit.metadata?.track;
-    const commitLevel = commit.metadata?.level;
-    
-    // If this commit doesn't specify a track, always show it
-    if (!commitTrack) return true;
-    
-    // Special case for management track - include all technical commits from levels before L5
-    if (selectedTrack === "M") {
-      if (commitTrack === "M") {
-        return true; // Show all management commits
-      } else if (commitTrack === "T" && commitLevel) {
-        const levelNumber = parseInt(commitLevel.replace(/\D/g, ''));
-        return levelNumber < 5; // Include technical track for levels before L5
-      }
-      return false;
-    }
-    
-    // Otherwise, only show commits that match the selected track
-    return commitTrack === selectedTrack;
-  });
-  
-  const getBranchStatusCounts = (commits: Branch['commits']) => {
-    const counts = {
-      notEvaluated: 0,
-      never: 0,
-      sometimes: 0,
-      always: 0
-    };
-
-    commits.forEach(commit => {
-      if (commit.evaluation === null) counts.notEvaluated++;
-      else if (commit.evaluation === 'never') counts.never++;
-      else if (commit.evaluation === 'sometimes') counts.sometimes++;
-      else if (commit.evaluation === 'always') counts.always++;
-    });
-
-    return counts;
+  // Handle commit evaluation with branch ID
+  const handleEvaluateCommit = (commitId: string, evaluation: 'never' | 'sometimes' | 'always') => {
+    onEvaluateCommit(branch.id, commitId, evaluation);
   };
-
-  const counts = getBranchStatusCounts(filteredCommits);
-
-  // Calculate points only for filtered commits
-  const calculateFilteredBranchPoints = (commits: Branch['commits']) => {
-    let points = 0;
-    commits.forEach(commit => {
-      if (commit.evaluation === 'sometimes') points += 1;
-      else if (commit.evaluation === 'always') points += 2;
-    });
-    return points;
-  };
-
-  const branchPoints = calculateFilteredBranchPoints(filteredCommits);
-  const tags = skillPath.tags;
-  
-  // Sort commits by level in descending order
-  const sortedCommits = [...filteredCommits].sort((a, b) => {
-    const levelA = a.metadata?.level ? parseInt(a.metadata.level.replace(/\D/g, '')) : 0;
-    const levelB = b.metadata?.level ? parseInt(b.metadata.level.replace(/\D/g, '')) : 0;
-    return levelB - levelA; // Descending order
-  });
-
-  // Get all unique levels available in this branch's commits
-  const availableLevels = Array.from(new Set(
-    sortedCommits
-      .map(commit => commit.metadata?.level?.replace(/\D/g, ''))
-      .filter(level => level !== undefined)
-  )).sort((a, b) => Number(b) - Number(a)); // Sort in descending order
   
   // Create a map of levels to tags
   const levelTags: Record<string, Tag> = {};
-  tags.forEach(tag => {
+  skillPath.tags.forEach(tag => {
     const levelMatch = tag.level.match(/Level (\d+)/);
     if (levelMatch) {
       const levelNumber = levelMatch[1];
       levelTags[levelNumber] = tag;
     }
   });
-  
-  // Group commits by level
-  const commitsByLevel: Record<string, Array<Commit>> = {};
-  sortedCommits.forEach(commit => {
-    const commitLevel = commit.metadata?.level?.replace(/\D/g, '') || '0';
-    if (!commitsByLevel[commitLevel]) {
-      commitsByLevel[commitLevel] = [];
-    }
-    commitsByLevel[commitLevel].push(commit);
-  });
-
-  // Toggle level expansion
-  const toggleLevelExpansion = (level: string) => {
-    setExpandedLevels(prev => {
-      if (prev.includes(level)) {
-        return prev.filter(l => l !== level);
-      } else {
-        return [...prev, level];
-      }
-    });
-  };
-
-  // Check if a level is expanded
-  const isLevelExpanded = (level: string) => {
-    return expandedLevels.includes(level);
-  };
-
-  // Get the appropriate level code and title based on level and track
-  const getLevelDisplay = (level: string) => {
-    if (selectedTrack) {
-      // For levels where differentiation happens (L5+)
-      if (parseInt(level) >= 5) {
-        return getLevelTitle(`L${level}-${selectedTrack}`);
-      }
-      // For lower levels, just get the base title with L code
-      return getLevelTitle(`L${level}`);
-    }
-    return getLevelTitle(`L${level}`);
-  };
   
   return (
     <div className={`mb-8 ${isCurrentBranch ? 'opacity-100' : 'opacity-60'}`}>
@@ -177,28 +69,7 @@ const BranchView: React.FC<BranchViewProps> = ({
           {branch.name}
         </div>
 
-        <div className="flex gap-1">
-          {counts.notEvaluated > 0 && (
-            <Badge variant="outline" className="bg-gray-100">
-              {counts.notEvaluated}
-            </Badge>
-          )}
-          {counts.never > 0 && (
-            <Badge className="bg-red-500 hover:bg-red-500">
-              {counts.never}
-            </Badge>
-          )}
-          {counts.sometimes > 0 && (
-            <Badge className="bg-yellow-500 hover:bg-yellow-500">
-              {counts.sometimes}
-            </Badge>
-          )}
-          {counts.always > 0 && (
-            <Badge className="bg-green-500 hover:bg-green-500">
-              {counts.always}
-            </Badge>
-          )}
-        </div>
+        <BranchStatusCounts counts={counts} />
       </div>
 
       <div className="relative">
@@ -208,75 +79,26 @@ const BranchView: React.FC<BranchViewProps> = ({
         ></div>
         <div className="relative z-10">
           {availableLevels.length > 0 ? (
-            availableLevels.map((level, levelIndex) => {
+            availableLevels.map((level) => {
               const tag = levelTags[level];
               const commitsForLevel = commitsByLevel[level] || [];
-              const isExpanded = isLevelExpanded(level);
-              const isCurrentLevel = selectedLevel ? level === selectedLevel.replace(/\D/g, '') : false;
-              const levelCode = selectedTrack && parseInt(level) >= 5 ? `L${level}-${selectedTrack}` : `L${level}`;
-              const levelTitle = getLevelDisplay(level);
+              const isCurrentLevelSelected = selectedLevel ? level === selectedLevel.replace(/\D/g, '') : false;
               
               return (
-                <div key={`level-${level}`} className="mb-4">
-                  {/* Level Tag */}
-                  <TagIllustratedNode
-                    key={`tag-${level}`}
-                    tag={{
-                      id: `level-${level}`,
-                      name: levelCode,
-                      level: levelTitle,
-                      pointsRequired: tag?.pointsRequired || 0,
-                      description: `Comportamentos esperados para ${levelTitle}`
-                    }}
-                    skillPath={skillPath}
-                    imageSrc={images[parseInt(level) % images.length]}
-                  />
-                  
-                  {/* Level Content */}
-                  <Collapsible
-                    open={isExpanded}
-                    onOpenChange={() => toggleLevelExpansion(level)}
-                    className="w-full mt-2"
-                  >
-                    <div className="flex items-center justify-between mb-2 p-2 bg-gray-50 rounded">
-                      <h3 className="text-sm font-medium">
-                        {isCurrentLevel && (
-                          <span className="ml-2 text-xs text-blue-500">(Nível Selecionado)</span>
-                        )}
-                      </h3>
-                      <CollapsibleTrigger asChild>
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          className="h-8 w-8 p-0"
-                        >
-                          {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                        </Button>
-                      </CollapsibleTrigger>
-                    </div>
-                    
-                    <CollapsibleContent>
-                      {commitsForLevel.length > 0 ? (
-                        <div className="space-y-2 pl-1">
-                          {commitsForLevel.map((commit, commitIndex) => (
-                            <CommitNode
-                              key={`commit-${commit.id}`}
-                              commit={commit}
-                              branchColor={branch.color}
-                              isLast={commitIndex === commitsForLevel.length - 1}
-                              onEvaluate={evaluation => onEvaluateCommit(branch.id, commit.id, evaluation)}
-                              dimmed={false}
-                            />
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="text-center py-4 text-gray-500">
-                          Nenhum comportamento disponível para este nível com os filtros atuais.
-                        </div>
-                      )}
-                    </CollapsibleContent>
-                  </Collapsible>
-                </div>
+                <LevelSection
+                  key={`level-${level}`}
+                  level={level}
+                  commits={commitsForLevel}
+                  tag={tag}
+                  branchColor={branch.color}
+                  skillPath={skillPath}
+                  isCurrentLevel={isCurrentLevelSelected}
+                  imageSrc={images[parseInt(level) % images.length]}
+                  onEvaluateCommit={handleEvaluateCommit}
+                  selectedTrack={selectedTrack}
+                  isExpanded={isLevelExpanded(level)}
+                  onToggleExpansion={() => toggleLevelExpansion(level)}
+                />
               );
             })
           ) : (
