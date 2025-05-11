@@ -1,5 +1,5 @@
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Branch, Commit, Tag } from '@/types/skill';
 import { getCodeTitle } from '@/utils/filterHelpers';
 
@@ -19,6 +19,18 @@ export function useBranchUtils(
     // If a level is selected, only it starts visible
     selectedLevel ? [selectedLevel.replace(/\D/g, '')] : []
   );
+
+  // Reset expanded and visible levels when selected level changes
+  useEffect(() => {
+    if (selectedLevel) {
+      const levelNum = selectedLevel.replace(/\D/g, '');
+      setExpandedLevels([levelNum]);
+      setVisibleLevels([levelNum]);
+    } else {
+      setExpandedLevels([]);
+      setVisibleLevels([]);
+    }
+  }, [selectedLevel]);
 
   // Filter commits by selected track if both levels and track are specified
   const filteredCommits = useMemo(() => {
@@ -124,26 +136,74 @@ export function useBranchUtils(
     return visibleLevels.includes(level);
   };
 
-  // Toggle visibility of all unselected levels
-  const toggleAllUnselectedLevels = () => {
+  // Show the next level
+  const showNextLevel = () => {
+    if (!selectedLevel || availableLevels.length <= 1) return;
+    
+    const selectedLevelNumber = selectedLevel.replace(/\D/g, '');
+    const selectedIndex = availableLevels.indexOf(selectedLevelNumber);
+    
+    // If the selected level is not found or is the last one, do nothing
+    if (selectedIndex === -1 || selectedIndex === availableLevels.length - 1) return;
+    
+    // Get the next level
+    const nextLevel = availableLevels[selectedIndex + 1];
+    
+    // Add the next level to visible levels and expand it
+    setVisibleLevels(prev => {
+      if (prev.includes(nextLevel)) {
+        return prev;
+      } else {
+        return [...prev, nextLevel];
+      }
+    });
+    
+    setExpandedLevels(prev => {
+      if (prev.includes(nextLevel)) {
+        return prev;
+      } else {
+        return [...prev, nextLevel];
+      }
+    });
+  };
+  
+  // Show the previous level
+  const showPreviousLevel = () => {
+    if (!selectedLevel || availableLevels.length <= 1) return;
+    
+    const selectedLevelNumber = selectedLevel.replace(/\D/g, '');
+    const selectedIndex = availableLevels.indexOf(selectedLevelNumber);
+    
+    // If the selected level is not found or is the first one, do nothing
+    if (selectedIndex <= 0 || selectedIndex >= availableLevels.length) return;
+    
+    // Get the previous level
+    const prevLevel = availableLevels[selectedIndex - 1];
+    
+    // Add the previous level to visible levels and expand it
+    setVisibleLevels(prev => {
+      if (prev.includes(prevLevel)) {
+        return prev;
+      } else {
+        return [...prev, prevLevel];
+      }
+    });
+    
+    setExpandedLevels(prev => {
+      if (prev.includes(prevLevel)) {
+        return prev;
+      } else {
+        return [...prev, prevLevel];
+      }
+    });
+  };
+  
+  // Hide all levels except the selected one
+  const hideAllExceptSelected = () => {
     if (!selectedLevel) return;
     
     const selectedLevelNumber = selectedLevel.replace(/\D/g, '');
-    const unselectedLevels = availableLevels.filter(level => level !== selectedLevelNumber);
-    
-    // Check if ALL unselected levels are currently visible
-    const allUnselectedVisible = unselectedLevels.every(level => visibleLevels.includes(level));
-    
-    if (allUnselectedVisible) {
-      // If all are visible, hide them all
-      setVisibleLevels([selectedLevelNumber]);
-    } else {
-      // If not all are visible, show them all and expand the selected one
-      setVisibleLevels([...availableLevels]);
-      
-      // Also expand them all for better visibility
-      setExpandedLevels([...availableLevels]);
-    }
+    setVisibleLevels([selectedLevelNumber]);
   };
 
   // Get the appropriate level code and title based on level and track
@@ -172,6 +232,9 @@ export function useBranchUtils(
   const branchPoints = calculateFilteredBranchPoints(filteredCommits);
   const counts = getBranchStatusCounts(filteredCommits);
 
+  // Calculate how many additional levels are visible
+  const additionalVisibleLevelsCount = visibleLevels.length - (selectedLevel ? 1 : 0);
+
   return {
     filteredCommits,
     availableLevels,
@@ -181,7 +244,10 @@ export function useBranchUtils(
     isLevelExpanded,
     isLevelVisible,
     toggleLevelExpansion,
-    toggleAllUnselectedLevels,
-    getLevelDisplay
+    showNextLevel,
+    showPreviousLevel,
+    hideAllExceptSelected,
+    getLevelDisplay,
+    additionalVisibleLevelsCount
   };
 }

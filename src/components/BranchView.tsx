@@ -5,7 +5,7 @@ import LevelSection from './LevelSection';
 import BranchStatusCounts from './BranchStatusCounts';
 import { useBranchUtils } from '@/hooks/useBranchUtils';
 import { Button } from './ui/button';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, Eye, EyeOff } from 'lucide-react';
 
 interface BranchViewProps {
   branch: Branch;
@@ -44,8 +44,11 @@ const BranchView: React.FC<BranchViewProps> = ({
     isLevelExpanded,
     isLevelVisible,
     toggleLevelExpansion,
-    toggleAllUnselectedLevels,
-    getLevelDisplay
+    showNextLevel,
+    showPreviousLevel,
+    hideAllExceptSelected,
+    getLevelDisplay,
+    additionalVisibleLevelsCount
   } = useBranchUtils(branch, selectedLevel, selectedTrack);
 
   // Handle commit evaluation with branch ID
@@ -72,10 +75,13 @@ const BranchView: React.FC<BranchViewProps> = ({
   // Check if there are other levels besides the selected level
   const hasOtherLevels = availableLevels.length > 1 && selectedLevelNumber !== null;
   
-  // Check if all non-selected levels are visible
-  const allNonSelectedVisible = selectedLevelNumber ? 
-    availableLevels.filter(level => level !== selectedLevelNumber)
-      .every(level => isLevelVisible(level)) : false;
+  // Calculate if we have next or previous levels relative to the selected one
+  const selectedLevelIndex = selectedLevelNumber 
+    ? availableLevels.indexOf(selectedLevelNumber) 
+    : -1;
+    
+  const hasNextLevel = selectedLevelIndex !== -1 && selectedLevelIndex < availableLevels.length - 1;
+  const hasPreviousLevel = selectedLevelIndex > 0;
   
   return (
     <div className={`mb-8 ${isCurrentBranch ? 'opacity-100' : 'opacity-60'}`}>
@@ -91,25 +97,43 @@ const BranchView: React.FC<BranchViewProps> = ({
       </div>
 
       {hasSelectedLevel && hasOtherLevels && (
-        <div className="mb-4">
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={toggleAllUnselectedLevels}
-            className="flex items-center gap-2"
-          >
-            {allNonSelectedVisible ? (
-              <>
-                <ChevronUp size={16} />
-                <span>Esconder outros níveis</span>
-              </>
-            ) : (
-              <>
-                <ChevronDown size={16} />
-                <span>Ver todos os níveis</span>
-              </>
-            )}
-          </Button>
+        <div className="mb-4 flex flex-wrap gap-2">
+          {additionalVisibleLevelsCount > 0 ? (
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={hideAllExceptSelected}
+              className="flex items-center gap-2"
+            >
+              <EyeOff size={16} />
+              <span>Mostrar apenas o nível selecionado</span>
+            </Button>
+          ) : (
+            <>
+              {hasPreviousLevel && (
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={showPreviousLevel}
+                  className="flex items-center gap-2"
+                >
+                  <ChevronUp size={16} />
+                  <span>Ver nível anterior</span>
+                </Button>
+              )}
+              {hasNextLevel && (
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={showNextLevel}
+                  className="flex items-center gap-2"
+                >
+                  <ChevronDown size={16} />
+                  <span>Ver próximo nível</span>
+                </Button>
+              )}
+            </>
+          )}
         </div>
       )}
 
@@ -155,25 +179,43 @@ const BranchView: React.FC<BranchViewProps> = ({
       </div>
 
       {hasSelectedLevel && hasOtherLevels && availableLevels.length > 0 && (
-        <div className="mt-4">
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={toggleAllUnselectedLevels}
-            className="flex items-center gap-2"
-          >
-            {allNonSelectedVisible ? (
-              <>
-                <ChevronUp size={16} />
-                <span>Esconder outros níveis</span>
-              </>
-            ) : (
-              <>
-                <ChevronDown size={16} />
-                <span>Ver todos os níveis</span>
-              </>
-            )}
-          </Button>
+        <div className="mt-4 flex flex-wrap gap-2">
+          {additionalVisibleLevelsCount > 0 ? (
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={hideAllExceptSelected}
+              className="flex items-center gap-2"
+            >
+              <EyeOff size={16} />
+              <span>Mostrar apenas o nível selecionado</span>
+            </Button>
+          ) : (
+            <>
+              {hasPreviousLevel && (
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={showPreviousLevel}
+                  className="flex items-center gap-2"
+                >
+                  <ChevronUp size={16} />
+                  <span>Ver nível anterior</span>
+                </Button>
+              )}
+              {hasNextLevel && (
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={showNextLevel}
+                  className="flex items-center gap-2"
+                >
+                  <ChevronDown size={16} />
+                  <span>Ver próximo nível</span>
+                </Button>
+              )}
+            </>
+          )}
         </div>
       )}
     </div>
