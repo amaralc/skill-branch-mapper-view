@@ -21,11 +21,11 @@ const levelDescriptions: Record<string, string> = {
   Sênior:
     "Resolve problemas de alta complexidade em escopo aberto e ambíguo. Eleva padrões da equipe. Impacta um ou mais times no setor.",
   Staff:
-    "Atua em escopos amplos e abertos, definindo padrões e decisões técnicas para múltiplos times. Desenvolve líderes técnicos. Amplifica impacto técnico no setor.",
+    "Atua em escopos amplos e abertos, elevando padrões e decisões técnicas para múltiplos times no setor. Desenvolve líderes técnicos. Amplifica impacto técnico no setor.",
   Coordenador:
     "Mesmo escopo que Staff, com foco adicional em coordenação de pessoas e processos. Amplifica impacto técnico e organizacional no setor.",
   Principal:
-    "Lidera técnica e estrategicamente múltiplos times e domínios. Define padrões e práticas com impacto sistêmico em toda a organização.",
+    "Lidera técnica e estrategicamente múltiplos times e domínios. Eleva padrões e práticas com impacto sistêmico em toda a organização e mercado.",
   Gerente:
     "Mesmo escopo que Principal, com foco em direção técnica e organizacional, fortalecendo estratégia e governança em toda a organização.",
   Diretor:

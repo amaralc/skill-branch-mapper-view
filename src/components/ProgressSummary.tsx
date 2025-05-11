@@ -52,7 +52,8 @@ const ProgressSummary: React.FC<ProgressSummaryProps> = ({
         if (
           selectedTrack &&
           commit.metadata?.track &&
-          commit.metadata.track !== selectedTrack
+          commit.metadata.track !== selectedTrack &&
+          ["L5", "L6", "L7"].includes(commit.metadata.level)
         ) {
           return;
         }
