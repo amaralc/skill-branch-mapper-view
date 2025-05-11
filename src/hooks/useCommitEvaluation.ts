@@ -14,7 +14,11 @@ export function useCommitEvaluation(initialSkillPath: SkillPath) {
             ...branch,
             commits: branch.commits.map(commit => {
               if (commit.id === commitId) {
-                return { ...commit, evaluation };
+                return { 
+                  ...commit, 
+                  evaluation,
+                  updatedAt: Date.now()
+                };
               }
               return commit;
             }),
@@ -32,7 +36,8 @@ export function useCommitEvaluation(initialSkillPath: SkillPath) {
         ...branch,
         commits: branch.commits.map(commit => ({
           ...commit,
-          evaluation: null
+          evaluation: null,
+          updatedAt: null
         }))
       }))
     }));

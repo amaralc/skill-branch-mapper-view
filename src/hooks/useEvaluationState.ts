@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { SkillPath } from '@/types/skill';
@@ -30,6 +31,7 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
 
   const evaluateCommit = async (branchId: string, commitId: string, evaluation: 'never' | 'sometimes' | 'always') => {
     const evaluationId = searchParams.get('eval') || generateEvaluationId();
+    const currentTimestamp = Date.now();
     
     const updatedSkillPath = {
       ...skillPath,
@@ -39,7 +41,11 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
             ...branch,
             commits: branch.commits.map(commit => {
               if (commit.id === commitId) {
-                return { ...commit, evaluation };
+                return { 
+                  ...commit, 
+                  evaluation,
+                  updatedAt: currentTimestamp 
+                };
               }
               return commit;
             }),
@@ -53,7 +59,7 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
     
     await saveEvaluation({
       id: evaluationId,
-      timestamp: Date.now(),
+      timestamp: currentTimestamp,
       skillPath: updatedSkillPath,
     });
 
@@ -71,7 +77,8 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
         ...branch,
         commits: branch.commits.map(commit => ({
           ...commit,
-          evaluation: null
+          evaluation: null,
+          updatedAt: null
         }))
       }))
     };

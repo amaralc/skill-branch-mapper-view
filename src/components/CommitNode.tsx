@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Commit } from '@/data/skillData';
-import { BookOpen } from 'lucide-react';
+import { BookOpen, Clock } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import {
   Drawer,
@@ -12,6 +12,8 @@ import {
   DrawerDescription,
 } from '@/components/ui/drawer';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
 interface CommitNodeProps {
   commit: Commit;
@@ -80,6 +82,11 @@ const CommitNode: React.FC<CommitNodeProps> = ({
     }));
   };
 
+  const formatDate = (timestamp: number | null) => {
+    if (!timestamp) return '';
+    return format(new Date(timestamp), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR });
+  };
+
   return (
     <div className={`flex items-center mb-2 ${isLast ? '' : 'pb-1'}`}>
       <div
@@ -103,6 +110,12 @@ const CommitNode: React.FC<CommitNodeProps> = ({
           <h4 className={`font-medium text-sm leading-tight ${borderTextClass.replace('border-', 'text-')}`}>
             {commit.behaviorDescription}
           </h4>
+          {commit.updatedAt && (
+            <div className="flex items-center text-xs text-gray-500 mt-1">
+              <Clock size={12} className="mr-1" />
+              <span>Avaliado em {formatDate(commit.updatedAt)}</span>
+            </div>
+          )}
         </div>
 
         <div className="flex items-center mx-2">
