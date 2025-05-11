@@ -1,8 +1,7 @@
-
 export interface Commit {
   id: string;
   behaviorDescription: string;
-  evaluation: 'never' | 'sometimes' | 'always' | null;
+  evaluation: "never" | "sometimes" | "always" | null;
   metadata?: {
     career?: string;
     baseBehavior?: string;
@@ -31,6 +30,8 @@ export interface Tag {
   id: string;
   name: string;
   level: string;
+  code: string;
+  track: string;
   pointsRequired: number;
   description?: string;
 }

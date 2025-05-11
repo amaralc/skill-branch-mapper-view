@@ -6,7 +6,7 @@ import TagIllustratedNode from './TagIllustratedNode';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from './ui/button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible';
-import { getLevelTitle } from '@/utils/filterHelpers';
+import { getCodeTitle } from '@/utils/filterHelpers';
 
 interface LevelSectionProps {
   level: string;
@@ -41,13 +41,15 @@ const LevelSection: React.FC<LevelSectionProps> = ({
   };
   
   const levelCode = getLevelCode();
-  const levelTitle = getLevelTitle(levelCode);
+  const name = getCodeTitle(levelCode);
   
   // Create a tag if not provided
-  const levelTag = tag || {
+  const levelTag:Tag = tag || {
     id: `level-${level}`,
-    name: levelCode,
-    level: levelTitle,
+    level,
+    name: name,
+    code: levelCode,
+    track: selectedTrack,
     pointsRequired: 0,
     description: `Comportamentos esperados para ${levelCode}`
   };

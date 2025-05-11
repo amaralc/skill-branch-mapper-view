@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { Branch, Commit, Tag } from '@/types/skill';
-import { getLevelTitle } from '@/utils/filterHelpers';
+import { getCodeTitle } from '@/utils/filterHelpers';
 
 export function useBranchUtils(
   branch: Branch,
@@ -117,12 +117,12 @@ export function useBranchUtils(
     if (selectedTrack) {
       // For levels where differentiation happens (L5+)
       if (parseInt(level) >= 5) {
-        return getLevelTitle(`L${level}-${selectedTrack}`);
+        return getCodeTitle(`L${level}-${selectedTrack}`);
       }
       // For lower levels, just get the base title with L code
-      return getLevelTitle(`L${level}`);
+      return getCodeTitle(`L${level}-T`);
     }
-    return getLevelTitle(`L${level}`);
+    return getCodeTitle(`L${level}-T`);
   };
 
   // Calculate points for filtered commits
