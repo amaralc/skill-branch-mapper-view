@@ -11,7 +11,6 @@ export interface Commit {
     groupCompetence?: string;
     groupCompetenceId?: string;
     groupCompetenceLevelId?: string;
-    behaviorDifferentiator?: string;
   };
 }
 
@@ -45,10 +44,3 @@ export interface SkillPath {
   branches: Branch[];
   tags: Tag[];
 }
-
-export type Emphasis = {
-  id: string;
-  label: string;
-  icon: string;
-  group: 'especialidade';
-};

@@ -1,9 +1,8 @@
 
-import { Branch, Commit, SkillPath, Tag, Emphasis } from "@/types/skill";
+import { Branch, Commit, SkillPath, Tag } from "@/types/skill";
 
 interface CsvRow {
   career: string;
-  behaviorDifferentiator: string;
   baseBehavior: string;
   level: string;
   track: string;
@@ -52,7 +51,6 @@ export const parseCsv = (csvContent: string): CsvRow[] => {
       // Create a properly typed CsvRow object with default empty strings
       const row: CsvRow = {
         career: "",
-        behaviorDifferentiator: "",
         baseBehavior: "",
         level: "",
         track: "",
@@ -76,55 +74,6 @@ export const parseCsv = (csvContent: string): CsvRow[] => {
       return row;
     });
 };
-
-export const extractSpecialtiesFromCsv = (csvData: CsvRow[]): Emphasis[] => {
-  if (!csvData.length) {
-    return [];
-  }
-
-  // Create a Set to deduplicate specialties
-  const specialtiesSet = new Set<string>();
-  
-  // Extract unique specialties from behaviorDifferentiator column
-  // that are not BASE
-  csvData.forEach(row => {
-    if (row.behaviorDifferentiator && 
-        row.behaviorDifferentiator !== 'BASE' && 
-        row.behaviorDifferentiator !== '') {
-      specialtiesSet.add(row.behaviorDifferentiator);
-    }
-  });
-
-  // Extract unique groupCompetence entries that aren't in the base tracks list
-  const baseTracks = ['ACCOUNTABILITY', 'ADAPTABILITY', 'COMMUNICATION', 
-    'CONTINUOUS-DEVELOPMENT', 'EMOTIONAL-INTELLIGENCE', 'RESULTS-ORIENTATION', 
-    'QUALITY', 'SECURITY', 'ARCHITECTURE', 'CONTINUOUS-DELIVERY'];
-  
-  csvData.forEach(row => {
-    if (row.groupCompetence && 
-        !baseTracks.includes(row.groupCompetenceId) &&
-        row.groupCompetence !== '') {
-      specialtiesSet.add(row.groupCompetenceId);
-    }
-  });
-
-  // Convert the Set to an array of Emphasis objects
-  return Array.from(specialtiesSet).map(specialty => ({
-    id: specialty.toLowerCase(),
-    label: formatSpecialtyName(specialty),
-    icon: specialty.toLowerCase(),
-    group: 'especialidade'
-  }));
-};
-
-// Helper function to format specialty names
-function formatSpecialtyName(specialty: string): string {
-  // Convert SNAKE-CASE or UPPERCASE to Title Case
-  return specialty
-    .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(' ');
-}
 
 export const convertCsvToSkillPath = (csvData: CsvRow[]): SkillPath => {
   if (!csvData.length) {
@@ -162,7 +111,6 @@ export const convertCsvToSkillPath = (csvData: CsvRow[]): SkillPath => {
               groupCompetence: row.groupCompetence,
               groupCompetenceId: row.groupCompetenceId,
               groupCompetenceLevelId: row.groupCompetenceLevelId,
-              behaviorDifferentiator: row.behaviorDifferentiator
             },
           });
         }
@@ -189,7 +137,7 @@ export const convertCsvToSkillPath = (csvData: CsvRow[]): SkillPath => {
       id: "junior",
       name: "Junior",
       level: "1",
-      code: "L2-T", 
+      code: "L2-T",
       track: "T",
       pointsRequired: 3,
       description: "Entry level",

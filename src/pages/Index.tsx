@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { SkillPath, Emphasis } from '@/types/skill';
+import { SkillPath } from '@/data/skillData';
 import ProgressSummary from '@/components/ProgressSummary';
 import { Button } from '@/components/ui/button';
 import { useEvaluationState } from '@/hooks/useEvaluationState';
@@ -11,7 +11,6 @@ import EmphasisSelector from '@/components/EmphasisSelector';
 import LevelTrackSelector from '@/components/LevelTrackSelector';
 import SkillBranches from '@/components/SkillBranches';
 import { careerPaths } from '@/data/skillData';
-import { emphasisOptions as defaultEmphasisOptions } from '@/types/emphasis';
 
 const Index = () => {
   const defaultCareer = careerPaths.find(path => path.id === "software") || careerPaths[0];
@@ -20,7 +19,6 @@ const Index = () => {
   const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
   const [selectedTrack, setSelectedTrack] = useState<string | null>('T'); // Default to Technical track
   const { skillPath, evaluateCommit, resetAllEvaluations, isLoading } = useEvaluationState(defaultCareer);
-  const [emphasisOptions, setEmphasisOptions] = useState(defaultEmphasisOptions);
 
   const handleCareerChange = (careerId: string) => {
     setSelectedCareerId(careerId);
@@ -58,14 +56,6 @@ const Index = () => {
 
   const handleImportEvaluation = (importedSkillPath: SkillPath) => {
     resetAllEvaluations(importedSkillPath);
-  };
-  
-  const handleSpecialtiesExtracted = (specialties: Emphasis[]) => {
-    if (specialties && specialties.length > 0) {
-      setEmphasisOptions(specialties);
-      // Reset selected emphasis since we have new options
-      setSelectedEmphasis([]);
-    }
   };
 
   // Define which branches are base competencies
@@ -111,7 +101,6 @@ const Index = () => {
             <ActionsDrawer 
               onExport={handleExportEvaluation}
               onImport={handleImportEvaluation}
-              onSpecialtiesExtracted={handleSpecialtiesExtracted}
             />
           </div>
         </div>
@@ -125,7 +114,6 @@ const Index = () => {
         <EmphasisSelector
           selectedEmphasis={selectedEmphasis}
           onEmphasisChange={handleEmphasisChange}
-          emphasisOptions={emphasisOptions}
         />
         
         {selectedCareerId && selectedEmphasis.length > 0 && (
