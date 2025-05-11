@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Branch, SkillPath, Tag } from "@/types/skill";
 import LevelSection from "./LevelSection";
@@ -90,12 +89,10 @@ const BranchView: React.FC<BranchViewProps> = ({
     ? availableLevels.indexOf(selectedLevelNumber)
     : -1;
 
-  const hasNextLevel =
+  const hasNextLevel = selectedLevelIndex !== -1 && selectedLevelIndex > 0;
+
+  const hasPreviousLevel =
     selectedLevelIndex !== -1 &&
-    selectedLevelIndex > 0;
-    
-  const hasPreviousLevel = 
-    selectedLevelIndex !== -1 && 
     selectedLevelIndex < availableLevels.length - 1;
 
   return (
@@ -126,19 +123,6 @@ const BranchView: React.FC<BranchViewProps> = ({
             </Button>
           )}
 
-          {/* Sempre mostramos o botão de "Ver nível anterior" se houver um */}
-          {hasPreviousLevel && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={showPreviousLevel}
-              className="flex items-center gap-2"
-            >
-              <ChevronDown size={16} />
-              <span>Ver nível anterior</span>
-            </Button>
-          )}
-
           {/* Mostramos o botão de "Mostrar apenas o nível selecionado" se houver níveis adicionais visíveis */}
           {additionalVisibleLevelsCount > 0 && (
             <Button
@@ -148,7 +132,7 @@ const BranchView: React.FC<BranchViewProps> = ({
               className="flex items-center gap-2"
             >
               <EyeOff size={16} />
-              <span>Mostrar apenas o nível selecionado</span>
+              <span>Ocultar níveis</span>
             </Button>
           )}
         </div>
@@ -200,19 +184,6 @@ const BranchView: React.FC<BranchViewProps> = ({
 
       {hasSelectedLevel && hasOtherLevels && availableLevels.length > 0 && (
         <div className="mt-4 flex flex-wrap gap-2">
-          {/* Repetimos os mesmos botões no final da seção para facilitar o uso */}
-          {hasNextLevel && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={showNextLevel}
-              className="flex items-center gap-2"
-            >
-              <ChevronUp size={16} />
-              <span>Ver próximo nível</span>
-            </Button>
-          )}
-
           {hasPreviousLevel && (
             <Button
               variant="outline"
@@ -233,7 +204,7 @@ const BranchView: React.FC<BranchViewProps> = ({
               className="flex items-center gap-2"
             >
               <EyeOff size={16} />
-              <span>Mostrar apenas o nível selecionado</span>
+              <span>Ocultar níveis</span>
             </Button>
           )}
         </div>
