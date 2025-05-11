@@ -14,6 +14,12 @@ export function useBranchUtils(
     selectedLevel ? [selectedLevel.replace(/\D/g, '')] : []
   );
 
+  // Track which levels should be visible (not hidden)
+  const [visibleLevels, setVisibleLevels] = useState<string[]>(
+    // If a level is selected, only it starts visible
+    selectedLevel ? [selectedLevel.replace(/\D/g, '')] : []
+  );
+
   // Filter commits by selected track if both levels and track are specified
   const filteredCommits = useMemo(() => {
     return branch.commits.filter(commit => {
@@ -113,22 +119,30 @@ export function useBranchUtils(
     return expandedLevels.includes(level);
   };
 
-  // Toggle all unselected levels' expansion state
+  // Check if a level should be visible
+  const isLevelVisible = (level: string) => {
+    return visibleLevels.includes(level);
+  };
+
+  // Toggle visibility of all unselected levels
   const toggleAllUnselectedLevels = () => {
     if (!selectedLevel) return;
     
     const selectedLevelNumber = selectedLevel.replace(/\D/g, '');
     const unselectedLevels = availableLevels.filter(level => level !== selectedLevelNumber);
     
-    // Check if ALL unselected levels are currently expanded
-    const allUnselectedExpanded = unselectedLevels.every(level => expandedLevels.includes(level));
+    // Check if ALL unselected levels are currently visible
+    const allUnselectedVisible = unselectedLevels.every(level => visibleLevels.includes(level));
     
-    if (allUnselectedExpanded) {
-      // If all are expanded, collapse them all
-      setExpandedLevels(prev => prev.filter(level => level === selectedLevelNumber));
+    if (allUnselectedVisible) {
+      // If all are visible, hide them all
+      setVisibleLevels([selectedLevelNumber]);
     } else {
-      // If not all are expanded, expand them all
-      setExpandedLevels([...unselectedLevels, selectedLevelNumber]);
+      // If not all are visible, show them all and expand the selected one
+      setVisibleLevels([...availableLevels]);
+      
+      // Also expand them all for better visibility
+      setExpandedLevels([...availableLevels]);
     }
   };
 
@@ -165,6 +179,7 @@ export function useBranchUtils(
     counts,
     branchPoints,
     isLevelExpanded,
+    isLevelVisible,
     toggleLevelExpansion,
     toggleAllUnselectedLevels,
     getLevelDisplay

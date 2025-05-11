@@ -42,6 +42,7 @@ const BranchView: React.FC<BranchViewProps> = ({
     commitsByLevel,
     counts,
     isLevelExpanded,
+    isLevelVisible,
     toggleLevelExpansion,
     toggleAllUnselectedLevels,
     getLevelDisplay
@@ -71,10 +72,10 @@ const BranchView: React.FC<BranchViewProps> = ({
   // Check if there are other levels besides the selected level
   const hasOtherLevels = availableLevels.length > 1 && selectedLevelNumber !== null;
   
-  // Check if all non-selected levels are expanded
-  const allNonSelectedExpanded = selectedLevelNumber ? 
+  // Check if all non-selected levels are visible
+  const allNonSelectedVisible = selectedLevelNumber ? 
     availableLevels.filter(level => level !== selectedLevelNumber)
-      .every(level => isLevelExpanded(level)) : false;
+      .every(level => isLevelVisible(level)) : false;
   
   return (
     <div className={`mb-8 ${isCurrentBranch ? 'opacity-100' : 'opacity-60'}`}>
@@ -97,7 +98,7 @@ const BranchView: React.FC<BranchViewProps> = ({
             onClick={toggleAllUnselectedLevels}
             className="flex items-center gap-2"
           >
-            {allNonSelectedExpanded ? (
+            {allNonSelectedVisible ? (
               <>
                 <ChevronUp size={16} />
                 <span>Esconder outros níveis</span>
@@ -120,27 +121,31 @@ const BranchView: React.FC<BranchViewProps> = ({
         <div className="relative z-10">
           {availableLevels.length > 0 ? (
             availableLevels.map((level) => {
-              const tag = levelTags[level];
-              const commitsForLevel = commitsByLevel[level] || [];
-              const isCurrentLevelSelected = selectedLevelNumber === level;
-              
-              return (
-                <LevelSection
-                  key={`level-${level}`}
-                  level={level}
-                  commits={commitsForLevel}
-                  tag={tag}
-                  branchColor={branch.color}
-                  skillPath={skillPath}
-                  isCurrentLevel={isCurrentLevelSelected}
-                  imageSrc={images[parseInt(level) % images.length]}
-                  onEvaluateCommit={handleEvaluateCommit}
-                  selectedTrack={selectedTrack}
-                  isExpanded={isLevelExpanded(level)}
-                  onToggleExpansion={() => toggleLevelExpansion(level)}
-                />
-              );
-            })
+              // Only render the level if it's visible or if there's no selected level
+              if (!selectedLevel || isLevelVisible(level)) {
+                const tag = levelTags[level];
+                const commitsForLevel = commitsByLevel[level] || [];
+                const isCurrentLevelSelected = selectedLevelNumber === level;
+                
+                return (
+                  <LevelSection
+                    key={`level-${level}`}
+                    level={level}
+                    commits={commitsForLevel}
+                    tag={tag}
+                    branchColor={branch.color}
+                    skillPath={skillPath}
+                    isCurrentLevel={isCurrentLevelSelected}
+                    imageSrc={images[parseInt(level) % images.length]}
+                    onEvaluateCommit={handleEvaluateCommit}
+                    selectedTrack={selectedTrack}
+                    isExpanded={isLevelExpanded(level)}
+                    onToggleExpansion={() => toggleLevelExpansion(level)}
+                  />
+                );
+              }
+              return null;
+            }).filter(Boolean)
           ) : (
             <div className="text-center py-8 text-gray-500">
               Nenhum comportamento disponível para esta competência com os filtros atuais.
@@ -157,7 +162,7 @@ const BranchView: React.FC<BranchViewProps> = ({
             onClick={toggleAllUnselectedLevels}
             className="flex items-center gap-2"
           >
-            {allNonSelectedExpanded ? (
+            {allNonSelectedVisible ? (
               <>
                 <ChevronUp size={16} />
                 <span>Esconder outros níveis</span>

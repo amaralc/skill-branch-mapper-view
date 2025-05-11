@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Commit, SkillPath, Tag } from "@/types/skill";
 import CommitNode from "./CommitNode";
@@ -61,6 +62,13 @@ const LevelSection: React.FC<LevelSectionProps> = ({
     pointsRequired: 0,
     description: `Comportamentos esperados para ${levelCode}`,
   };
+
+  // Auto-expand current level
+  React.useEffect(() => {
+    if (isCurrentLevel && !isExpanded) {
+      onToggleExpansion();
+    }
+  }, [isCurrentLevel, isExpanded, onToggleExpansion]);
 
   return (
     <div className="mb-4">
