@@ -22,8 +22,24 @@ export const filterCommitsByLevelAndTrack = (
       const levelMatches = !selectedLevel || commitLevel === selectedLevel;
       
       // Match by track if selected
-      // If commit doesn't specify track, include it regardless of selected track
-      const trackMatches = !selectedTrack || !commitTrack || commitTrack === selectedTrack;
+      // Special case: If management track ("M") is selected, show all technical commits from lower levels
+      let trackMatches = !selectedTrack || !commitTrack;
+      
+      if (selectedTrack) {
+        if (selectedTrack === "M") {
+          // For management track: match if commit is management OR if it's technical track from levels before "L5"
+          if (commitTrack === "M") {
+            trackMatches = true;
+          } else if (commitTrack === "T" && commitLevel) {
+            const levelNumber = parseInt(commitLevel.replace(/\D/g, ''));
+            // Include technical track commits for levels before L5
+            trackMatches = levelNumber < 5;
+          }
+        } else {
+          // For technical track: only match technical track
+          trackMatches = commitTrack === selectedTrack;
+        }
+      }
       
       // When filtering by track, we want to include all levels
       // When filtering by level, we may also filter by track if specified
@@ -57,8 +73,22 @@ export const getCommitCounts = (
   branches.forEach(branch => {
     branch.commits.forEach(commit => {
       // Skip commits that don't match the selected track
-      if (selectedTrack && commit.metadata?.track && commit.metadata.track !== selectedTrack) {
-        return;
+      if (selectedTrack && commit.metadata?.track) {
+        // Special case for management track
+        if (selectedTrack === "M") {
+          const commitTrack = commit.metadata.track;
+          const commitLevel = commit.metadata.level;
+          
+          // Skip if it's technical track at higher levels (L5+)
+          if (commitTrack === "T" && commitLevel) {
+            const levelNumber = parseInt(commitLevel.replace(/\D/g, ''));
+            if (levelNumber >= 5) return;
+          } else if (commitTrack !== "M") {
+            return;
+          }
+        } else if (commit.metadata.track !== selectedTrack) {
+          return;
+        }
       }
       
       counts.total++;
@@ -89,4 +119,40 @@ export const getAvailableLevels = (branches: Branch[]): string[] => {
     const levelB = parseInt(b.replace(/\D/g, ''));
     return levelA - levelB;
   });
+};
+
+// Define a mapping for level titles
+export const getLevelTitle = (level: string): string => {
+  const levelMap: Record<string, string> = {
+    "L0": "Estagiário",
+    "L1": "Assistente",
+    "L2": "Júnior",
+    "L3": "Pleno",
+    "L4": "Sênior",
+    "L5-T": "Staff",
+    "L5-M": "Coordenador",
+    "L6-T": "Principal",
+    "L6-M": "Gerente",
+    "L7-M": "Diretor"
+  };
+  
+  // Extract the level number
+  const plainLevel = level.match(/L(\d+)/)
+    ? `L${level.match(/L(\d+)/)![1]}`
+    : level;
+    
+  // Try to get the full code (like "L5-T")
+  if (levelMap[level]) {
+    return levelMap[level];
+  }
+  
+  // If no track is specified in the level string, try both options
+  if (level.includes("-T")) {
+    return levelMap[plainLevel + "-T"] || plainLevel;
+  } else if (level.includes("-M")) {
+    return levelMap[plainLevel + "-M"] || plainLevel;
+  }
+  
+  // Default to the plain level name
+  return levelMap[plainLevel] || plainLevel;
 };

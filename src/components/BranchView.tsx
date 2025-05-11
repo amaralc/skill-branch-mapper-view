@@ -7,6 +7,7 @@ import { calculateBranchPoints } from '@/utils/skillCalculations';
 import { Button } from './ui/button';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible';
+import { getLevelTitle } from '@/utils/filterHelpers';
 
 const images = [
   "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=160&q=80",
@@ -40,7 +41,7 @@ const BranchView: React.FC<BranchViewProps> = ({
   // Track which levels are expanded (all others are collapsed)
   const [expandedLevels, setExpandedLevels] = useState<string[]>(
     // If a level is selected, it starts expanded
-    selectedLevel ? [selectedLevel] : []
+    selectedLevel ? [selectedLevel.replace(/\D/g, '')] : []
   );
 
   // Filter commits by selected track if both levels and track are specified
@@ -48,11 +49,26 @@ const BranchView: React.FC<BranchViewProps> = ({
     // If no track selected, show all
     if (!selectedTrack) return true;
     
+    // Get track and level info from commit
+    const commitTrack = commit.metadata?.track;
+    const commitLevel = commit.metadata?.level;
+    
     // If this commit doesn't specify a track, always show it
-    if (!commit.metadata?.track) return true;
+    if (!commitTrack) return true;
+    
+    // Special case for management track - include all technical commits from levels before L5
+    if (selectedTrack === "M") {
+      if (commitTrack === "M") {
+        return true; // Show all management commits
+      } else if (commitTrack === "T" && commitLevel) {
+        const levelNumber = parseInt(commitLevel.replace(/\D/g, ''));
+        return levelNumber < 5; // Include technical track for levels before L5
+      }
+      return false;
+    }
     
     // Otherwise, only show commits that match the selected track
-    return commit.metadata.track === selectedTrack;
+    return commitTrack === selectedTrack;
   });
   
   const getBranchStatusCounts = (commits: Branch['commits']) => {
@@ -137,6 +153,19 @@ const BranchView: React.FC<BranchViewProps> = ({
   const isLevelExpanded = (level: string) => {
     return expandedLevels.includes(level);
   };
+
+  // Get the appropriate level title based on level and track
+  const getLevelDisplay = (level: string) => {
+    if (selectedTrack) {
+      // For levels where differentiation happens (L5+)
+      if (parseInt(level) >= 5) {
+        return getLevelTitle(`L${level}-${selectedTrack}`);
+      }
+      // For lower levels, just get the base title
+      return getLevelTitle(`L${level}`);
+    }
+    return getLevelTitle(`L${level}`);
+  };
   
   return (
     <div className={`mb-8 ${isCurrentBranch ? 'opacity-100' : 'opacity-60'}`}>
@@ -184,6 +213,7 @@ const BranchView: React.FC<BranchViewProps> = ({
               const commitsForLevel = commitsByLevel[level] || [];
               const isExpanded = isLevelExpanded(level);
               const isCurrentLevel = selectedLevel ? level === selectedLevel.replace(/\D/g, '') : false;
+              const levelTitle = getLevelDisplay(level);
               
               return (
                 <div key={`level-${level}`} className="mb-4">
@@ -205,7 +235,7 @@ const BranchView: React.FC<BranchViewProps> = ({
                   >
                     <div className="flex items-center justify-between mb-2 p-2 bg-gray-50 rounded">
                       <h3 className="text-sm font-medium">
-                        Nível {level} 
+                        {levelTitle}
                         {isCurrentLevel && (
                           <span className="ml-2 text-xs text-blue-500">(Nível Selecionado)</span>
                         )}
