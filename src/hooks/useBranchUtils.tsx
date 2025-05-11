@@ -153,10 +153,9 @@ export function useBranchUtils(
     const selectedIndex = availableLevels.indexOf(selectedLevelNumber);
 
     // If the selected level is not found or is the last one, do nothing
-    if (selectedIndex === -1 || selectedIndex === availableLevels.length - 1)
-      return;
+    if (selectedIndex === -1 || selectedIndex === 0) return;
 
-    // Get the next level
+    // Get the next level (higher in our list is lower index since we sort descending)
     const nextLevel = availableLevels[selectedIndex - 1];
 
     // Add the next level to visible levels and expand it
@@ -184,10 +183,10 @@ export function useBranchUtils(
     const selectedLevelNumber = selectedLevel.replace(/\D/g, "");
     const selectedIndex = availableLevels.indexOf(selectedLevelNumber);
 
-    // If the selected level is not found or is the first one, do nothing
-    if (selectedIndex <= 0 || selectedIndex >= availableLevels.length) return;
+    // If the selected level is not found or is the last one, do nothing
+    if (selectedIndex === -1 || selectedIndex >= availableLevels.length - 1) return;
 
-    // Get the previous level
+    // Get the previous level (lower in our list is higher index since we sort descending)
     const prevLevel = availableLevels[selectedIndex + 1];
 
     // Add the previous level to visible levels and expand it

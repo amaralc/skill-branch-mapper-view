@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Branch, SkillPath, Tag } from "@/types/skill";
 import LevelSection from "./LevelSection";
@@ -91,8 +92,10 @@ const BranchView: React.FC<BranchViewProps> = ({
 
   const hasNextLevel =
     selectedLevelIndex !== -1 &&
+    selectedLevelIndex > 0;
+  const hasPreviousLevel = 
+    selectedLevelIndex !== -1 && 
     selectedLevelIndex < availableLevels.length - 1;
-  const hasPreviousLevel = selectedLevelIndex > 0;
 
   return (
     <div className={`mb-8 ${isCurrentBranch ? "opacity-100" : "opacity-60"}`}>
