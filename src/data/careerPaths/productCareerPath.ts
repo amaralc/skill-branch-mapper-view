@@ -33,6 +33,8 @@ const productManagementPath: SkillPath = {
       id: "nivel1",
       name: "Nível 1 - Júnior",
       level: "Júnior",
+      code: "L2-T",
+      track: "T",
       pointsRequired: 2,
       description: "Conhecimento inicial sobre produto."
     },
@@ -40,6 +42,8 @@ const productManagementPath: SkillPath = {
       id: "nivel2",
       name: "Nível 2 - Pleno",
       level: "Pleno",
+      code: "L3-T",
+      track: "T",
       pointsRequired: 4,
       description: "Experiência intermediária em gestão de produtos."
     }

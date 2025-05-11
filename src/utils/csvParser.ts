@@ -1,3 +1,4 @@
+
 import { Branch, Commit, SkillPath, Tag } from "@/types/skill";
 
 interface CsvRow {
@@ -130,12 +131,14 @@ export const convertCsvToSkillPath = (csvData: CsvRow[]): SkillPath => {
     }
   );
 
-  // Create tags
+  // Create tags with the required properties
   const tags: Tag[] = [
     {
       id: "junior",
       name: "Junior",
       level: "1",
+      code: "L2-T",
+      track: "T",
       pointsRequired: 3,
       description: "Entry level",
     },
@@ -143,6 +146,8 @@ export const convertCsvToSkillPath = (csvData: CsvRow[]): SkillPath => {
       id: "pleno",
       name: "Pleno",
       level: "2",
+      code: "L3-T",
+      track: "T",
       pointsRequired: 6,
       description: "Mid level",
     },
@@ -150,6 +155,8 @@ export const convertCsvToSkillPath = (csvData: CsvRow[]): SkillPath => {
       id: "senior",
       name: "Senior",
       level: "3",
+      code: "L4-T",
+      track: "T",
       pointsRequired: 8,
       description: "Senior level",
     },
