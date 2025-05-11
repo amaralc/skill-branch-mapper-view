@@ -1,3 +1,4 @@
+
 import { useState, useMemo } from 'react';
 import { Branch, Commit, Tag } from '@/types/skill';
 import { getCodeTitle } from '@/utils/filterHelpers';
@@ -112,6 +113,25 @@ export function useBranchUtils(
     return expandedLevels.includes(level);
   };
 
+  // Toggle all unselected levels' expansion state
+  const toggleAllUnselectedLevels = () => {
+    if (!selectedLevel) return;
+    
+    const selectedLevelNumber = selectedLevel.replace(/\D/g, '');
+    const unselectedLevels = availableLevels.filter(level => level !== selectedLevelNumber);
+    
+    // Check if ALL unselected levels are currently expanded
+    const allUnselectedExpanded = unselectedLevels.every(level => expandedLevels.includes(level));
+    
+    if (allUnselectedExpanded) {
+      // If all are expanded, collapse them all
+      setExpandedLevels(prev => prev.filter(level => level === selectedLevelNumber));
+    } else {
+      // If not all are expanded, expand them all
+      setExpandedLevels([...unselectedLevels, selectedLevelNumber]);
+    }
+  };
+
   // Get the appropriate level code and title based on level and track
   const getLevelDisplay = (level: string) => {
     if (selectedTrack) {
@@ -146,6 +166,7 @@ export function useBranchUtils(
     branchPoints,
     isLevelExpanded,
     toggleLevelExpansion,
+    toggleAllUnselectedLevels,
     getLevelDisplay
   };
 }

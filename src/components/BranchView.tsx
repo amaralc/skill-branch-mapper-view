@@ -4,6 +4,8 @@ import { Branch, SkillPath, Tag } from '@/types/skill';
 import LevelSection from './LevelSection';
 import BranchStatusCounts from './BranchStatusCounts';
 import { useBranchUtils } from '@/hooks/useBranchUtils';
+import { Button } from './ui/button';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 interface BranchViewProps {
   branch: Branch;
@@ -41,6 +43,7 @@ const BranchView: React.FC<BranchViewProps> = ({
     counts,
     isLevelExpanded,
     toggleLevelExpansion,
+    toggleAllUnselectedLevels,
     getLevelDisplay
   } = useBranchUtils(branch, selectedLevel, selectedTrack);
 
@@ -58,6 +61,20 @@ const BranchView: React.FC<BranchViewProps> = ({
       levelTags[levelNumber] = tag;
     }
   });
+
+  // Check if we have a selected level to determine if we should show toggle buttons
+  const hasSelectedLevel = !!selectedLevel;
+  
+  // Get the selected level number without the "L" prefix
+  const selectedLevelNumber = selectedLevel ? selectedLevel.replace(/\D/g, '') : null;
+  
+  // Check if there are other levels besides the selected level
+  const hasOtherLevels = availableLevels.length > 1 && selectedLevelNumber !== null;
+  
+  // Check if all non-selected levels are expanded
+  const allNonSelectedExpanded = selectedLevelNumber ? 
+    availableLevels.filter(level => level !== selectedLevelNumber)
+      .every(level => isLevelExpanded(level)) : false;
   
   return (
     <div className={`mb-8 ${isCurrentBranch ? 'opacity-100' : 'opacity-60'}`}>
@@ -72,6 +89,29 @@ const BranchView: React.FC<BranchViewProps> = ({
         <BranchStatusCounts counts={counts} />
       </div>
 
+      {hasSelectedLevel && hasOtherLevels && (
+        <div className="mb-4">
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={toggleAllUnselectedLevels}
+            className="flex items-center gap-2"
+          >
+            {allNonSelectedExpanded ? (
+              <>
+                <ChevronUp size={16} />
+                <span>Esconder outros níveis</span>
+              </>
+            ) : (
+              <>
+                <ChevronDown size={16} />
+                <span>Ver todos os níveis</span>
+              </>
+            )}
+          </Button>
+        </div>
+      )}
+
       <div className="relative">
         <div 
           className="absolute left-4 top-4 h-[calc(100%-8px)] w-1 z-0" 
@@ -82,7 +122,7 @@ const BranchView: React.FC<BranchViewProps> = ({
             availableLevels.map((level) => {
               const tag = levelTags[level];
               const commitsForLevel = commitsByLevel[level] || [];
-              const isCurrentLevelSelected = selectedLevel ? level === selectedLevel.replace(/\D/g, '') : false;
+              const isCurrentLevelSelected = selectedLevelNumber === level;
               
               return (
                 <LevelSection
@@ -108,6 +148,29 @@ const BranchView: React.FC<BranchViewProps> = ({
           )}
         </div>
       </div>
+
+      {hasSelectedLevel && hasOtherLevels && availableLevels.length > 0 && (
+        <div className="mt-4">
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={toggleAllUnselectedLevels}
+            className="flex items-center gap-2"
+          >
+            {allNonSelectedExpanded ? (
+              <>
+                <ChevronUp size={16} />
+                <span>Esconder outros níveis</span>
+              </>
+            ) : (
+              <>
+                <ChevronDown size={16} />
+                <span>Ver todos os níveis</span>
+              </>
+            )}
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
