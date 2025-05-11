@@ -1,11 +1,12 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Commit, SkillPath, Tag } from '@/types/skill';
 import CommitNode from './CommitNode';
 import TagIllustratedNode from './TagIllustratedNode';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from './ui/button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible';
+import { getLevelTitle } from '@/utils/filterHelpers';
 
 interface LevelSectionProps {
   level: string;
@@ -36,23 +37,27 @@ const LevelSection: React.FC<LevelSectionProps> = ({
 }) => {
   // Get level code based on level and track
   const getLevelCode = () => {
-    return selectedTrack && parseInt(level) >= 5 ? `L${level}-${selectedTrack}` : `L${level}`;
+    return selectedTrack && parseInt(level) >= 5 ? `L${level}-${selectedTrack}` : `L${level}-T`;
   };
   
   const levelCode = getLevelCode();
+  const levelTitle = getLevelTitle(levelCode);
+  
+  // Create a tag if not provided
+  const levelTag = tag || {
+    id: `level-${level}`,
+    name: levelCode,
+    level: levelTitle,
+    pointsRequired: 0,
+    description: `Comportamentos esperados para ${levelCode}`
+  };
   
   return (
     <div className="mb-4">
       {/* Level Tag */}
       <TagIllustratedNode
         key={`tag-${level}`}
-        tag={{
-          id: `level-${level}`,
-          name: levelCode,
-          level: tag?.level || levelCode,
-          pointsRequired: tag?.pointsRequired || 0,
-          description: `Comportamentos esperados para ${levelCode}`
-        }}
+        tag={levelTag}
         skillPath={skillPath}
         imageSrc={imageSrc}
       />
