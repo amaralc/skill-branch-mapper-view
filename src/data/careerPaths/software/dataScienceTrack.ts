@@ -10,26 +10,31 @@ const dataScienceTrack: Branch = {
       id: "ds-1",
       behaviorDescription: "Realiza análise exploratória de dados efetivamente",
       evaluation: null,
+      updatedAt: null,
     },
     {
       id: "ds-2",
       behaviorDescription: "Prepara e limpa dados para análise",
       evaluation: null,
+      updatedAt: null,
     },
     {
       id: "ds-3",
       behaviorDescription: "Desenvolve modelos de machine learning básicos",
       evaluation: null,
+      updatedAt: null,
     },
     {
       id: "ds-4",
       behaviorDescription: "Avalia e valida modelos adequadamente",
       evaluation: null,
+      updatedAt: null,
     },
     {
       id: "ds-5",
       behaviorDescription: "Comunica resultados de forma clara e efetiva",
       evaluation: null,
+      updatedAt: null,
     },
   ],
   levelRequirements: [

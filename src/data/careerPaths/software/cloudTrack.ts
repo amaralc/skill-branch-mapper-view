@@ -10,26 +10,31 @@ const cloudTrack: Branch = {
       id: "cl-1",
       behaviorDescription: "Provisiona e gerencia recursos em nuvem",
       evaluation: null,
+      updatedAt: null,
     },
     {
       id: "cl-2",
       behaviorDescription: "Implementa práticas de segurança em nuvem",
       evaluation: null,
+      updatedAt: null,
     },
     {
       id: "cl-3",
       behaviorDescription: "Desenvolve arquiteturas serverless básicas",
       evaluation: null,
+      updatedAt: null,
     },
     {
       id: "cl-4",
       behaviorDescription: "Configura monitoramento e logging",
       evaluation: null,
+      updatedAt: null,
     },
     {
       id: "cl-5",
       behaviorDescription: "Otimiza custos de recursos em nuvem",
       evaluation: null,
+      updatedAt: null,
     },
   ],
   levelRequirements: [

@@ -11,30 +11,35 @@ const backEndTrack: Branch = {
       behaviorDescription:
         "Desenvolve APIs RESTful seguindo padrões e boas práticas",
       evaluation: null,
+      updatedAt: null,
     },
     {
       id: "be-2",
       behaviorDescription:
         "Implementa autenticação e autorização de forma segura",
       evaluation: null,
+      updatedAt: null,
     },
     {
       id: "be-3",
       behaviorDescription:
         "Modela bancos de dados relacionais de forma eficiente",
       evaluation: null,
+      updatedAt: null,
     },
     {
       id: "be-4",
       behaviorDescription:
         "Desenvolve serviços com alta disponibilidade e escalabilidade",
       evaluation: null,
+      updatedAt: null,
     },
     {
       id: "be-5",
       behaviorDescription:
         "Monitora e otimiza performance de aplicações backend",
       evaluation: null,
+      updatedAt: null,
     },
   ],
   levelRequirements: [

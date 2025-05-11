@@ -14,12 +14,14 @@ const productManagementPath: SkillPath = {
         {
           id: "pcommit1",
           behaviorDescription: "Identificar e compreender as necessidades do usuário.",
-          evaluation: null
+          evaluation: null,
+          updatedAt: null
         },
         {
           id: "pcommit2",
           behaviorDescription: "Definir a visão do produto e alinhar ao negócio.",
-          evaluation: null
+          evaluation: null,
+          updatedAt: null
         }
       ],
       levelRequirements: [
