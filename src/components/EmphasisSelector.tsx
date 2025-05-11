@@ -10,16 +10,18 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Check, ChevronDown } from 'lucide-react';
-import { emphasisOptions } from '@/types/emphasis';
+import { Emphasis } from '@/types/skill';
 
 interface EmphasisSelectorProps {
   selectedEmphasis: string[];
   onEmphasisChange: (emphasisIds: string[]) => void;
+  emphasisOptions: Emphasis[];
 }
 
 const EmphasisSelector: React.FC<EmphasisSelectorProps> = ({
   selectedEmphasis,
-  onEmphasisChange
+  onEmphasisChange,
+  emphasisOptions
 }) => {
   const handleToggleEmphasis = (emphasisId: string) => {
     const newSelection = selectedEmphasis.includes(emphasisId)

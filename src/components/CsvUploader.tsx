@@ -4,16 +4,21 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Upload } from 'lucide-react';
-import { parseCsv, convertCsvToSkillPath } from '@/utils/csvParser';
-import { SkillPath } from '@/types/skill';
+import { parseCsv, convertCsvToSkillPath, extractSpecialtiesFromCsv } from '@/utils/csvParser';
+import { SkillPath, Emphasis } from '@/types/skill';
 import { toast } from 'sonner';
 
 interface CsvUploaderProps {
   onImport: (skillPath: SkillPath) => void;
+  onSpecialtiesExtracted?: (specialties: Emphasis[]) => void;
   onClose?: () => void;
 }
 
-const CsvUploader: React.FC<CsvUploaderProps> = ({ onImport, onClose }) => {
+const CsvUploader: React.FC<CsvUploaderProps> = ({ 
+  onImport, 
+  onSpecialtiesExtracted,
+  onClose 
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -33,6 +38,13 @@ const CsvUploader: React.FC<CsvUploaderProps> = ({ onImport, onClose }) => {
   
       if (!csvData || csvData.length === 0) {
         throw new Error('The CSV file appears to be empty or invalid');
+      }
+      
+      // Extract specialties from CSV data
+      if (onSpecialtiesExtracted) {
+        const specialties = extractSpecialtiesFromCsv(csvData);
+        onSpecialtiesExtracted(specialties);
+        console.log('Extracted specialties:', specialties);
       }
   
       const skillPath = convertCsvToSkillPath(csvData);
@@ -68,7 +80,7 @@ const CsvUploader: React.FC<CsvUploaderProps> = ({ onImport, onClose }) => {
         </div>
         <p className="text-sm text-gray-500">
           Upload a CSV file with career path data. The file should have the expected format with columns:
-          career, baseBehavior, level, track, groupCompetence, groupCompetenceId, groupCompetenceLevelId, id, description, size.
+          career, behaviorDifferentiator, baseBehavior, level, track, groupCompetence, groupCompetenceId, groupCompetenceLevelId, id, description, size.
         </p>
       </div>
       
