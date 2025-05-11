@@ -154,14 +154,14 @@ const BranchView: React.FC<BranchViewProps> = ({
     return expandedLevels.includes(level);
   };
 
-  // Get the appropriate level title based on level and track
+  // Get the appropriate level code and title based on level and track
   const getLevelDisplay = (level: string) => {
     if (selectedTrack) {
       // For levels where differentiation happens (L5+)
       if (parseInt(level) >= 5) {
         return getLevelTitle(`L${level}-${selectedTrack}`);
       }
-      // For lower levels, just get the base title
+      // For lower levels, just get the base title with L code
       return getLevelTitle(`L${level}`);
     }
     return getLevelTitle(`L${level}`);
@@ -213,29 +213,33 @@ const BranchView: React.FC<BranchViewProps> = ({
               const commitsForLevel = commitsByLevel[level] || [];
               const isExpanded = isLevelExpanded(level);
               const isCurrentLevel = selectedLevel ? level === selectedLevel.replace(/\D/g, '') : false;
+              const levelCode = selectedTrack && parseInt(level) >= 5 ? `L${level}-${selectedTrack}` : `L${level}`;
               const levelTitle = getLevelDisplay(level);
               
               return (
                 <div key={`level-${level}`} className="mb-4">
                   {/* Level Tag */}
-                  {tag && (
-                    <TagIllustratedNode
-                      key={`tag-${tag.id}-${level}`}
-                      tag={tag}
-                      skillPath={skillPath}
-                      imageSrc={images[parseInt(level) % images.length]}
-                    />
-                  )}
+                  <TagIllustratedNode
+                    key={`tag-${level}`}
+                    tag={{
+                      id: `level-${level}`,
+                      name: levelCode,
+                      level: levelTitle,
+                      pointsRequired: tag?.pointsRequired || 0,
+                      description: `Comportamentos esperados para ${levelTitle}`
+                    }}
+                    skillPath={skillPath}
+                    imageSrc={images[parseInt(level) % images.length]}
+                  />
                   
-                  {/* Level Header */}
+                  {/* Level Content */}
                   <Collapsible
                     open={isExpanded}
                     onOpenChange={() => toggleLevelExpansion(level)}
-                    className="w-full"
+                    className="w-full mt-2"
                   >
                     <div className="flex items-center justify-between mb-2 p-2 bg-gray-50 rounded">
                       <h3 className="text-sm font-medium">
-                        {levelTitle}
                         {isCurrentLevel && (
                           <span className="ml-2 text-xs text-blue-500">(Nível Selecionado)</span>
                         )}
@@ -251,7 +255,6 @@ const BranchView: React.FC<BranchViewProps> = ({
                       </CollapsibleTrigger>
                     </div>
                     
-                    {/* Level Content */}
                     <CollapsibleContent>
                       {commitsForLevel.length > 0 ? (
                         <div className="space-y-2 pl-1">

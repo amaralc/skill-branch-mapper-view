@@ -1,4 +1,3 @@
-
 import { Branch, Commit } from '@/types/skill';
 
 export const filterCommitsByLevelAndTrack = (
@@ -143,16 +142,16 @@ export const getLevelTitle = (level: string): string => {
     
   // Try to get the full code (like "L5-T")
   if (levelMap[level]) {
-    return levelMap[level];
+    return `${level} - ${levelMap[level]}`;
   }
   
   // If no track is specified in the level string, try both options
   if (level.includes("-T")) {
-    return levelMap[plainLevel + "-T"] || plainLevel;
+    return `${level} - ${levelMap[plainLevel + "-T"] || plainLevel}`;
   } else if (level.includes("-M")) {
-    return levelMap[plainLevel + "-M"] || plainLevel;
+    return `${level} - ${levelMap[plainLevel + "-M"] || plainLevel}`;
   }
   
-  // Default to the plain level name
-  return levelMap[plainLevel] || plainLevel;
+  // Default to the plain level name with code
+  return `${plainLevel} - ${levelMap[plainLevel] || plainLevel}`;
 };
