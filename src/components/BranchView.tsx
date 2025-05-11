@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { Branch, SkillPath, Tag } from '@/types/skill';
+import { Branch, SkillPath, Tag, Commit } from '@/types/skill';
 import CommitNode from './CommitNode';
 import TagIllustratedNode from './TagIllustratedNode';
 import { Badge } from '@/components/ui/badge';
