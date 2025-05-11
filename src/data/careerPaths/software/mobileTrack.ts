@@ -11,28 +11,33 @@ const mobileTrack: Branch = {
       behaviorDescription:
         "Desenvolve interfaces nativas seguindo guidelines da plataforma",
       evaluation: null,
+      updatedAt: null,
     },
     {
       id: "mb-2",
       behaviorDescription: "Gerencia estados e ciclo de vida de apps mobile",
       evaluation: null,
+      updatedAt: null,
     },
     {
       id: "mb-3",
       behaviorDescription:
         "Implementa features específicas de dispositivos móveis",
       evaluation: null,
+      updatedAt: null,
     },
     {
       id: "mb-4",
       behaviorDescription: "Otimiza performance e consumo de recursos",
       evaluation: null,
+      updatedAt: null,
     },
     {
       id: "mb-5",
       behaviorDescription:
         "Implementa armazenamento local e sincronização offline",
       evaluation: null,
+      updatedAt: null,
     },
   ],
   levelRequirements: [

@@ -11,26 +11,31 @@ const firmwareTrack: Branch = {
       behaviorDescription:
         "Desenvolve código otimizado para sistemas embarcados",
       evaluation: null,
+      updatedAt: null,
     },
     {
       id: "fw-2",
       behaviorDescription: "Implementa comunicação com periféricos",
       evaluation: null,
+      updatedAt: null,
     },
     {
       id: "fw-3",
       behaviorDescription: "Desenvolve drivers para hardware específico",
       evaluation: null,
+      updatedAt: null,
     },
     {
       id: "fw-4",
       behaviorDescription: "Implementa tratamento de interrupções e timers",
       evaluation: null,
+      updatedAt: null,
     },
     {
       id: "fw-5",
       behaviorDescription: "Otimiza consumo de energia em sistemas embarcados",
       evaluation: null,
+      updatedAt: null,
     },
   ],
   levelRequirements: [

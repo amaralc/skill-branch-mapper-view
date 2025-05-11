@@ -1,3 +1,4 @@
+
 import { SkillPath } from "../../types/skill";
 import architectureBranch from "./software/architectureBranch";
 import qualityBranch from "./software/qualityBranch";
@@ -16,7 +17,22 @@ const softwareCareerPath: SkillPath = {
   id: "software-engineering",
   name: "Engenharia de Software",
   description: "Trilha de desenvolvimento para Engenheiros de Software",
-  branches: [],
+  branches: [
+    // Base Competencies
+    architectureBranch,
+    qualityBranch,
+    securityBranch,
+    continuousDeliveryBranch,
+    
+    // Specialty Tracks
+    frontEndTrack,
+    backEndTrack,
+    fullStackTrack,
+    dataScienceTrack,
+    mobileTrack,
+    cloudTrack,
+    firmwareTrack,
+  ],
   tags: softwareCareerTags,
 };
 

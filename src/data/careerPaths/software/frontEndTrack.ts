@@ -11,29 +11,34 @@ const frontEndTrack: Branch = {
       behaviorDescription:
         "Implementa interfaces responsivas seguindo princípios de design mobile-first",
       evaluation: null,
+      updatedAt: null,
     },
     {
       id: "fe-2",
       behaviorDescription: "Aplica boas práticas de acessibilidade web (WCAG)",
       evaluation: null,
+      updatedAt: null,
     },
     {
       id: "fe-3",
       behaviorDescription:
         "Otimiza performance do front-end utilizando técnicas modernas",
       evaluation: null,
+      updatedAt: null,
     },
     {
       id: "fe-4",
       behaviorDescription:
         "Desenvolve componentes reutilizáveis e mantém consistência visual",
       evaluation: null,
+      updatedAt: null,
     },
     {
       id: "fe-5",
       behaviorDescription:
         "Implementa integrações com APIs RESTful de forma eficiente",
       evaluation: null,
+      updatedAt: null,
     },
   ],
   levelRequirements: [
