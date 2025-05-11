@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Tag, SkillPath } from "@/types/skill";
 import { GraduationCap } from "lucide-react";
@@ -37,8 +38,6 @@ const TagIllustratedNode: React.FC<TagIllustratedNodeProps> = ({
   skillPath,
   imageSrc,
 }) => {
-  // Extract the title from the level name (e.g., "L3-T - Pleno" -> "Pleno")
-
   // Get the description based on the level title
   const description = levelDescriptions[tag.name] || tag.description;
 

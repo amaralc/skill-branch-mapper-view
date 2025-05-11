@@ -21,6 +21,9 @@ const SkillBranches: React.FC<SkillBranchesProps> = ({
   selectedLevel,
   selectedTrack
 }) => {
+  // Define which branches are base competencies
+  const baseTracks = ['ACCOUNTABILITY', 'ADAPTABILITY', 'COMMUNICATION', 'CONTINUOUS-DEVELOPMENT', 'EMOTIONAL-INTELLIGENCE', 'RESULTS-ORIENTATION', 'QUALITY', 'SECURITY', 'ARCHITECTURE', 'CONTINUOUS-DELIVERY'];
+
   // Filter branches to only include those with commits
   const branchesWithCommits = branches.filter(branch => {
     // If filtering by track, only include branches with commits for that track
@@ -58,7 +61,7 @@ const SkillBranches: React.FC<SkillBranchesProps> = ({
                   style={{ backgroundColor: branch.color }}
                 />
                 <span>{branch.name}</span>
-                {!['ACCOUNTABILITY', 'ADAPTABILITY', 'COMMUNICATION', 'CONTINUOUS-DEVELOPMENT', 'EMOTIONAL-INTELLIGENCE', 'RESULTS-ORIENTATION', 'QUALITY', 'SECURITY', 'ARCHITECTURE', 'CONTINUOUS-DELIVERY'].includes(branch.id) && (
+                {!baseTracks.includes(branch.id) && (
                   <span className="ml-1 text-xs text-gray-500">
                     (Especialidade)
                   </span>

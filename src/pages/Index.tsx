@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { SkillPath } from '@/data/skillData';
 import ProgressSummary from '@/components/ProgressSummary';
@@ -14,18 +15,18 @@ import { careerPaths } from '@/data/skillData';
 const Index = () => {
   const defaultCareer = careerPaths.find(path => path.id === "software") || careerPaths[0];
   const [selectedCareerId, setSelectedCareerId] = useState(defaultCareer.id);
-  const [selectedEmphasis, setSelectedEmphasis] = useState<string | null>(null);
+  const [selectedEmphasis, setSelectedEmphasis] = useState<string[]>([]);
   const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
   const [selectedTrack, setSelectedTrack] = useState<string | null>('T'); // Default to Technical track
   const { skillPath, evaluateCommit, resetAllEvaluations, isLoading } = useEvaluationState(defaultCareer);
 
   const handleCareerChange = (careerId: string) => {
     setSelectedCareerId(careerId);
-    setSelectedEmphasis(null);
+    setSelectedEmphasis([]);
   };
 
-  const handleEmphasisChange = (emphasisId: string) => {
-    setSelectedEmphasis(emphasisId);
+  const handleEmphasisChange = (emphasisIds: string[]) => {
+    setSelectedEmphasis(emphasisIds);
   };
 
   const handleLevelChange = (level: string) => {
@@ -57,19 +58,19 @@ const Index = () => {
     resetAllEvaluations(importedSkillPath);
   };
 
+  // Define which branches are base competencies
   const baseTracks = ['ACCOUNTABILITY', 'ADAPTABILITY', 'COMMUNICATION', 'CONTINUOUS-DEVELOPMENT', 'EMOTIONAL-INTELLIGENCE', 'RESULTS-ORIENTATION', 'QUALITY', 'SECURITY', 'ARCHITECTURE', 'CONTINUOUS-DELIVERY'];
   
   const filteredBranches = skillPath?.branches?.filter(branch => {
-    // Sempre incluir branches base
+    // Always include base branches
     if (baseTracks.includes(branch.id)) {
       return true;
     }
     
-    // Incluir a branch de especialidade selecionada
-    // Importante: branch.id pode ser 'front-end', 'back-end', 'full-stack', etc.
-    // E selectedEmphasis será o ID correspondente, como 'front-end', 'back-end', 'full-stack'
-    if (selectedEmphasis && branch.id.toLowerCase() === selectedEmphasis.toLowerCase()) {
-      return true;
+    // Include specialty branches only if they're in the selectedEmphasis array
+    if (selectedEmphasis.length > 0) {
+      const branchLowerCase = branch.id.toLowerCase();
+      return selectedEmphasis.some(emphasis => emphasis.toLowerCase() === branchLowerCase);
     }
     
     return false;
@@ -115,7 +116,7 @@ const Index = () => {
           onEmphasisChange={handleEmphasisChange}
         />
         
-        {selectedCareerId && selectedEmphasis && (
+        {selectedCareerId && selectedEmphasis.length > 0 && (
           <LevelTrackSelector 
             branches={filteredBranches}
             selectedLevel={selectedLevel}
@@ -127,7 +128,7 @@ const Index = () => {
       </div>
 
       <main className="max-w-[1200px] mx-auto py-0 px-4">
-        {selectedCareerId && selectedEmphasis ? (
+        {selectedCareerId && selectedEmphasis.length > 0 ? (
           <>
             <ProgressSummary skillPath={skillPath} selectedTrack={selectedTrack} />
             
@@ -157,7 +158,9 @@ const Index = () => {
           </>
         ) : (
           <div className="text-center py-12 text-gray-500">
-            Selecione uma carreira e uma especialidade para visualizar as trilhas de competência
+            {selectedCareerId ? 
+              'Selecione pelo menos uma especialidade para visualizar as trilhas de competência' :
+              'Selecione uma carreira para começar'}
           </div>
         )}
       </main>
