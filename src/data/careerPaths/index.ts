@@ -14,4 +14,3 @@ const enhancedSoftwarePath = addCommonBranches(softwareCareerPath);
 const enhancedProductPath = addCommonBranches(productManagementPath);
 
 export const careerPaths = [enhancedSoftwarePath, enhancedProductPath];
-
