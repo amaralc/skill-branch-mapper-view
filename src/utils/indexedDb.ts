@@ -5,6 +5,9 @@ interface StoredEvaluation {
   id: string;
   timestamp: number;
   skillPath: SkillPath;
+  careerId?: string;
+  selectedLevel?: string | null;
+  selectedTrack?: string | null;
 }
 
 const DB_NAME = 'skillBranchMapper';

@@ -2,7 +2,7 @@
 import React, { useRef, useState } from 'react';
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
-import { Download, Upload, Menu, FileText } from 'lucide-react';
+import { Download, Upload, Menu } from 'lucide-react';
 import { toast } from "sonner";
 import { SkillPath } from '@/types/skill';
 import CsvUploader from '@/components/CsvUploader';
@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface ActionsDrawerProps {
   onExport: () => void;
-  onImport: (importedData: SkillPath) => void;
+  onImport: (importedData: any) => void;
 }
 
 const ActionsDrawer = ({ onExport, onImport }: ActionsDrawerProps) => {
@@ -29,11 +29,12 @@ const ActionsDrawer = ({ onExport, onImport }: ActionsDrawerProps) => {
       const text = await file.text();
       const importedData = JSON.parse(text);
       
-      if (!importedData.skillPath || !importedData.timestamp) {
+      // Check if it's a valid evaluation file (has skillPath)
+      if (!importedData.skillPath) {
         throw new Error("Invalid evaluation file format");
       }
 
-      onImport(importedData.skillPath);
+      onImport(importedData);
       toast.success("Evaluation imported successfully");
       setIsOpen(false);
     } catch (error) {

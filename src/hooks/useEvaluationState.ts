@@ -4,10 +4,22 @@ import { useSearchParams } from 'react-router-dom';
 import { SkillPath } from '@/types/skill';
 import { saveEvaluation, getEvaluation, generateEvaluationId } from '@/utils/indexedDb';
 
+export interface EvaluationState {
+  skillPath: SkillPath;
+  careerId?: string;
+  selectedLevel?: string | null;
+  selectedTrack?: string | null;
+}
+
 export function useEvaluationState(initialSkillPath: SkillPath) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [skillPath, setSkillPath] = useState<SkillPath>(initialSkillPath);
   const [isLoading, setIsLoading] = useState(true);
+  const [evaluationMeta, setEvaluationMeta] = useState<{
+    careerId?: string;
+    selectedLevel?: string | null;
+    selectedTrack?: string | null;
+  }>({});
 
   useEffect(() => {
     const evaluationId = searchParams.get('eval');
@@ -23,6 +35,11 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
       const savedEvaluation = await getEvaluation(evaluationId);
       if (savedEvaluation) {
         setSkillPath(savedEvaluation.skillPath);
+        setEvaluationMeta({
+          careerId: savedEvaluation.careerId,
+          selectedLevel: savedEvaluation.selectedLevel,
+          selectedTrack: savedEvaluation.selectedTrack
+        });
       }
     } finally {
       setIsLoading(false);
@@ -61,6 +78,31 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
       id: evaluationId,
       timestamp: currentTimestamp,
       skillPath: updatedSkillPath,
+      careerId: evaluationMeta.careerId,
+      selectedLevel: evaluationMeta.selectedLevel,
+      selectedTrack: evaluationMeta.selectedTrack
+    });
+
+    if (!searchParams.get('eval')) {
+      setSearchParams({ eval: evaluationId });
+    }
+  };
+
+  const updateEvaluationMeta = async (meta: {
+    careerId?: string;
+    selectedLevel?: string | null;
+    selectedTrack?: string | null;
+  }) => {
+    const evaluationId = searchParams.get('eval') || generateEvaluationId();
+    const updatedMeta = { ...evaluationMeta, ...meta };
+    
+    setEvaluationMeta(updatedMeta);
+    
+    await saveEvaluation({
+      id: evaluationId,
+      timestamp: Date.now(),
+      skillPath,
+      ...updatedMeta
     });
 
     if (!searchParams.get('eval')) {
@@ -89,6 +131,7 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
       id: evaluationId,
       timestamp: Date.now(),
       skillPath: updatedSkillPath,
+      ...evaluationMeta
     });
 
     if (!searchParams.get('eval')) {
@@ -100,6 +143,8 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
     skillPath,
     evaluateCommit,
     resetAllEvaluations,
+    updateEvaluationMeta,
+    evaluationMeta,
     isLoading
   };
 }

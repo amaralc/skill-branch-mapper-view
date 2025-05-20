@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { SkillPath } from '@/data/skillData';
 import ProgressSummary from '@/components/ProgressSummary';
@@ -17,11 +18,32 @@ const Index = () => {
   const [selectedEmphasis, setSelectedEmphasis] = useState<string[]>([]);
   const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
   const [selectedTrack, setSelectedTrack] = useState<string | null>('T'); // Default to Technical track
-  const { skillPath, evaluateCommit, resetAllEvaluations, isLoading } = useEvaluationState(defaultCareer);
+  const { 
+    skillPath, 
+    evaluateCommit, 
+    resetAllEvaluations, 
+    updateEvaluationMeta, 
+    evaluationMeta, 
+    isLoading 
+  } = useEvaluationState(defaultCareer);
+
+  // Load saved evaluation metadata when component mounts
+  useEffect(() => {
+    if (evaluationMeta.careerId) {
+      setSelectedCareerId(evaluationMeta.careerId);
+    }
+    if (evaluationMeta.selectedLevel !== undefined) {
+      setSelectedLevel(evaluationMeta.selectedLevel);
+    }
+    if (evaluationMeta.selectedTrack !== undefined) {
+      setSelectedTrack(evaluationMeta.selectedTrack);
+    }
+  }, [evaluationMeta]);
 
   const handleCareerChange = (careerId: string) => {
     setSelectedCareerId(careerId);
     setSelectedEmphasis([]);
+    updateEvaluationMeta({ careerId });
   };
 
   const handleEmphasisChange = (emphasisIds: string[]) => {
@@ -29,17 +51,24 @@ const Index = () => {
   };
 
   const handleLevelChange = (level: string) => {
-    setSelectedLevel(level === "" ? null : level);
+    const newLevel = level === "" ? null : level;
+    setSelectedLevel(newLevel);
+    updateEvaluationMeta({ selectedLevel: newLevel });
   };
 
   const handleTrackChange = (track: string) => {
-    setSelectedTrack(track === "" ? null : track);
+    const newTrack = track === "" ? null : track;
+    setSelectedTrack(newTrack);
+    updateEvaluationMeta({ selectedTrack: newTrack });
   };
 
   const handleExportEvaluation = () => {
     const evaluationData = {
       skillPath,
-      timestamp: Date.now()
+      timestamp: Date.now(),
+      careerId: selectedCareerId,
+      selectedLevel,
+      selectedTrack
     };
     
     const blob = new Blob([JSON.stringify(evaluationData, null, 2)], { type: 'application/json' });
@@ -53,8 +82,19 @@ const Index = () => {
     URL.revokeObjectURL(url);
   };
 
-  const handleImportEvaluation = (importedSkillPath: SkillPath) => {
-    resetAllEvaluations(importedSkillPath);
+  const handleImportEvaluation = (importedData: any) => {
+    // Check if it's the new format with metadata
+    if (importedData.careerId) {
+      setSelectedCareerId(importedData.careerId);
+      setSelectedLevel(importedData.selectedLevel);
+      setSelectedTrack(importedData.selectedTrack);
+      
+      // Reset evaluation with the imported data
+      resetAllEvaluations(importedData.skillPath);
+    } else {
+      // Handle legacy format (just skillPath)
+      resetAllEvaluations(importedData);
+    }
   };
 
   // Define which branches are base competencies
