@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { SkillPath } from '@/data/skillData';
 import ProgressSummary from '@/components/ProgressSummary';
@@ -111,10 +110,13 @@ const Index = () => {
           selectedCareerId={selectedCareerId}
           onCareerChange={handleCareerChange}
         />
-        <EmphasisSelector
-          selectedEmphasis={selectedEmphasis}
-          onEmphasisChange={handleEmphasisChange}
-        />
+        <div>
+          <label className="block text-sm font-medium mb-1">Carreira</label>
+          <EmphasisSelector
+            selectedEmphasis={selectedEmphasis}
+            onEmphasisChange={handleEmphasisChange}
+          />
+        </div>
         
         {selectedCareerId && selectedEmphasis.length > 0 && (
           <LevelTrackSelector 
@@ -158,7 +160,7 @@ const Index = () => {
         ) : (
           <div className="text-center py-12 text-gray-500">
             {selectedCareerId ? 
-              'Selecione pelo menos uma especialidade para visualizar as trilhas de competência' :
+              'Selecione uma carreira para visualizar as trilhas de competência' :
               'Selecione uma carreira para começar'}
           </div>
         )}

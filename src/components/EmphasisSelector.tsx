@@ -1,74 +1,57 @@
 
 import React from 'react';
-import { 
-  DropdownMenu, 
-  DropdownMenuCheckboxItem, 
-  DropdownMenuContent, 
-  DropdownMenuLabel, 
-  DropdownMenuSeparator, 
-  DropdownMenuTrigger 
-} from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
-import { Check, ChevronDown } from 'lucide-react';
-import { emphasisOptions } from '@/types/emphasis';
+import { Select, SelectGroup, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
+import { careerOptions } from '@/types/emphasis';
 
 interface EmphasisSelectorProps {
   selectedEmphasis: string[];
-  onEmphasisChange: (emphasisIds: string[]) => void;
+  onEmphasisChange: (emphasis: string[]) => void;
 }
 
 const EmphasisSelector: React.FC<EmphasisSelectorProps> = ({
   selectedEmphasis,
   onEmphasisChange
 }) => {
-  const handleToggleEmphasis = (emphasisId: string) => {
-    const newSelection = selectedEmphasis.includes(emphasisId)
-      ? selectedEmphasis.filter(id => id !== emphasisId)
-      : [...selectedEmphasis, emphasisId];
-    
-    onEmphasisChange(newSelection);
+  // Convert career selection to specialty selections
+  const handleCareerChange = (careerId: string) => {
+    const selectedCareer = careerOptions.find(career => career.id === careerId);
+    if (selectedCareer) {
+      onEmphasisChange(selectedCareer.specialties);
+    }
   };
 
-  const getSelectedText = () => {
-    if (selectedEmphasis.length === 0) {
-      return "Escolha suas especialidades";
+  // Find the selected career based on current specialties
+  const getSelectedCareerId = (): string => {
+    for (const career of careerOptions) {
+      // Check if selected specialties exactly match a career's specialties
+      if (
+        career.specialties.length === selectedEmphasis.length && 
+        career.specialties.every(spec => selectedEmphasis.includes(spec)) &&
+        selectedEmphasis.every(spec => career.specialties.includes(spec))
+      ) {
+        return career.id;
+      }
     }
-    
-    if (selectedEmphasis.length === 1) {
-      const selected = emphasisOptions.find(e => e.id === selectedEmphasis[0]);
-      return selected ? selected.label : "1 especialidade selecionada";
-    }
-    
-    return `${selectedEmphasis.length} especialidades selecionadas`;
+    return "";
   };
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="w-full justify-between">
-          <span className="truncate">{getSelectedText()}</span>
-          <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-full bg-white">
-        <DropdownMenuLabel>Especialidades</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        {emphasisOptions.map(emphasis => (
-          <DropdownMenuCheckboxItem
-            key={emphasis.id}
-            checked={selectedEmphasis.includes(emphasis.id)}
-            onSelect={(e) => {
-              e.preventDefault();
-              handleToggleEmphasis(emphasis.id);
-            }}
-          >
-            <span className="flex items-center">
-              {emphasis.label}
-            </span>
-          </DropdownMenuCheckboxItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <div className="w-full">
+      <Select value={getSelectedCareerId()} onValueChange={handleCareerChange}>
+        <SelectTrigger className="w-full">
+          <SelectValue placeholder="Escolha uma carreira" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            {careerOptions.map(career => (
+              <SelectItem key={career.id} value={career.id}>
+                {career.label}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    </div>
   );
 };
 

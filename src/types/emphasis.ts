@@ -1,8 +1,15 @@
+
 export type Emphasis = {
   id: string;
   label: string;
   icon: string;
   group: "especialidade";
+};
+
+export type Career = {
+  id: string;
+  label: string;
+  specialties: string[];
 };
 
 export const emphasisOptions: Emphasis[] = [
@@ -18,7 +25,6 @@ export const emphasisOptions: Emphasis[] = [
     icon: "back-end",
     group: "especialidade",
   },
-  // Removing Full-Stack as requested
   {
     id: "engineering-and-data-science",
     label: "Data Science",
@@ -33,9 +39,47 @@ export const emphasisOptions: Emphasis[] = [
     group: "especialidade",
   },
   {
-    id: "firmware",
-    label: "Firmware",
-    icon: "firmware",
+    id: "value-refinement",
+    label: "Value Refinement",
+    icon: "value-refinement",
     group: "especialidade",
+  },
+];
+
+export const careerOptions: Career[] = [
+  {
+    id: "front-end",
+    label: "Front-End",
+    specialties: ["front-end"],
+  },
+  {
+    id: "back-end",
+    label: "Back-End",
+    specialties: ["back-end"],
+  },
+  {
+    id: "mobile",
+    label: "Mobile",
+    specialties: ["mobile"],
+  },
+  {
+    id: "engineering-and-data-science",
+    label: "Engineering and Data Science",
+    specialties: ["back-end", "engineering-and-data-science"],
+  },
+  {
+    id: "full-stack",
+    label: "Full-Stack",
+    specialties: ["front-end", "back-end"],
+  },
+  {
+    id: "qa",
+    label: "QA",
+    specialties: ["value-refinement"],
+  },
+  {
+    id: "cloud-infrastructure",
+    label: "Cloud Infrastructure",
+    specialties: ["back-end", "cloud"],
   },
 ];
