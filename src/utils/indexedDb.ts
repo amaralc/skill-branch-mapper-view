@@ -8,6 +8,7 @@ interface StoredEvaluation {
   careerId?: string;
   selectedLevel?: string | null;
   selectedTrack?: string | null;
+  specialties?: string[];
 }
 
 const DB_NAME = 'skillBranchMapper';

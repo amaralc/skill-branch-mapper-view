@@ -9,6 +9,7 @@ export interface EvaluationState {
   careerId?: string;
   selectedLevel?: string | null;
   selectedTrack?: string | null;
+  specialties?: string[];
 }
 
 export function useEvaluationState(initialSkillPath: SkillPath) {
@@ -19,6 +20,7 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
     careerId?: string;
     selectedLevel?: string | null;
     selectedTrack?: string | null;
+    specialties?: string[];
   }>({});
 
   useEffect(() => {
@@ -38,7 +40,8 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
         setEvaluationMeta({
           careerId: savedEvaluation.careerId,
           selectedLevel: savedEvaluation.selectedLevel,
-          selectedTrack: savedEvaluation.selectedTrack
+          selectedTrack: savedEvaluation.selectedTrack,
+          specialties: savedEvaluation.specialties
         });
       }
     } finally {
@@ -80,7 +83,8 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
       skillPath: updatedSkillPath,
       careerId: evaluationMeta.careerId,
       selectedLevel: evaluationMeta.selectedLevel,
-      selectedTrack: evaluationMeta.selectedTrack
+      selectedTrack: evaluationMeta.selectedTrack,
+      specialties: evaluationMeta.specialties
     });
 
     if (!searchParams.get('eval')) {
@@ -92,6 +96,7 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
     careerId?: string;
     selectedLevel?: string | null;
     selectedTrack?: string | null;
+    specialties?: string[];
   }) => {
     const evaluationId = searchParams.get('eval') || generateEvaluationId();
     const updatedMeta = { ...evaluationMeta, ...meta };

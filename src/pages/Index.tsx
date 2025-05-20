@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { SkillPath } from '@/data/skillData';
@@ -66,23 +67,45 @@ const Index = () => {
   // Handle functions for career, emphasis, level, and track changes
   const handleCareerChange = (careerId: string) => {
     setSelectedCareerId(careerId);
-    setSelectedEmphasis([]);
-    updateEvaluationMeta({ careerId });
+    
+    // Find the selected career to get its specialties
+    const selectedCareer = careerPaths.find(path => path.id === careerId);
+    if (selectedCareer && selectedCareer.specialties) {
+      setSelectedEmphasis(selectedCareer.specialties);
+      
+      // Update both career and specialties in the evaluation metadata
+      updateEvaluationMeta({ 
+        careerId,
+        selectedTrack: 'T', // Always set default track when career changes
+        specialties: selectedCareer.specialties
+      });
+    } else {
+      setSelectedEmphasis([]);
+      // Update just the career if no specialties found
+      updateEvaluationMeta({ 
+        careerId,
+        selectedTrack: 'T' // Always set default track when career changes
+      });
+    }
   };
 
   const handleEmphasisChange = (emphasisIds: string[]) => {
     setSelectedEmphasis(emphasisIds);
+    // Save the emphasis selection to IndexedDB
+    updateEvaluationMeta({ specialties: emphasisIds });
   };
 
   const handleLevelChange = (level: string) => {
     const newLevel = level === "" ? null : level;
     setSelectedLevel(newLevel);
+    // Save the level selection to IndexedDB
     updateEvaluationMeta({ selectedLevel: newLevel });
   };
 
   const handleTrackChange = (track: string) => {
     const newTrack = track === "" ? null : track;
     setSelectedTrack(newTrack);
+    // Save the track selection to IndexedDB
     updateEvaluationMeta({ selectedTrack: newTrack });
   };
 
