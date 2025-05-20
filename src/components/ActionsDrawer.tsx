@@ -73,7 +73,7 @@ const ActionsDrawer = ({ onExport, onImport }: ActionsDrawerProps) => {
             <TabsContent value="import" className="space-y-4">
               <Button 
                 variant="outline"
-                className="w-full"
+                className="w-full bg-white text-black border-black hover:bg-gray-100"
                 onClick={handleImportClick}
               >
                 <Upload className="w-4 h-4 mr-2" />
@@ -96,7 +96,7 @@ const ActionsDrawer = ({ onExport, onImport }: ActionsDrawerProps) => {
             <TabsContent value="export" className="space-y-4">
               <Button 
                 variant="outline" 
-                className="w-full"
+                className="w-full bg-white text-black border-black hover:bg-gray-100"
                 onClick={() => {
                   onExport();
                   setIsOpen(false);

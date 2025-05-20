@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { SkillPath } from '@/data/skillData';
 import ProgressSummary from '@/components/ProgressSummary';
 import { Button } from '@/components/ui/button';
@@ -18,6 +18,7 @@ import CsvUploader from '@/components/CsvUploader';
 
 const Index = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const hasEvalParam = searchParams.has('eval');
   
   const defaultCareer = careerPaths.find(path => path.id === "software") || careerPaths[0];
@@ -122,6 +123,9 @@ const Index = () => {
     // Hide the import dialogs
     setShowJsonImport(false);
     setShowCsvImport(false);
+    
+    // Add eval parameter to URL
+    navigate('/?eval=true');
   };
 
   // Define which branches are base competencies
@@ -206,7 +210,11 @@ const Index = () => {
                       className="w-full border rounded p-2"
                     />
                     <div className="flex justify-end gap-2">
-                      <Button variant="outline" onClick={() => setShowJsonImport(false)}>
+                      <Button 
+                        variant="outline" 
+                        onClick={() => setShowJsonImport(false)}
+                        className="bg-white text-black border-black hover:bg-gray-100"
+                      >
                         Cancelar
                       </Button>
                     </div>
@@ -217,7 +225,11 @@ const Index = () => {
                   <h3 className="text-lg font-semibold mb-4">Importar CSV de Comportamentos</h3>
                   <CsvUploader onImport={handleImportEvaluation} onClose={() => setShowCsvImport(false)} />
                   <div className="flex justify-end gap-2 mt-4">
-                    <Button variant="outline" onClick={() => setShowCsvImport(false)}>
+                    <Button 
+                      variant="outline" 
+                      onClick={() => setShowCsvImport(false)}
+                      className="bg-white text-black border-black hover:bg-gray-100"
+                    >
                       Cancelar
                     </Button>
                   </div>
@@ -227,7 +239,7 @@ const Index = () => {
                   <Button
                     size="lg"
                     onClick={() => setShowJsonImport(true)}
-                    className="py-8 text-lg"
+                    className="py-8 text-lg bg-black text-white hover:bg-black/90"
                   >
                     <FileText className="w-5 h-5 mr-2" />
                     Carregar Avaliação em JSON
@@ -235,7 +247,7 @@ const Index = () => {
                   <Button
                     size="lg"
                     onClick={() => setShowCsvImport(true)}
-                    className="py-8 text-lg"
+                    className="py-8 text-lg bg-white text-black border-black hover:bg-gray-100"
                     variant="outline"
                   >
                     <Upload className="w-5 h-5 mr-2" />
@@ -276,7 +288,7 @@ const Index = () => {
                 <div className="flex flex-col gap-4 mb-6">
                   <Button 
                     variant="outline" 
-                    className="w-full" 
+                    className="w-full bg-white text-black border-black hover:bg-gray-100" 
                     onClick={() => resetAllEvaluations()}
                   >
                     Reiniciar Avaliação

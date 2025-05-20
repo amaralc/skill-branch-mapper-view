@@ -45,7 +45,7 @@ const EvaluationModal: React.FC<EvaluationModalProps> = ({
           <div className="grid grid-cols-3 gap-3 mt-4">
             <Button
               variant="outline"
-              className={`flex flex-col py-4 ${commit.evaluation === 'never' ? 'border-red-500 bg-red-50' : ''}`}
+              className={`flex flex-col py-4 ${commit.evaluation === 'never' ? 'border-red-500 bg-red-50' : 'bg-white text-black border-black hover:bg-gray-100'}`}
               onClick={() => onEvaluate('never')}
             >
               <CircleX className="h-6 w-6 mb-2 text-red-500" />
@@ -55,7 +55,7 @@ const EvaluationModal: React.FC<EvaluationModalProps> = ({
             
             <Button
               variant="outline"
-              className={`flex flex-col py-4 ${commit.evaluation === 'sometimes' ? 'border-yellow-500 bg-yellow-50' : ''}`}
+              className={`flex flex-col py-4 ${commit.evaluation === 'sometimes' ? 'border-yellow-500 bg-yellow-50' : 'bg-white text-black border-black hover:bg-gray-100'}`}
               onClick={() => onEvaluate('sometimes')}
             >
               <CircleMinus className="h-6 w-6 mb-2 text-yellow-500" />
@@ -65,7 +65,7 @@ const EvaluationModal: React.FC<EvaluationModalProps> = ({
             
             <Button
               variant="outline"
-              className={`flex flex-col py-4 ${commit.evaluation === 'always' ? 'border-green-500 bg-green-50' : ''}`}
+              className={`flex flex-col py-4 ${commit.evaluation === 'always' ? 'border-green-500 bg-green-50' : 'bg-white text-black border-black hover:bg-gray-100'}`}
               onClick={() => onEvaluate('always')}
             >
               <Check className="h-6 w-6 mb-2 text-green-500" />

@@ -80,7 +80,7 @@ const CsvUploader: React.FC<CsvUploaderProps> = ({ onImport, onClose }) => {
       
       <Button
         variant="outline"
-        className="w-full"
+        className="w-full bg-white text-black border-black hover:bg-gray-100"
         onClick={() => fileInputRef.current?.click()}
         disabled={isLoading}
       >
