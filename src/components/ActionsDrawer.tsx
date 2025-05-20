@@ -19,6 +19,8 @@ const ActionsDrawer = ({ onExport, onImport }: ActionsDrawerProps) => {
 
   const handleImportClick = () => {
     fileInputRef.current?.click();
+    // Close the drawer immediately when the file selector opens
+    setIsOpen(false);
   };
 
   const handleFileImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,7 +38,6 @@ const ActionsDrawer = ({ onExport, onImport }: ActionsDrawerProps) => {
 
       onImport(importedData);
       toast.success("Evaluation imported successfully");
-      setIsOpen(false);
     } catch (error) {
       toast.error("Failed to import evaluation file");
     }

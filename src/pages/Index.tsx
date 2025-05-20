@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { SkillPath } from '@/data/skillData';
 import ProgressSummary from '@/components/ProgressSummary';
@@ -26,9 +25,10 @@ const Index = () => {
   const [selectedEmphasis, setSelectedEmphasis] = useState<string[]>([]);
   const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
   const [selectedTrack, setSelectedTrack] = useState<string | null>('T'); // Default to Technical track
-  const [showJsonImport, setShowJsonImport] = useState(false);
   const [showCsvImport, setShowCsvImport] = useState(false);
   
+  const jsonFileInputRef = useRef<HTMLInputElement>(null);
+
   const { 
     skillPath, 
     evaluateCommit, 
@@ -121,11 +121,35 @@ const Index = () => {
     }
     
     // Hide the import dialogs
-    setShowJsonImport(false);
     setShowCsvImport(false);
     
     // Add eval parameter to URL
     navigate('/?eval=true');
+  };
+
+  // Function to trigger file input click
+  const handleJsonButtonClick = () => {
+    if (jsonFileInputRef.current) {
+      jsonFileInputRef.current.click();
+    }
+  };
+
+  // Handle file selection
+  const handleFileSelection = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const data = JSON.parse(e.target?.result as string);
+        handleImportEvaluation(data);
+        toast.success("Avaliação carregada com sucesso");
+      } catch (error) {
+        toast.error("Erro ao carregar o arquivo JSON");
+      }
+    };
+    reader.readAsText(file);
   };
 
   // Define which branches are base competencies
@@ -184,43 +208,7 @@ const Index = () => {
           <div className="flex flex-col items-center justify-center min-h-[70vh]">
             <h2 className="text-2xl font-bold mb-8">Bem-vindo ao Skill Branch Mapper</h2>
             <div className="flex flex-col gap-6 w-full max-w-md">
-              {showJsonImport ? (
-                <div className="bg-white p-6 rounded-lg shadow-md">
-                  <h3 className="text-lg font-semibold mb-4">Importar Avaliação</h3>
-                  <div className="space-y-4">
-                    <input
-                      type="file"
-                      accept=".json"
-                      onChange={(event) => {
-                        const file = event.target.files?.[0];
-                        if (!file) return;
-                        
-                        const reader = new FileReader();
-                        reader.onload = (e) => {
-                          try {
-                            const data = JSON.parse(e.target?.result as string);
-                            handleImportEvaluation(data);
-                            toast.success("Avaliação carregada com sucesso");
-                          } catch (error) {
-                            toast.error("Erro ao carregar o arquivo JSON");
-                          }
-                        };
-                        reader.readAsText(file);
-                      }}
-                      className="w-full border rounded p-2"
-                    />
-                    <div className="flex justify-end gap-2">
-                      <Button 
-                        variant="outline" 
-                        onClick={() => setShowJsonImport(false)}
-                        className="bg-white text-black border-black hover:bg-gray-100"
-                      >
-                        Cancelar
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              ) : showCsvImport ? (
+              {showCsvImport ? (
                 <div className="bg-white p-6 rounded-lg shadow-md">
                   <h3 className="text-lg font-semibold mb-4">Importar CSV de Comportamentos</h3>
                   <CsvUploader onImport={handleImportEvaluation} onClose={() => setShowCsvImport(false)} />
@@ -238,12 +226,21 @@ const Index = () => {
                 <>
                   <Button
                     size="lg"
-                    onClick={() => setShowJsonImport(true)}
+                    onClick={handleJsonButtonClick}
                     className="py-8 text-lg bg-black text-white hover:bg-black/90"
                   >
                     <FileText className="w-5 h-5 mr-2" />
                     Carregar Avaliação em JSON
                   </Button>
+
+                  <input 
+                    type="file" 
+                    ref={jsonFileInputRef} 
+                    onChange={handleFileSelection} 
+                    accept=".json" 
+                    className="hidden" 
+                  />
+
                   <Button
                     size="lg"
                     onClick={() => setShowCsvImport(true)}
