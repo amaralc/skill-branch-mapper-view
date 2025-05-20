@@ -140,7 +140,6 @@ const Index = () => {
               >
                 Reiniciar Avaliação
               </Button>
-              <SeniorityLevelsSheet skillPath={skillPath} />
             </div>
 
             <div className="flex flex-col">
