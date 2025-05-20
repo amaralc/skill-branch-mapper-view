@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { SkillPath } from '@/data/skillData';
 import ProgressSummary from '@/components/ProgressSummary';
@@ -11,6 +10,7 @@ import EmphasisSelector from '@/components/EmphasisSelector';
 import LevelTrackSelector from '@/components/LevelTrackSelector';
 import SkillBranches from '@/components/SkillBranches';
 import { careerPaths } from '@/data/skillData';
+import { toast } from "sonner";
 
 const Index = () => {
   const defaultCareer = careerPaths.find(path => path.id === "software") || careerPaths[0];
@@ -27,15 +27,27 @@ const Index = () => {
     isLoading 
   } = useEvaluationState(defaultCareer);
 
-  // Load saved evaluation metadata when component mounts
+  // Load saved evaluation metadata when component mounts or evaluation changes
   useEffect(() => {
     if (evaluationMeta.careerId) {
+      console.log("Setting career ID from evaluationMeta:", evaluationMeta.careerId);
       setSelectedCareerId(evaluationMeta.careerId);
+      
+      // Find the career to get its specialties
+      const career = careerPaths.find(path => path.id === evaluationMeta.careerId);
+      if (career && career.specialties) {
+        console.log("Setting emphases from career:", career.specialties);
+        setSelectedEmphasis(career.specialties);
+      }
     }
+    
     if (evaluationMeta.selectedLevel !== undefined) {
+      console.log("Setting level from evaluationMeta:", evaluationMeta.selectedLevel);
       setSelectedLevel(evaluationMeta.selectedLevel);
     }
+    
     if (evaluationMeta.selectedTrack !== undefined) {
+      console.log("Setting track from evaluationMeta:", evaluationMeta.selectedTrack);
       setSelectedTrack(evaluationMeta.selectedTrack);
     }
   }, [evaluationMeta]);
