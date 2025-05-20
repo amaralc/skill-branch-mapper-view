@@ -49,6 +49,13 @@ const SkillBranches: React.FC<SkillBranchesProps> = ({
     );
   }
   
+  // Handle comment update
+  const handleUpdateComment = (branchId: string, commitId: string, comment: string) => {
+    // This function would typically call a parent function to update the comment
+    console.log(`Updating comment for branch ${branchId}, commit ${commitId}: ${comment}`);
+    // You would typically implement state changes here
+  };
+  
   return (
     <Tabs defaultValue={branchesWithCommits[0]?.id} className="w-full">
       <ScrollArea className="w-full pb-4" orientation="horizontal">
@@ -79,7 +86,13 @@ const SkillBranches: React.FC<SkillBranchesProps> = ({
       {branchesWithCommits.map(branch => (
         <TabsContent key={branch.id} value={branch.id}>
           <BranchView
-            branch={branch}
+            branch={{
+              ...branch,
+              commits: branch.commits.map(commit => ({
+                ...commit,
+                onUpdateComment: (comment) => handleUpdateComment(branch.id, commit.id, comment)
+              }))
+            }}
             onEvaluateCommit={onEvaluateCommit}
             isCurrentBranch={true}
             skillPath={skillPath}

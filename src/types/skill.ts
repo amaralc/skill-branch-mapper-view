@@ -1,8 +1,11 @@
+
 export interface Commit {
   id: string;
   behaviorDescription: string;
   evaluation: "never" | "sometimes" | "always" | null;
   updatedAt: number | null;
+  comment?: string;
+  onUpdateComment?: (comment: string) => void;
   metadata?: {
     career?: string;
     baseBehavior?: string;

@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Commit } from '@/data/skillData';
-import { BookOpen, Clock } from 'lucide-react';
+import { Clock, MessageSquare } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import {
   Drawer,
@@ -10,10 +10,13 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerDescription,
+  DrawerFooter,
 } from '@/components/ui/drawer';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
 
 interface CommitNodeProps {
   commit: Commit;
@@ -27,13 +30,6 @@ const evaluationValues = [
   { label: 'Nunca', value: 0, color: 'border-red-400 text-red-600' },
   { label: 'Às Vezes', value: 1, color: 'border-yellow-400 text-yellow-600' },
   { label: 'Consistentemente', value: 2, color: 'border-green-400 text-green-600' }
-];
-
-const references = [
-  { id: 1, label: "Livro: Testes Automatizados Modernos (Cap. 3 e 4)" },
-  { id: 2, label: "Artigo: Como Escrever Testes Úteis - Dev.to" },
-  { id: 3, label: "Curso: Testes em Software na Prática - Udemy" },
-  { id: 4, label: "Workshop: Revisão de Código Colaborativa" },
 ];
 
 const CommitNode: React.FC<CommitNodeProps> = ({
@@ -73,13 +69,16 @@ const CommitNode: React.FC<CommitNodeProps> = ({
     onEvaluate(getEvalFromValue(val));
   };
 
-  const [checkedRefs, setCheckedRefs] = useState<{ [id: number]: boolean }>({});
+  const [comment, setComment] = useState(commit.comment || '');
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const handleCheckRef = (id: number) => {
-    setCheckedRefs(prev => ({
-      ...prev,
-      [id]: !prev[id]
-    }));
+  const handleSaveComment = () => {
+    // This would typically update the comment in the parent component
+    // For now, we just store it locally and close the drawer
+    if (commit.onUpdateComment) {
+      commit.onUpdateComment(comment);
+    }
+    setDrawerOpen(false);
   };
 
   const formatDate = (timestamp: number | null) => {
@@ -116,42 +115,46 @@ const CommitNode: React.FC<CommitNodeProps> = ({
               <span>Avaliado em {formatDate(commit.updatedAt)}</span>
             </div>
           )}
+          {comment && (
+            <div className="text-xs text-gray-600 italic mt-1">
+              "{comment.length > 50 ? `${comment.substring(0, 50)}...` : comment}"
+            </div>
+          )}
         </div>
 
         <div className="flex items-center mx-2">
-          <Drawer shouldScaleBackground={false}>
+          <Drawer 
+            open={drawerOpen} 
+            onOpenChange={setDrawerOpen}
+            shouldScaleBackground={false}
+          >
             <DrawerTrigger asChild>
               <button
                 className={`p-1 rounded text-gray-700 hover:text-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500`}
-                aria-label="Ver referências sugeridas"
+                aria-label="Adicionar comentário"
                 type="button"
               >
-                <BookOpen size={20} />
+                <MessageSquare size={20} />
               </button>
             </DrawerTrigger>
             <DrawerContent className="bg-white">
               <DrawerHeader>
-                <DrawerTitle>Referências para se aprimorar</DrawerTitle>
+                <DrawerTitle>Comentários do avaliador</DrawerTitle>
                 <DrawerDescription className="text-gray-600">
-                  Material de estudo para desenvolver esta competência
+                  Adicione suas observações sobre esta competência
                 </DrawerDescription>
               </DrawerHeader>
               <div className="p-4 pt-0">
-                <ul className="space-y-3">
-                  {references.map(ref =>
-                    <li key={ref.id} className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        checked={!!checkedRefs[ref.id]}
-                        onChange={() => handleCheckRef(ref.id)}
-                        className="accent-blue-500 w-4 h-4 rounded border border-gray-300"
-                        id={`refcheck-${ref.id}`}
-                      />
-                      <label htmlFor={`refcheck-${ref.id}`} className="text-sm">{ref.label}</label>
-                    </li>
-                  )}
-                </ul>
+                <Textarea
+                  placeholder="Digite seu comentário sobre o comportamento do avaliado..."
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  className="min-h-[120px]"
+                />
               </div>
+              <DrawerFooter>
+                <Button onClick={handleSaveComment}>Salvar comentário</Button>
+              </DrawerFooter>
             </DrawerContent>
           </Drawer>
         </div>
