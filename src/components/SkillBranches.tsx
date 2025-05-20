@@ -36,6 +36,10 @@ const SkillBranches: React.FC<SkillBranchesProps> = ({
     return branch.commits.length > 0;
   });
   
+  // Log information to help debug branch filtering
+  console.log('Available branches:', branches.map(b => ({ id: b.id, name: b.name })));
+  console.log('Filtered branches:', branchesWithCommits.map(b => ({ id: b.id, name: b.name })));
+  
   // Verificar se há branches disponíveis para evitar erro
   if (branchesWithCommits.length === 0) {
     return (

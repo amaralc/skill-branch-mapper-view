@@ -16,6 +16,7 @@ const EmphasisSelector: React.FC<EmphasisSelectorProps> = ({
   const handleCareerChange = (careerId: string) => {
     const selectedCareer = careerOptions.find(career => career.id === careerId);
     if (selectedCareer) {
+      console.log(`Selected career: ${selectedCareer.label}, specialties: ${selectedCareer.specialties.join(', ')}`);
       onEmphasisChange(selectedCareer.specialties);
     }
   };

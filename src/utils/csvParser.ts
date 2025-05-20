@@ -1,3 +1,4 @@
+
 import { Branch, Commit, SkillPath, Tag } from "@/types/skill";
 
 interface CsvRow {
@@ -81,10 +82,13 @@ export const convertCsvToSkillPath = (csvData: CsvRow[]): SkillPath => {
 
   const careerName = csvData[0].career;
   const groupedByCompetence = csvData.reduce((acc, row) => {
-    if (!acc[row.groupCompetenceId]) {
-      acc[row.groupCompetenceId] = [];
+    // Normalize the ID for consistency
+    const normalizedId = normalizeCompetenceId(row.groupCompetenceId);
+    
+    if (!acc[normalizedId]) {
+      acc[normalizedId] = [];
     }
-    acc[row.groupCompetenceId].push(row);
+    acc[normalizedId].push(row);
     return acc;
   }, {} as Record<string, CsvRow[]>);
 
@@ -109,7 +113,7 @@ export const convertCsvToSkillPath = (csvData: CsvRow[]): SkillPath => {
               level: row.level,
               track: row.track,
               groupCompetence: row.groupCompetence,
-              groupCompetenceId: row.groupCompetenceId,
+              groupCompetenceId: normalizeCompetenceId(row.groupCompetenceId),
               groupCompetenceLevelId: row.groupCompetenceLevelId,
             },
           });
@@ -118,7 +122,7 @@ export const convertCsvToSkillPath = (csvData: CsvRow[]): SkillPath => {
       }, [] as Commit[]);
 
       return {
-        id: competenceId,
+        id: normalizeCompetenceId(competenceId),
         name: rows[0].groupCompetence,
         color: getRandomColor(),
         commits,
@@ -169,6 +173,20 @@ export const convertCsvToSkillPath = (csvData: CsvRow[]): SkillPath => {
     branches,
     tags,
   };
+};
+
+// Helper function to normalize competence IDs for consistent matching
+const normalizeCompetenceId = (id: string): string => {
+  // Convert to uppercase and handle specific mappings
+  const upperId = id.toUpperCase();
+  
+  // Handle specific mappings
+  if (upperId === "CLOUD-INFRASTRUCTURE" || upperId === "CLOUD INFRASTRUCTURE") {
+    return "CLOUD";
+  }
+  
+  // For all other cases, just return the uppercase ID
+  return upperId;
 };
 
 // Helper function to generate random colors for branches

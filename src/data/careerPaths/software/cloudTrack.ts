@@ -2,7 +2,7 @@
 import { Branch } from "@/types/skill";
 
 const cloudTrack: Branch = {
-  id: "CLOUD-INFRASTRUCTURE",
+  id: "CLOUD",
   name: "Cloud Infrastructure",
   color: "#E67E22",
   commits: [
