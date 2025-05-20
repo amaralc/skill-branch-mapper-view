@@ -1,4 +1,6 @@
+
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { SkillPath } from '@/data/skillData';
 import ProgressSummary from '@/components/ProgressSummary';
 import { Button } from '@/components/ui/button';
@@ -11,13 +13,21 @@ import LevelTrackSelector from '@/components/LevelTrackSelector';
 import SkillBranches from '@/components/SkillBranches';
 import { careerPaths } from '@/data/skillData';
 import { toast } from "sonner";
+import { Upload, FileText } from 'lucide-react';
+import CsvUploader from '@/components/CsvUploader';
 
 const Index = () => {
+  const [searchParams] = useSearchParams();
+  const hasEvalParam = searchParams.has('eval');
+  
   const defaultCareer = careerPaths.find(path => path.id === "software") || careerPaths[0];
   const [selectedCareerId, setSelectedCareerId] = useState(defaultCareer.id);
   const [selectedEmphasis, setSelectedEmphasis] = useState<string[]>([]);
   const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
   const [selectedTrack, setSelectedTrack] = useState<string | null>('T'); // Default to Technical track
+  const [showJsonImport, setShowJsonImport] = useState(false);
+  const [showCsvImport, setShowCsvImport] = useState(false);
+  
   const { 
     skillPath, 
     evaluateCommit, 
@@ -52,6 +62,7 @@ const Index = () => {
     }
   }, [evaluationMeta]);
 
+  // Handle functions for career, emphasis, level, and track changes
   const handleCareerChange = (careerId: string) => {
     setSelectedCareerId(careerId);
     setSelectedEmphasis([]);
@@ -107,6 +118,10 @@ const Index = () => {
       // Handle legacy format (just skillPath)
       resetAllEvaluations(importedData);
     }
+    
+    // Hide the import dialogs
+    setShowJsonImport(false);
+    setShowCsvImport(false);
   };
 
   // Define which branches are base competencies
@@ -127,6 +142,7 @@ const Index = () => {
     return false;
   }) || [];
 
+  // Loading state
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -149,71 +165,144 @@ const Index = () => {
                 Trilhas de conhecimento organizadas por área
               </p>
             </div>
-            <ActionsDrawer 
-              onExport={handleExportEvaluation}
-              onImport={handleImportEvaluation}
-            />
+            {hasEvalParam && (
+              <ActionsDrawer 
+                onExport={handleExportEvaluation}
+                onImport={handleImportEvaluation}
+              />
+            )}
           </div>
         </div>
       </header>
 
-      <div className="max-w-[1200px] mx-auto py-5 px-[16px] flex flex-col gap-4">
-        <CareerSelector
-          selectedCareerId={selectedCareerId}
-          onCareerChange={handleCareerChange}
-        />
-        <div>
-          <label className="block text-sm font-medium mb-1">Carreira</label>
-          <EmphasisSelector
-            selectedEmphasis={selectedEmphasis}
-            onEmphasisChange={handleEmphasisChange}
-          />
-        </div>
-        
-        {selectedCareerId && selectedEmphasis.length > 0 && (
-          <LevelTrackSelector 
-            branches={filteredBranches}
-            selectedLevel={selectedLevel}
-            selectedTrack={selectedTrack}
-            onLevelChange={handleLevelChange}
-            onTrackChange={handleTrackChange}
-          />
-        )}
-      </div>
-
-      <main className="max-w-[1200px] mx-auto py-0 px-4">
-        {selectedCareerId && selectedEmphasis.length > 0 ? (
-          <>
-            <ProgressSummary skillPath={skillPath} selectedTrack={selectedTrack} />
-            
-            <div className="flex flex-col gap-4 mb-6">
-              <Button 
-                variant="outline" 
-                className="w-full" 
-                onClick={() => resetAllEvaluations()}
-              >
-                Reiniciar Avaliação
-              </Button>
+      <main className="max-w-[1200px] mx-auto py-5 px-[16px]">
+        {!hasEvalParam ? (
+          <div className="flex flex-col items-center justify-center min-h-[70vh]">
+            <h2 className="text-2xl font-bold mb-8">Bem-vindo ao Skill Branch Mapper</h2>
+            <div className="flex flex-col gap-6 w-full max-w-md">
+              {showJsonImport ? (
+                <div className="bg-white p-6 rounded-lg shadow-md">
+                  <h3 className="text-lg font-semibold mb-4">Importar Avaliação</h3>
+                  <div className="space-y-4">
+                    <input
+                      type="file"
+                      accept=".json"
+                      onChange={(event) => {
+                        const file = event.target.files?.[0];
+                        if (!file) return;
+                        
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                          try {
+                            const data = JSON.parse(e.target?.result as string);
+                            handleImportEvaluation(data);
+                            toast.success("Avaliação carregada com sucesso");
+                          } catch (error) {
+                            toast.error("Erro ao carregar o arquivo JSON");
+                          }
+                        };
+                        reader.readAsText(file);
+                      }}
+                      className="w-full border rounded p-2"
+                    />
+                    <div className="flex justify-end gap-2">
+                      <Button variant="outline" onClick={() => setShowJsonImport(false)}>
+                        Cancelar
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              ) : showCsvImport ? (
+                <div className="bg-white p-6 rounded-lg shadow-md">
+                  <h3 className="text-lg font-semibold mb-4">Importar CSV de Comportamentos</h3>
+                  <CsvUploader onImport={handleImportEvaluation} onClose={() => setShowCsvImport(false)} />
+                  <div className="flex justify-end gap-2 mt-4">
+                    <Button variant="outline" onClick={() => setShowCsvImport(false)}>
+                      Cancelar
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <Button
+                    size="lg"
+                    onClick={() => setShowJsonImport(true)}
+                    className="py-8 text-lg"
+                  >
+                    <FileText className="w-5 h-5 mr-2" />
+                    Carregar Avaliação em JSON
+                  </Button>
+                  <Button
+                    size="lg"
+                    onClick={() => setShowCsvImport(true)}
+                    className="py-8 text-lg"
+                    variant="outline"
+                  >
+                    <Upload className="w-5 h-5 mr-2" />
+                    Carregar CSV de comportamentos
+                  </Button>
+                </>
+              )}
             </div>
-
-            <div className="flex flex-col">
-              <div className="bg-white rounded-lg shadow p-4 mb-6">
-                <h2 className="text-lg font-bold mb-3">Trilhas de Competência</h2>
-                <SkillBranches
-                  branches={filteredBranches}
-                  skillPath={skillPath}
-                  onEvaluateCommit={evaluateCommit}
-                  selectedLevel={selectedLevel}
-                  selectedTrack={selectedTrack}
-                />
-              </div>
-            </div>
-          </>
+          </div>
         ) : (
-          <div className="text-center py-12 text-gray-500">
-            {selectedCareerId ? 
-              'Selecione uma carreira para visualizar as trilhas de competência' :
-              'Selecione uma carreira para começar'}
+          <div className="flex flex-col gap-4">
+            <CareerSelector
+              selectedCareerId={selectedCareerId}
+              onCareerChange={handleCareerChange}
+            />
+            <div>
+              <label className="block text-sm font-medium mb-1">Carreira</label>
+              <EmphasisSelector
+                selectedEmphasis={selectedEmphasis}
+                onEmphasisChange={handleEmphasisChange}
+              />
+            </div>
+            
+            {selectedCareerId && selectedEmphasis.length > 0 && (
+              <LevelTrackSelector 
+                branches={filteredBranches}
+                selectedLevel={selectedLevel}
+                selectedTrack={selectedTrack}
+                onLevelChange={handleLevelChange}
+                onTrackChange={handleTrackChange}
+              />
+            )}
+
+            {selectedCareerId && selectedEmphasis.length > 0 ? (
+              <>
+                <ProgressSummary skillPath={skillPath} selectedTrack={selectedTrack} />
+                
+                <div className="flex flex-col gap-4 mb-6">
+                  <Button 
+                    variant="outline" 
+                    className="w-full" 
+                    onClick={() => resetAllEvaluations()}
+                  >
+                    Reiniciar Avaliação
+                  </Button>
+                </div>
+
+                <div className="flex flex-col">
+                  <div className="bg-white rounded-lg shadow p-4 mb-6">
+                    <h2 className="text-lg font-bold mb-3">Trilhas de Competência</h2>
+                    <SkillBranches
+                      branches={filteredBranches}
+                      skillPath={skillPath}
+                      onEvaluateCommit={evaluateCommit}
+                      selectedLevel={selectedLevel}
+                      selectedTrack={selectedTrack}
+                    />
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="text-center py-12 text-gray-500">
+                {selectedCareerId ? 
+                  'Selecione uma carreira para visualizar as trilhas de competência' :
+                  'Selecione uma carreira para começar'}
+              </div>
+            )}
           </div>
         )}
       </main>
