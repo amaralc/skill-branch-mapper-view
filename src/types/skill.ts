@@ -46,4 +46,5 @@ export interface SkillPath {
   description: string;
   branches: Branch[];
   tags: Tag[];
+  specialties?: string[]; // Added specialties property as optional
 }
