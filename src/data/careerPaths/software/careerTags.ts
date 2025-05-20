@@ -72,6 +72,16 @@ const softwareCareerTags: Tag[] = [
     description:
       "Gerente - Mesmo escopo que Principal, com foco em direção técnica e organizacional",
   },
+  {
+    id: "em03",
+    name: "EM03",
+    level: "Diretor",
+    code: "L7-M",
+    track: "M",
+    pointsRequired: 80,
+    description:
+      "Diretor - Lidera a definição da estratégia técnica e organizacional",
+  },
 ];
 
 export default softwareCareerTags;

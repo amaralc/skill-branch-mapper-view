@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Branch } from '@/types/skill';
+import { getCodeTitle } from '@/utils/filterHelpers';
 
 interface LevelTrackSelectorProps {
   branches: Branch[];
@@ -18,8 +19,17 @@ const LevelTrackSelector: React.FC<LevelTrackSelectorProps> = ({
   onLevelChange,
   onTrackChange
 }) => {
-  // Available levels from L0 to L7
-  const levels = ['L0', 'L1', 'L2', 'L3', 'L4', 'L5', 'L6', 'L7'];
+  // Map of levels with their description
+  const levelDescriptions = [
+    { id: 'L0', label: 'Estagiário' },
+    { id: 'L1', label: 'Assistente' },
+    { id: 'L2', label: 'Júnior' },
+    { id: 'L3', label: 'Pleno' },
+    { id: 'L4', label: 'Sênior' },
+    { id: 'L5', label: 'Staff ou Coordenador' },
+    { id: 'L6', label: 'Principal ou Gerente' },
+    { id: 'L7', label: 'Diretor' }
+  ];
   
   // Available tracks
   const tracks = [
@@ -61,9 +71,9 @@ const LevelTrackSelector: React.FC<LevelTrackSelectorProps> = ({
         <SelectContent>
           <SelectGroup>
             <SelectLabel>Nível</SelectLabel>
-            {levels.map(level => (
-              <SelectItem key={level} value={level}>
-                {level}
+            {levelDescriptions.map(level => (
+              <SelectItem key={level.id} value={level.id}>
+                {level.id} - {level.label}
               </SelectItem>
             ))}
           </SelectGroup>
