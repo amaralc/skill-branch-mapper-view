@@ -27,7 +27,6 @@ interface LevelSectionProps {
   selectedTrack: string | null;
   isExpanded: boolean;
   onToggleExpansion: () => void;
-  isLocked?: boolean;
 }
 
 const LevelSection: React.FC<LevelSectionProps> = ({
@@ -42,7 +41,6 @@ const LevelSection: React.FC<LevelSectionProps> = ({
   selectedTrack,
   isExpanded,
   onToggleExpansion,
-  isLocked = false,
 }) => {
   // Get level code based on level and track
   const getLevelCode = () => {
@@ -113,7 +111,6 @@ const LevelSection: React.FC<LevelSectionProps> = ({
                     onEvaluateCommit(commit.id, evaluation)
                   }
                   dimmed={false}
-                  isLocked={isLocked}
                 />
               ))}
             </div>

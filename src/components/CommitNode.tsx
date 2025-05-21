@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Commit } from '@/types/skill';
-import { Clock, MessageSquare, Lock } from 'lucide-react';
+import { Clock, MessageSquare } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import {
   Drawer,
@@ -24,7 +24,6 @@ interface CommitNodeProps {
   isLast: boolean;
   onEvaluate: (evaluation: 'never' | 'sometimes' | 'always') => void;
   dimmed?: boolean;
-  isLocked?: boolean;
 }
 
 const evaluationValues = [
@@ -38,8 +37,7 @@ const CommitNode: React.FC<CommitNodeProps> = ({
   branchColor,
   isLast,
   onEvaluate,
-  dimmed = false,
-  isLocked = false
+  dimmed = false
 }) => {
   const getValueFromEval = (evalValue: Commit['evaluation']) => {
     if (evalValue === 'sometimes') return 1;
@@ -68,16 +66,14 @@ const CommitNode: React.FC<CommitNodeProps> = ({
   }
 
   const handleValueChange = ([val]: number[]) => {
-    if (!isLocked) {
-      onEvaluate(getEvalFromValue(val));
-    }
+    onEvaluate(getEvalFromValue(val));
   };
 
   const [comment, setComment] = useState(commit.comment || '');
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const handleSaveComment = () => {
-    if (commit.onUpdateComment && !isLocked) {
+    if (commit.onUpdateComment) {
       commit.onUpdateComment(comment);
     }
     setDrawerOpen(false);
@@ -88,16 +84,13 @@ const CommitNode: React.FC<CommitNodeProps> = ({
     return format(new Date(timestamp), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR });
   };
 
-  // Determine final opacity based on dimmed and locked state
-  const opacityClass = isLocked ? 'opacity-40' : dimmed ? 'opacity-60' : '';
-
   return (
     <div className={`flex items-center mb-2 ${isLast ? '' : 'pb-1'}`}>
       <div
         className="w-6 h-6 rounded-full flex items-center justify-center mr-3 text-xs font-mono"
         style={{ 
           backgroundColor: branchColor,
-          opacity: isLocked || dimmed ? 0.5 : 1
+          opacity: dimmed ? 0.5 : 1
         }}
       >
         <span className="text-white">
@@ -107,7 +100,7 @@ const CommitNode: React.FC<CommitNodeProps> = ({
       <div
         className={`flex-1 flex items-center rounded border bg-white shadow-sm transition-shadow 
           ${borderTextClass}
-          ${opacityClass}`}
+          ${dimmed ? 'opacity-60' : ''}`}
         style={{ minHeight: "2.25rem", padding: "0.5rem 1rem" }}
       >
         <div className="flex flex-col flex-1 justify-center">
@@ -135,11 +128,9 @@ const CommitNode: React.FC<CommitNodeProps> = ({
           >
             <DrawerTrigger asChild>
               <button
-                className={`p-1 rounded text-gray-700 hover:text-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 
-                  ${isLocked ? 'cursor-not-allowed opacity-50' : ''}`}
+                className={`p-1 rounded text-gray-700 hover:text-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500`}
                 aria-label="Adicionar comentário"
                 type="button"
-                disabled={isLocked}
               >
                 <MessageSquare size={20} />
               </button>
@@ -157,11 +148,10 @@ const CommitNode: React.FC<CommitNodeProps> = ({
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
                   className="min-h-[120px]"
-                  disabled={isLocked}
                 />
               </div>
               <DrawerFooter>
-                <Button onClick={handleSaveComment} disabled={isLocked}>Salvar comentário</Button>
+                <Button onClick={handleSaveComment}>Salvar comentário</Button>
               </DrawerFooter>
             </DrawerContent>
           </Drawer>
@@ -170,29 +160,19 @@ const CommitNode: React.FC<CommitNodeProps> = ({
         <div className="flex flex-col items-end ml-3" style={{ minWidth: 56 }}>
           <Tooltip>
             <TooltipTrigger asChild>
-              <div className="w-14 relative">
-                {isLocked && (
-                  <div className="absolute top-0 right-0 -mt-1 -mr-1 z-10">
-                    <Lock size={14} className="text-gray-500" />
-                  </div>
-                )}
+              <div className="w-14">
                 <Slider
                   min={0}
                   max={2}
                   step={1}
                   value={sliderValue}
                   onValueChange={handleValueChange}
-                  className={`w-14 ${isLocked ? 'cursor-not-allowed' : ''}`}
-                  disabled={isLocked}
+                  className="w-14"
                 />
               </div>
             </TooltipTrigger>
             <TooltipContent side="top" align="center">
-              {isLocked ? (
-                <span className="block text-xs font-medium">Eleve a consistência no nível atual antes de focar no próximo nível</span>
-              ) : (
-                <span className="block text-xs font-medium">{getCurrentLabel()}</span>
-              )}
+              <span className="block text-xs font-medium">{getCurrentLabel()}</span>
             </TooltipContent>
           </Tooltip>
         </div>

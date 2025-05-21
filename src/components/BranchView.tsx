@@ -97,17 +97,6 @@ const BranchView: React.FC<BranchViewProps> = ({
   const hasPreviousLevel =
     selectedLevelIndex !== -1 &&
     selectedLevelIndex < availableLevels.length - 1;
-    
-  // Determine if a level should be locked (higher than selected level)
-  const isLevelLocked = (level: string) => {
-    if (!selectedLevelNumber) return false;
-    
-    const currentLevelNumber = parseInt(level);
-    const selectedLevelNumberInt = parseInt(selectedLevelNumber);
-    
-    // Lock levels higher than the selected level
-    return currentLevelNumberInt < selectedLevelNumberInt;
-  };
 
   return (
     <div className={`mb-8 ${isCurrentBranch ? "opacity-100" : "opacity-60"}`}>
@@ -166,7 +155,6 @@ const BranchView: React.FC<BranchViewProps> = ({
                   const tag = levelTags[level];
                   const commitsForLevel = commitsByLevel[level] || [];
                   const isCurrentLevelSelected = selectedLevelNumber === level;
-                  const isLocked = isLevelLocked(level);
 
                   return (
                     <LevelSection
@@ -182,7 +170,6 @@ const BranchView: React.FC<BranchViewProps> = ({
                       selectedTrack={selectedTrack}
                       isExpanded={isLevelExpanded(level)}
                       onToggleExpansion={() => toggleLevelExpansion(level)}
-                      isLocked={isLocked}
                     />
                   );
                 }
