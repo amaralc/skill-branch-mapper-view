@@ -31,7 +31,7 @@ const SkillBranches: React.FC<SkillBranchesProps> = ({
     if (selectedLevel) {
       // Check if there are any commits for the selected level
       const hasCommitsForLevel = branch.commits.some(commit => 
-        commit.metadata?.level === selectedLevel && 
+        commit.metadata?.level === `L${selectedLevel}` && 
         (!selectedTrack || !commit.metadata?.track || commit.metadata.track === selectedTrack)
       );
       return hasCommitsForLevel;
@@ -107,7 +107,6 @@ const SkillBranches: React.FC<SkillBranchesProps> = ({
               }))
             }}
             onEvaluateCommit={onEvaluateCommit}
-            isCurrentBranch={true}
             skillPath={skillPath}
             selectedLevel={selectedLevel}
             selectedTrack={selectedTrack}

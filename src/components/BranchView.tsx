@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Branch, Commit, SkillPath, Tag } from "@/types/skill";
 import LevelSection from "./LevelSection";
 import BranchStatusCounts from "./BranchStatusCounts";
-import { getLevelCommits } from "@/hooks/useBranchUtils";
+import { getLevelCommits } from "@/utils/branchUtils";
 
 interface BranchViewProps {
   branch: Branch;
