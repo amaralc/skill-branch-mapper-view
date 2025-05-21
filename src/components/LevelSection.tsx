@@ -27,9 +27,6 @@ interface LevelSectionProps {
   selectedTrack: string | null;
   isExpanded: boolean;
   onToggleExpansion: () => void;
-  isLocked?: boolean;
-  canEvaluateLevel: boolean;
-  prevLevelIncomplete?: boolean;
 }
 
 const LevelSection: React.FC<LevelSectionProps> = ({
@@ -44,9 +41,6 @@ const LevelSection: React.FC<LevelSectionProps> = ({
   selectedTrack,
   isExpanded,
   onToggleExpansion,
-  isLocked = false,
-  canEvaluateLevel = true,
-  prevLevelIncomplete = false,
 }) => {
   // Get level code based on level and track
   const getLevelCode = () => {
@@ -85,6 +79,11 @@ const LevelSection: React.FC<LevelSectionProps> = ({
         className="w-full mt-2"
       >
         <div className="flex items-center justify-between mb-4 p-2 bg-gray-50 rounded border border-gray-300">
+          {/* <h3 className="text-sm font-medium">
+            {isCurrentLevel && (
+              <span className="ml-2 text-xs text-blue-500">(Nível Selecionado)</span>
+            )}
+          </h3> */}
           {/* Level Tag */}
           <TagIllustratedNode
             key={`tag-${level}`}
@@ -102,26 +101,18 @@ const LevelSection: React.FC<LevelSectionProps> = ({
         <CollapsibleContent>
           {commits.length > 0 ? (
             <div className="space-y-2 pl-1">
-              {commits.map((commit, commitIndex) => {
-                const disabledReason = isLocked
-                  ? "Complete todos os comportamentos do nível atual como 'Consistentemente' antes de avaliar níveis superiores"
-                  : "Comportamento bloqueado";
-
-                return (
-                  <CommitNode
-                    key={`commit-${commit.id}`}
-                    commit={commit}
-                    branchColor={branchColor}
-                    isLast={commitIndex === commits.length - 1}
-                    onEvaluate={(evaluation) =>
-                      onEvaluateCommit(commit.id, evaluation)
-                    }
-                    dimmed={false}
-                    disabled={isLocked || !canEvaluateLevel}
-                    disabledReason={disabledReason}
-                  />
-                );
-              })}
+              {commits.map((commit, commitIndex) => (
+                <CommitNode
+                  key={`commit-${commit.id}`}
+                  commit={commit}
+                  branchColor={branchColor}
+                  isLast={commitIndex === commits.length - 1}
+                  onEvaluate={(evaluation) =>
+                    onEvaluateCommit(commit.id, evaluation)
+                  }
+                  dimmed={false}
+                />
+              ))}
             </div>
           ) : (
             <div className="text-center py-4 text-gray-500">

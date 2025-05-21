@@ -98,49 +98,6 @@ const BranchView: React.FC<BranchViewProps> = ({
     selectedLevelIndex !== -1 &&
     selectedLevelIndex < availableLevels.length - 1;
 
-  // Check if all behaviors in the current level are evaluated as "always"
-  const areAllCurrentLevelBehaviorsConsistent = (level: string) => {
-    const commitsForLevel = commitsByLevel[level] || [];
-    return commitsForLevel.every(commit => commit.evaluation === 'always');
-  };
-
-  // Determine if a level should be locked for evaluation
-  const isLevelLocked = (level: string) => {
-    if (!selectedLevelNumber) return false;
-    
-    const currentLevelNum = parseInt(selectedLevelNumber);
-    const levelNum = parseInt(level);
-    
-    // Only lock levels higher than the selected level
-    if (levelNum <= currentLevelNum) return false;
-    
-    // Check if all behaviors in the current level are "always"
-    return !areAllCurrentLevelBehaviorsConsistent(selectedLevelNumber);
-  };
-
-  // Check if the level can be evaluated (not locked due to previous level)
-  const canEvaluateLevel = (level: string) => {
-    if (!selectedLevelNumber) return true;
-    
-    const currentLevelNum = parseInt(selectedLevelNumber);
-    const levelNum = parseInt(level);
-    
-    // Current level can always be evaluated
-    if (levelNum === currentLevelNum) return true;
-    
-    // For levels above the selected level, check if all behaviors in the previous level are "always"
-    if (levelNum > currentLevelNum) {
-      // Check each level from the selected level up to this one
-      for (let i = currentLevelNum; i < levelNum; i++) {
-        if (!areAllCurrentLevelBehaviorsConsistent(i.toString())) {
-          return false;
-        }
-      }
-    }
-    
-    return true;
-  };
-
   return (
     <div className={`mb-8 ${isCurrentBranch ? "opacity-100" : "opacity-60"}`}>
       <div className="flex items-center gap-2 mb-4">
@@ -198,13 +155,6 @@ const BranchView: React.FC<BranchViewProps> = ({
                   const tag = levelTags[level];
                   const commitsForLevel = commitsByLevel[level] || [];
                   const isCurrentLevelSelected = selectedLevelNumber === level;
-                  const levelLocked = isLevelLocked(level);
-                  const canEvaluate = canEvaluateLevel(level);
-                  
-                  // Check if the previous level is incomplete
-                  const prevLevelIncomplete = selectedLevelNumber && 
-                    parseInt(level) > parseInt(selectedLevelNumber) && 
-                    !areAllCurrentLevelBehaviorsConsistent(selectedLevelNumber);
 
                   return (
                     <LevelSection
@@ -220,9 +170,6 @@ const BranchView: React.FC<BranchViewProps> = ({
                       selectedTrack={selectedTrack}
                       isExpanded={isLevelExpanded(level)}
                       onToggleExpansion={() => toggleLevelExpansion(level)}
-                      isLocked={levelLocked}
-                      canEvaluateLevel={canEvaluate}
-                      prevLevelIncomplete={prevLevelIncomplete}
                     />
                   );
                 }

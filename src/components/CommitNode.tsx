@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Commit } from '@/types/skill';
-import { Clock, MessageSquare, Lock } from 'lucide-react';
+import { Clock, MessageSquare } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import {
   Drawer,
@@ -24,8 +24,6 @@ interface CommitNodeProps {
   isLast: boolean;
   onEvaluate: (evaluation: 'never' | 'sometimes' | 'always') => void;
   dimmed?: boolean;
-  disabled?: boolean;
-  disabledReason?: string;
 }
 
 const evaluationValues = [
@@ -39,9 +37,7 @@ const CommitNode: React.FC<CommitNodeProps> = ({
   branchColor,
   isLast,
   onEvaluate,
-  dimmed = false,
-  disabled = false,
-  disabledReason = "Comportamento bloqueado"
+  dimmed = false
 }) => {
   const getValueFromEval = (evalValue: Commit['evaluation']) => {
     if (evalValue === 'sometimes') return 1;
@@ -70,9 +66,7 @@ const CommitNode: React.FC<CommitNodeProps> = ({
   }
 
   const handleValueChange = ([val]: number[]) => {
-    if (!disabled) {
-      onEvaluate(getEvalFromValue(val));
-    }
+    onEvaluate(getEvalFromValue(val));
   };
 
   const [comment, setComment] = useState(commit.comment || '');
@@ -96,7 +90,7 @@ const CommitNode: React.FC<CommitNodeProps> = ({
         className="w-6 h-6 rounded-full flex items-center justify-center mr-3 text-xs font-mono"
         style={{ 
           backgroundColor: branchColor,
-          opacity: dimmed || disabled ? 0.5 : 1
+          opacity: dimmed ? 0.5 : 1
         }}
       >
         <span className="text-white">
@@ -106,7 +100,7 @@ const CommitNode: React.FC<CommitNodeProps> = ({
       <div
         className={`flex-1 flex items-center rounded border bg-white shadow-sm transition-shadow 
           ${borderTextClass}
-          ${dimmed || disabled ? 'opacity-60' : ''}`}
+          ${dimmed ? 'opacity-60' : ''}`}
         style={{ minHeight: "2.25rem", padding: "0.5rem 1rem" }}
       >
         <div className="flex flex-col flex-1 justify-center">
@@ -137,7 +131,6 @@ const CommitNode: React.FC<CommitNodeProps> = ({
                 className={`p-1 rounded text-gray-700 hover:text-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500`}
                 aria-label="Adicionar comentário"
                 type="button"
-                disabled={disabled}
               >
                 <MessageSquare size={20} />
               </button>
@@ -165,37 +158,23 @@ const CommitNode: React.FC<CommitNodeProps> = ({
         </div>
 
         <div className="flex flex-col items-end ml-3" style={{ minWidth: 56 }}>
-          {disabled ? (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div className="flex items-center justify-center w-14 h-5 bg-gray-100 rounded cursor-not-allowed">
-                  <Lock size={14} className="text-gray-500" />
-                </div>
-              </TooltipTrigger>
-              <TooltipContent side="top" align="center">
-                <span className="block text-xs font-medium">{disabledReason}</span>
-              </TooltipContent>
-            </Tooltip>
-          ) : (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div className="w-14">
-                  <Slider
-                    min={0}
-                    max={2}
-                    step={1}
-                    value={sliderValue}
-                    onValueChange={handleValueChange}
-                    className="w-14"
-                    disabled={disabled}
-                  />
-                </div>
-              </TooltipTrigger>
-              <TooltipContent side="top" align="center">
-                <span className="block text-xs font-medium">{getCurrentLabel()}</span>
-              </TooltipContent>
-            </Tooltip>
-          )}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="w-14">
+                <Slider
+                  min={0}
+                  max={2}
+                  step={1}
+                  value={sliderValue}
+                  onValueChange={handleValueChange}
+                  className="w-14"
+                />
+              </div>
+            </TooltipTrigger>
+            <TooltipContent side="top" align="center">
+              <span className="block text-xs font-medium">{getCurrentLabel()}</span>
+            </TooltipContent>
+          </Tooltip>
         </div>
       </div>
     </div>
