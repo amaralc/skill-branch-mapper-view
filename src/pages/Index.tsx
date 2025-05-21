@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { SkillPath } from '@/data/skillData';
@@ -43,6 +44,13 @@ const Index = () => {
     if (evaluationMeta.careerId) {
       console.log("Setting career ID from evaluationMeta:", evaluationMeta.careerId);
       setSelectedCareerId(evaluationMeta.careerId);
+      
+      // Find the career to get its specialties
+      const career = careerPaths.find(path => path.id === evaluationMeta.careerId);
+      if (career && career.specialties) {
+        console.log("Setting emphases from career:", career.specialties);
+        setSelectedEmphasis(career.specialties);
+      }
     }
     
     if (evaluationMeta.selectedLevel !== undefined) {
@@ -60,15 +68,31 @@ const Index = () => {
   const handleCareerChange = (careerId: string) => {
     setSelectedCareerId(careerId);
     
-    // Update career in the evaluation metadata and set default track
-    updateEvaluationMeta({ 
-      careerId,
-      selectedTrack: 'T' // Always set default track when career changes
-    });
+    // Find the selected career to get its specialties
+    const selectedCareer = careerPaths.find(path => path.id === careerId);
+    if (selectedCareer && selectedCareer.specialties) {
+      setSelectedEmphasis(selectedCareer.specialties);
+      
+      // Update both career and specialties in the evaluation metadata
+      updateEvaluationMeta({ 
+        careerId,
+        selectedTrack: 'T', // Always set default track when career changes
+        specialties: selectedCareer.specialties
+      });
+    } else {
+      setSelectedEmphasis([]);
+      // Update just the career if no specialties found
+      updateEvaluationMeta({ 
+        careerId,
+        selectedTrack: 'T' // Always set default track when career changes
+      });
+    }
   };
 
   const handleEmphasisChange = (emphasisIds: string[]) => {
     setSelectedEmphasis(emphasisIds);
+    // Save the emphasis selection to IndexedDB
+    updateEvaluationMeta({ specialties: emphasisIds });
   };
 
   const handleLevelChange = (level: string) => {
