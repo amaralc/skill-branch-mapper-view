@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Select, SelectGroup, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
+import { Select, SelectGroup, SelectTrigger, SelectContent, SelectItem, SelectValue, SelectLabel } from '@/components/ui/select';
 import { careerOptions } from '@/types/emphasis';
 
 interface EmphasisSelectorProps {
@@ -43,6 +43,7 @@ const EmphasisSelector: React.FC<EmphasisSelectorProps> = ({
           <SelectValue placeholder="Escolha uma ênfase" />
         </SelectTrigger>
         <SelectContent>
+          <SelectLabel className="font-bold">Ênfase</SelectLabel>
           <SelectGroup>
             {careerOptions.map(career => (
               <SelectItem key={career.id} value={career.id}>
