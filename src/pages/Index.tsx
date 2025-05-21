@@ -510,7 +510,7 @@ const Index = () => {
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-6">
+                <div className="grid grid-cols-1 gap-6">
                   <div>
                     <div className="mb-6">
                       <CareerSelector 
@@ -526,7 +526,7 @@ const Index = () => {
                         />
                       </div>
                     )}
-                    <div>
+                    <div className="mb-6">
                       <LevelTrackSelector
                         branches={skillPath.branches || []} 
                         selectedLevel={selectedLevel}
@@ -535,13 +535,13 @@ const Index = () => {
                         onTrackChange={handleTrackChange}
                       />
                     </div>
-                  </div>
-                  <div>
-                    <ProgressSummary
-                      skillPath={skillPath}
-                      selectedTrack={selectedTrack}
-                      selectedLevel={selectedLevel}
-                    />
+                    <div>
+                      <ProgressSummary
+                        skillPath={skillPath}
+                        selectedTrack={selectedTrack}
+                        selectedLevel={selectedLevel}
+                      />
+                    </div>
                   </div>
                 </div>
                 
