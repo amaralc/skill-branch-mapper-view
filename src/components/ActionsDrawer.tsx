@@ -64,9 +64,9 @@ const ActionsDrawer = ({ onExport, onImport, currentTimestamp }: ActionsDrawerPr
 
       // If no conflict, proceed with import
       onImport(importedData);
-      toast.success("Evaluation imported successfully");
+      toast.success("Avaliação importada com sucesso");
     } catch (error) {
-      toast.error("Failed to import evaluation file");
+      toast.error("Falha ao importar arquivo de avaliação");
     }
 
     // Clear the input
@@ -80,7 +80,7 @@ const ActionsDrawer = ({ onExport, onImport, currentTimestamp }: ActionsDrawerPr
       onImport(importData);
       setImportData(null);
       setShowConfirmDialog(false);
-      toast.success("Evaluation updated successfully");
+      toast.success("Avaliação atualizada com sucesso");
     }
     
     // Clear the input
@@ -119,8 +119,8 @@ const ActionsDrawer = ({ onExport, onImport, currentTimestamp }: ActionsDrawerPr
           <div className="mx-auto w-full max-w-sm">
             <Tabs defaultValue="import" className="pt-4">
               <TabsList className="grid grid-cols-2 mb-4">
-                <TabsTrigger value="import">Import</TabsTrigger>
-                <TabsTrigger value="export">Export</TabsTrigger>
+                <TabsTrigger value="import">Importar</TabsTrigger>
+                <TabsTrigger value="export">Exportar</TabsTrigger>
               </TabsList>
               
               <TabsContent value="import" className="space-y-4">
@@ -130,7 +130,7 @@ const ActionsDrawer = ({ onExport, onImport, currentTimestamp }: ActionsDrawerPr
                   onClick={handleImportClick}
                 >
                   <Upload className="w-4 h-4 mr-2" />
-                  Import JSON Evaluation
+                  Importar Avaliação JSON
                 </Button>
                 
                 <div className="border-t border-gray-200 pt-4">
@@ -156,7 +156,7 @@ const ActionsDrawer = ({ onExport, onImport, currentTimestamp }: ActionsDrawerPr
                   }}
                 >
                   <Download className="w-4 h-4 mr-2" />
-                  Export Evaluation as JSON
+                  Exportar Avaliação como JSON
                 </Button>
               </TabsContent>
             </Tabs>
@@ -167,18 +167,18 @@ const ActionsDrawer = ({ onExport, onImport, currentTimestamp }: ActionsDrawerPr
       <AlertDialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Override existing evaluation?</AlertDialogTitle>
+            <AlertDialogTitle>Substituir avaliação existente?</AlertDialogTitle>
             <AlertDialogDescription>
               {importData && importData.timestamp > currentTimestamp
-                ? "The imported evaluation is newer than your current one."
-                : "The imported evaluation is older than your current one."}
+                ? "A avaliação importada é mais recente que a sua avaliação atual."
+                : "A avaliação importada é mais antiga que a sua avaliação atual."}
               <br />
-              Do you want to override your current evaluation with the imported one?
+              Deseja substituir sua avaliação atual pela avaliação importada?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={handleCancelImport}>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleConfirmImport}>Override</AlertDialogAction>
+            <AlertDialogCancel onClick={handleCancelImport}>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmImport}>Substituir</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

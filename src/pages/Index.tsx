@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { SkillPath } from '@/data/skillData';
@@ -171,7 +172,7 @@ const Index = () => {
         const params = new URLSearchParams(searchParams);
         params.set('eval', importedData.id);
         params.set('timestamp', importedData.timestamp.toString());
-        window.history.replaceState({}, '', `${window.location.pathname}?${params.toString()}`);
+        setSearchParams(params);
         
         // Reset evaluation with the imported data
         resetAllEvaluations(importedData.skillPath);
@@ -185,7 +186,7 @@ const Index = () => {
         });
         
         setHasValidEvaluation(true);
-        toast.success("Evaluation updated successfully");
+        toast.success("Avaliação atualizada com sucesso");
       } else {
         // Create new evaluation
         await createNewEvaluation(importedData.skillPath, {
@@ -195,10 +196,10 @@ const Index = () => {
           specialties: importedData.specialties
         });
         setHasValidEvaluation(true);
-        toast.success("Evaluation imported successfully");
+        toast.success("Avaliação importada com sucesso");
       }
     } catch (error) {
-      toast.error("Error importing evaluation");
+      toast.error("Erro ao importar avaliação");
     } finally {
       setImportedData(null);
       setShowOverrideDialog(false);
@@ -239,7 +240,7 @@ const Index = () => {
           const params = new URLSearchParams(searchParams);
           params.set('eval', data.id);
           params.set('timestamp', data.timestamp.toString());
-          window.history.replaceState({}, '', `${window.location.pathname}?${params.toString()}`);
+          setSearchParams(params);
           
           // Reset evaluation with the imported data
           resetAllEvaluations(data.skillPath);
@@ -269,7 +270,7 @@ const Index = () => {
       setShowCsvImport(false);
       setHasValidEvaluation(true);
     } catch (error) {
-      console.error("Error importing evaluation:", error);
+      console.error("Erro ao importar avaliação:", error);
       toast.error("Erro ao importar avaliação");
     }
   };
@@ -518,18 +519,18 @@ const Index = () => {
       <AlertDialog open={showOverrideDialog} onOpenChange={setShowOverrideDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Override existing evaluation?</AlertDialogTitle>
+            <AlertDialogTitle>Substituir avaliação existente?</AlertDialogTitle>
             <AlertDialogDescription>
               {importedData && importedData.timestamp > timestamp
-                ? "The imported evaluation is newer than your current one."
-                : "The imported evaluation is older than your current one."}
+                ? "A avaliação importada é mais recente que a sua avaliação atual."
+                : "A avaliação importada é mais antiga que a sua avaliação atual."}
               <br />
-              Do you want to override your current evaluation with the imported one?
+              Deseja substituir sua avaliação atual pela avaliação importada?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={handleCancelOverride}>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleConfirmOverride}>Override</AlertDialogAction>
+            <AlertDialogCancel onClick={handleCancelOverride}>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmOverride}>Substituir</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
