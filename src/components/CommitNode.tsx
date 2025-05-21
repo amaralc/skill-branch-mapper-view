@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Commit } from '@/data/skillData';
+import { Commit } from '@/types/skill';
 import { Clock, MessageSquare } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import {
@@ -73,8 +73,6 @@ const CommitNode: React.FC<CommitNodeProps> = ({
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const handleSaveComment = () => {
-    // This would typically update the comment in the parent component
-    // For now, we just store it locally and close the drawer
     if (commit.onUpdateComment) {
       commit.onUpdateComment(comment);
     }

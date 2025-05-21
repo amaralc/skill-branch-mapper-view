@@ -10,6 +10,7 @@ interface SkillBranchesProps {
   branches: Branch[];
   skillPath: SkillPath;
   onEvaluateCommit: (branchId: string, commitId: string, evaluation: 'never' | 'sometimes' | 'always') => void;
+  onUpdateComment?: (branchId: string, commitId: string, comment: string) => void;
   selectedLevel: string | null;
   selectedTrack: string | null;
 }
@@ -18,6 +19,7 @@ const SkillBranches: React.FC<SkillBranchesProps> = ({
   branches,
   skillPath,
   onEvaluateCommit,
+  onUpdateComment,
   selectedLevel,
   selectedTrack
 }) => {
@@ -51,9 +53,9 @@ const SkillBranches: React.FC<SkillBranchesProps> = ({
   
   // Handle comment update
   const handleUpdateComment = (branchId: string, commitId: string, comment: string) => {
-    // This function would typically call a parent function to update the comment
-    console.log(`Updating comment for branch ${branchId}, commit ${commitId}: ${comment}`);
-    // You would typically implement state changes here
+    if (onUpdateComment) {
+      onUpdateComment(branchId, commitId, comment);
+    }
   };
   
   return (

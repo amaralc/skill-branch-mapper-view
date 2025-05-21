@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { SkillPath } from '@/types/skill';
@@ -59,6 +58,50 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
     }
   };
 
+  const updateComment = async (branchId: string, commitId: string, comment: string) => {
+    const evaluationId = searchParams.get('eval');
+    if (!evaluationId) {
+      console.error("Cannot update comment without an active evaluation");
+      return;
+    }
+    
+    const currentTimestamp = Date.now();
+    
+    const updatedSkillPath = {
+      ...skillPath,
+      branches: skillPath.branches.map(branch => {
+        if (branch.id === branchId) {
+          return {
+            ...branch,
+            commits: branch.commits.map(commit => {
+              if (commit.id === commitId) {
+                return { 
+                  ...commit, 
+                  comment,
+                  updatedAt: commit.updatedAt || currentTimestamp
+                };
+              }
+              return commit;
+            }),
+          };
+        }
+        return branch;
+      }),
+    };
+
+    setSkillPath(updatedSkillPath);
+    
+    await saveEvaluation({
+      id: evaluationId,
+      timestamp: currentTimestamp,
+      skillPath: updatedSkillPath,
+      careerId: evaluationMeta.careerId,
+      selectedLevel: evaluationMeta.selectedLevel,
+      selectedTrack: evaluationMeta.selectedTrack,
+      specialties: evaluationMeta.specialties
+    });
+  };
+
   const evaluateCommit = async (branchId: string, commitId: string, evaluation: 'never' | 'sometimes' | 'always') => {
     const evaluationId = searchParams.get('eval');
     if (!evaluationId) {
@@ -79,7 +122,9 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
                 return { 
                   ...commit, 
                   evaluation,
-                  updatedAt: currentTimestamp 
+                  updatedAt: currentTimestamp,
+                  // Keep existing comment if it exists
+                  comment: commit.comment || ''
                 };
               }
               return commit;
@@ -157,6 +202,8 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
       return;
     }
     
+    // If we're resetting with a new skill path, use that
+    // Otherwise, just reset the evaluations in the current skill path but preserve comments
     const updatedSkillPath = newSkillPath || {
       ...skillPath,
       branches: skillPath.branches.map(branch => ({
@@ -164,7 +211,9 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
         commits: branch.commits.map(commit => ({
           ...commit,
           evaluation: null,
-          updatedAt: null
+          updatedAt: null,
+          // Preserve existing comment
+          comment: commit.comment || null
         }))
       }))
     };
@@ -182,6 +231,7 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
   return {
     skillPath,
     evaluateCommit,
+    updateComment,
     resetAllEvaluations,
     updateEvaluationMeta,
     evaluationMeta,

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { SkillPath } from '@/data/skillData';
@@ -33,6 +34,7 @@ const Index = () => {
   const { 
     skillPath, 
     evaluateCommit, 
+    updateComment,  
     resetAllEvaluations, 
     updateEvaluationMeta, 
     evaluationMeta, 
@@ -382,6 +384,7 @@ const Index = () => {
                       branches={filteredBranches}
                       skillPath={skillPath}
                       onEvaluateCommit={evaluateCommit}
+                      onUpdateComment={updateComment}
                       selectedLevel={selectedLevel}
                       selectedTrack={selectedTrack}
                     />
