@@ -5,12 +5,14 @@ import { careerPaths } from '@/data/skillData';
 
 interface CareerSelectorProps {
   selectedCareerId: string;
-  onCareerChange: (careerId: string) => void;
+  onCareerChange?: (careerId: string) => void; // Original prop
+  onChange?: (careerId: string) => void; // Added to support the way it's called in Index.tsx
 }
 
 const CareerSelector: React.FC<CareerSelectorProps> = ({
   selectedCareerId,
-  onCareerChange
+  onCareerChange,
+  onChange
 }) => {
   const careerOptions = careerPaths.map(path => ({
     id: path.id,
@@ -19,8 +21,17 @@ const CareerSelector: React.FC<CareerSelectorProps> = ({
     skillPath: path
   }));
 
+  // Use onChange if provided, otherwise fall back to onCareerChange
+  const handleChange = (careerId: string) => {
+    if (onChange) {
+      onChange(careerId);
+    } else if (onCareerChange) {
+      onCareerChange(careerId);
+    }
+  };
+
   return (
-    <Select value={selectedCareerId} onValueChange={onCareerChange}>
+    <Select value={selectedCareerId} onValueChange={handleChange}>
       <SelectTrigger className="w-full">
         <SelectValue placeholder="Escolha a carreira" />
       </SelectTrigger>

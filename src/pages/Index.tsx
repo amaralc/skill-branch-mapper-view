@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { SkillPath } from '@/data/skillData';
@@ -527,6 +528,7 @@ const Index = () => {
                     )}
                     <div>
                       <LevelTrackSelector
+                        branches={skillPath.branches || []} 
                         selectedLevel={selectedLevel}
                         selectedTrack={selectedTrack}
                         onLevelChange={handleLevelChange}

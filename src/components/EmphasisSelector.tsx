@@ -6,18 +6,35 @@ import { careerOptions } from '@/types/emphasis';
 interface EmphasisSelectorProps {
   selectedEmphasis: string[];
   onEmphasisChange: (emphasis: string[]) => void;
+  // Add support for new prop names used in Index.tsx
+  selectedSpecialties?: string[];
+  onChange?: (emphasis: string[]) => void;
 }
 
 const EmphasisSelector: React.FC<EmphasisSelectorProps> = ({
   selectedEmphasis,
-  onEmphasisChange
+  onEmphasisChange,
+  selectedSpecialties,
+  onChange
 }) => {
+  // Use either selectedSpecialties or selectedEmphasis
+  const selectedItems = selectedSpecialties || selectedEmphasis;
+  
+  // Use either onChange or onEmphasisChange
+  const handleChange = (emphasis: string[]) => {
+    if (onChange) {
+      onChange(emphasis);
+    } else {
+      onEmphasisChange(emphasis);
+    }
+  };
+
   // Convert career selection to specialty selections
   const handleCareerChange = (careerId: string) => {
     const selectedCareer = careerOptions.find(career => career.id === careerId);
     if (selectedCareer) {
       console.log(`Selected career: ${selectedCareer.label}, specialties: ${selectedCareer.specialties.join(', ')}`);
-      onEmphasisChange(selectedCareer.specialties);
+      handleChange(selectedCareer.specialties);
     }
   };
 
@@ -26,9 +43,9 @@ const EmphasisSelector: React.FC<EmphasisSelectorProps> = ({
     for (const career of careerOptions) {
       // Check if selected specialties exactly match a career's specialties
       if (
-        career.specialties.length === selectedEmphasis.length && 
-        career.specialties.every(spec => selectedEmphasis.includes(spec)) &&
-        selectedEmphasis.every(spec => career.specialties.includes(spec))
+        career.specialties.length === selectedItems.length && 
+        career.specialties.every(spec => selectedItems.includes(spec)) &&
+        selectedItems.every(spec => career.specialties.includes(spec))
       ) {
         return career.id;
       }
