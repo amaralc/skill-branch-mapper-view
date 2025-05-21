@@ -15,9 +15,19 @@ import { toast } from "sonner";
 import { Upload, FileText } from 'lucide-react';
 import CsvUploader from '@/components/CsvUploader';
 import { getEvaluation } from '@/utils/indexedDb';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 const Index = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const evalParam = searchParams.get('eval');
   
@@ -28,6 +38,8 @@ const Index = () => {
   const [selectedTrack, setSelectedTrack] = useState<string | null>('T'); // Default to Technical track
   const [showCsvImport, setShowCsvImport] = useState(false);
   const [hasValidEvaluation, setHasValidEvaluation] = useState(false);
+  const [showOverrideDialog, setShowOverrideDialog] = useState(false);
+  const [importedData, setImportedData] = useState<any>(null);
   
   const jsonFileInputRef = useRef<HTMLInputElement>(null);
 
@@ -145,66 +157,112 @@ const Index = () => {
     URL.revokeObjectURL(url);
   };
 
-  const handleImportEvaluation = async (importedData: any) => {
+  const handleConfirmOverride = async () => {
+    if (!importedData) return;
+    
+    try {
+      // Continue with handling the import
+      // If this is an existing evaluation with the same ID, we'll override both
+      // the data and the URL timestamp
+      const currentEvalId = searchParams.get('eval');
+      
+      if (currentEvalId && importedData.id && currentEvalId === importedData.id) {
+        // Update URL with the imported timestamp
+        const params = new URLSearchParams(searchParams);
+        params.set('eval', importedData.id);
+        params.set('timestamp', importedData.timestamp.toString());
+        window.history.replaceState({}, '', `${window.location.pathname}?${params.toString()}`);
+        
+        // Reset evaluation with the imported data
+        resetAllEvaluations(importedData.skillPath);
+        
+        // Update all metadata at once
+        updateEvaluationMeta({
+          careerId: importedData.careerId,
+          selectedLevel: importedData.selectedLevel, 
+          selectedTrack: importedData.selectedTrack,
+          specialties: importedData.specialties
+        });
+        
+        setHasValidEvaluation(true);
+        toast.success("Evaluation updated successfully");
+      } else {
+        // Create new evaluation
+        await createNewEvaluation(importedData.skillPath, {
+          careerId: importedData.careerId,
+          selectedLevel: importedData.selectedLevel,
+          selectedTrack: importedData.selectedTrack,
+          specialties: importedData.specialties
+        });
+        setHasValidEvaluation(true);
+        toast.success("Evaluation imported successfully");
+      }
+    } catch (error) {
+      toast.error("Error importing evaluation");
+    } finally {
+      setImportedData(null);
+      setShowOverrideDialog(false);
+    }
+  };
+
+  const handleCancelOverride = () => {
+    setImportedData(null);
+    setShowOverrideDialog(false);
+  };
+
+  const handleImportEvaluation = async (data: any) => {
     try {
       // Check if we're importing an evaluation with the same ID as the current one
       const currentEvalId = searchParams.get('eval');
       
-      if (currentEvalId && importedData.id && currentEvalId === importedData.id) {
-        // Get the current evaluation from IndexedDB
-        const currentEvaluation = await getEvaluation(currentEvalId);
-        
-        // If the imported evaluation is newer or user confirms override
-        if (!currentEvaluation || importedData.timestamp > currentEvaluation.timestamp) {
-          // This is a newer version of the same evaluation, proceed with update
-          console.log("Updating existing evaluation with newer version");
-        } else {
-          // This is an older version, we already checked in ActionsDrawer but log for clarity
-          console.log("Overriding with older version of the same evaluation (user confirmed)");
-        }
+      if (currentEvalId && data.id && currentEvalId === data.id) {
+        // Store the data temporarily and show confirmation dialog
+        setImportedData(data);
+        setShowOverrideDialog(true);
+        return;
       }
       
       // Check if it's the new format with metadata
-      if (importedData.careerId) {
-        setSelectedCareerId(importedData.careerId);
-        setSelectedLevel(importedData.selectedLevel);
-        setSelectedTrack(importedData.selectedTrack);
+      if (data.careerId) {
+        setSelectedCareerId(data.careerId);
+        setSelectedLevel(data.selectedLevel);
+        setSelectedTrack(data.selectedTrack);
         
         // Set specialties if available
-        if (importedData.specialties && Array.isArray(importedData.specialties)) {
-          setSelectedEmphasis(importedData.specialties);
+        if (data.specialties && Array.isArray(data.specialties)) {
+          setSelectedEmphasis(data.specialties);
         }
         
         // If we're importing an evaluation with an ID and timestamp
-        if (importedData.id) {
+        if (data.id) {
           // Use the existing ID from the imported data
           const params = new URLSearchParams(searchParams);
-          params.set('eval', importedData.id);
-          params.set('timestamp', importedData.timestamp.toString());
+          params.set('eval', data.id);
+          params.set('timestamp', data.timestamp.toString());
           window.history.replaceState({}, '', `${window.location.pathname}?${params.toString()}`);
           
           // Reset evaluation with the imported data
-          resetAllEvaluations(importedData.skillPath);
+          resetAllEvaluations(data.skillPath);
           
           // Update all metadata at once
           updateEvaluationMeta({
-            careerId: importedData.careerId,
-            selectedLevel: importedData.selectedLevel, 
-            selectedTrack: importedData.selectedTrack,
-            specialties: importedData.specialties
+            careerId: data.careerId,
+            selectedLevel: data.selectedLevel, 
+            selectedTrack: data.selectedTrack,
+            specialties: data.specialties
           });
         } else {
           // Create a new evaluation if there's no ID in the imported data
-          await createNewEvaluation(importedData.skillPath, {
-            careerId: importedData.careerId,
-            selectedLevel: importedData.selectedLevel,
-            selectedTrack: importedData.selectedTrack,
-            specialties: importedData.specialties
+          await createNewEvaluation(data.skillPath, {
+            careerId: data.careerId,
+            selectedLevel: data.selectedLevel,
+            selectedTrack: data.selectedTrack,
+            specialties: data.specialties
           });
         }
       } else {
         // Handle legacy format (just skillPath)
-        resetAllEvaluations(importedData);
+        resetAllEvaluations(data);
       }
       
       // Hide the import dialogs
@@ -228,30 +286,47 @@ const Index = () => {
     const file = event.target.files?.[0];
     if (!file) return;
     
-    const reader = new FileReader();
-    reader.onload = async (e) => {
-      try {
-        const data = JSON.parse(e.target?.result as string);
-        
-        if (data.skillPath) {
-          // If we're importing a complete evaluation with skillPath
-          await createNewEvaluation(data.skillPath, {
-            careerId: data.careerId,
-            selectedLevel: data.selectedLevel,
-            selectedTrack: data.selectedTrack,
-            specialties: data.specialties
-          });
-          setHasValidEvaluation(true);
-          toast.success("Avaliação carregada com sucesso");
-        } else {
-          // Handle legacy format or invalid data
-          toast.error("Formato de avaliação inválido");
+    try {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const data = JSON.parse(e.target?.result as string);
+          
+          if (data.skillPath) {
+            // Check if we're importing an evaluation with the same ID as the current one
+            const currentEvalId = searchParams.get('eval');
+            
+            if (currentEvalId && data.id && currentEvalId === data.id) {
+              // Store the data temporarily and show confirmation dialog
+              setImportedData(data);
+              setShowOverrideDialog(true);
+              return;
+            }
+            
+            // If no conflict, proceed with import
+            await createNewEvaluation(data.skillPath, {
+              careerId: data.careerId,
+              selectedLevel: data.selectedLevel,
+              selectedTrack: data.selectedTrack,
+              specialties: data.specialties
+            });
+            setHasValidEvaluation(true);
+            toast.success("Avaliação carregada com sucesso");
+          } else {
+            // Handle legacy format or invalid data
+            toast.error("Formato de avaliação inválido");
+          }
+        } catch (error) {
+          toast.error("Erro ao carregar o arquivo JSON");
         }
-      } catch (error) {
-        toast.error("Erro ao carregar o arquivo JSON");
+      };
+      reader.readAsText(file);
+    } finally {
+      // Clear the input
+      if (event.target) {
+        event.target.value = '';
       }
-    };
-    reader.readAsText(file);
+    }
   };
 
   // Handle CSV import - This is the only way to start a new evaluation
@@ -438,6 +513,26 @@ const Index = () => {
           </div>
         )}
       </main>
+
+      {/* Override confirmation dialog */}
+      <AlertDialog open={showOverrideDialog} onOpenChange={setShowOverrideDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Override existing evaluation?</AlertDialogTitle>
+            <AlertDialogDescription>
+              {importedData && importedData.timestamp > timestamp
+                ? "The imported evaluation is newer than your current one."
+                : "The imported evaluation is older than your current one."}
+              <br />
+              Do you want to override your current evaluation with the imported one?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleCancelOverride}>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmOverride}>Override</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 };
