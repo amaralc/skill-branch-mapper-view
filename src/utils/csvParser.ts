@@ -21,11 +21,7 @@ export const parseCsv = (csvContent: string): CsvRow[] => {
     .replace(/\r/g, "\n");
 
   const lines = normalizedContent.split("\n");
-  
-  // Handle empty file case
-  if (lines.length === 0) return [];
-  
-  const headers = lines[0].split(",").map(header => header.trim());
+  const headers = lines[0].split(",");
 
   return lines
     .slice(1)

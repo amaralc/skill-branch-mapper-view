@@ -25,33 +25,14 @@ const CsvUploader: React.FC<CsvUploaderProps> = ({ onImport, onClose }) => {
   
     try {
       const arrayBuffer = await file.arrayBuffer();
-      // Try UTF-8 first, which is commonly used for Portuguese text files
-      const decoder = new TextDecoder('utf-8'); 
-      let text = decoder.decode(arrayBuffer);
-      
-      // Check if the text has encoding issues, and try different encodings if needed
-      if (text.includes('�') || /Ã|Âµ|Ãµ|Ã³/.test(text)) {
-        // Try other common encodings for Portuguese
-        const encodings = ['latin1', 'iso-8859-1', 'windows-1252'];
-        
-        for (const encoding of encodings) {
-          const altDecoder = new TextDecoder(encoding);
-          const altText = altDecoder.decode(arrayBuffer);
-          
-          // If this encoding produces better results, use it
-          if (!altText.includes('�') && !/Ã|Âµ|Ãµ|Ã³/.test(altText)) {
-            text = altText;
-            console.log(`Using ${encoding} encoding for CSV`);
-            break;
-          }
-        }
-      }
+      const decoder = new TextDecoder('iso-8859-1'); // You can also try 'iso-8859-1' if needed
+      const text = decoder.decode(arrayBuffer);
   
       console.log('Raw CSV text sample:', text.substring(0, 200));
       const csvData = parseCsv(text);
   
       if (!csvData || csvData.length === 0) {
-        throw new Error('O arquivo CSV parece estar vazio ou inválido');
+        throw new Error('The CSV file appears to be empty or invalid');
       }
   
       const skillPath = convertCsvToSkillPath(csvData);
