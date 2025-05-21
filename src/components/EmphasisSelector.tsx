@@ -19,7 +19,7 @@ const EmphasisSelector: React.FC<EmphasisSelectorProps> = ({
   onChange
 }) => {
   // Use either selectedSpecialties or selectedEmphasis with a default empty array
-  const selectedItems = selectedSpecialties || selectedEmphasis;
+  const selectedItems = selectedSpecialties || selectedEmphasis || [];
   
   // Use either onChange or onEmphasisChange
   const handleChange = (emphasis: string[]) => {
@@ -41,6 +41,10 @@ const EmphasisSelector: React.FC<EmphasisSelectorProps> = ({
 
   // Find the selected career based on current specialties
   const getSelectedCareerId = (): string => {
+    if (!selectedItems || selectedItems.length === 0) {
+      return "";
+    }
+    
     for (const career of careerOptions) {
       // Check if selected specialties exactly match a career's specialties
       if (
@@ -56,7 +60,10 @@ const EmphasisSelector: React.FC<EmphasisSelectorProps> = ({
 
   return (
     <div className="w-full">
-      <Select value={getSelectedCareerId()} onValueChange={handleCareerChange}>
+      <Select 
+        value={getSelectedCareerId()} 
+        onValueChange={handleCareerChange}
+      >
         <SelectTrigger className="w-full">
           <SelectValue placeholder="Escolha uma ênfase" />
         </SelectTrigger>
