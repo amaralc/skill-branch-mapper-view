@@ -79,12 +79,12 @@ const EmphasisSelector: React.FC<EmphasisSelectorProps> = ({
   // Get the label for selected emphasis
   const getSelectedEmphasisLabel = (): string => {
     if (!selectedItems || selectedItems.length === 0) {
-      return "Escolha uma ênfase";
+      return "Escolha um cargo";
     }
     
     if (selectedItems.length === 1) {
       const emphasis = emphasisOptions.find(e => e.id === selectedItems[0]);
-      return emphasis ? emphasis.label : "Escolha uma ênfase";
+      return emphasis ? emphasis.label : "Escolha um cargo";
     }
     
     // Check if it matches a career
@@ -107,8 +107,6 @@ const EmphasisSelector: React.FC<EmphasisSelectorProps> = ({
   return (
     <div className="w-full">
       <div className="flex flex-col gap-1">
-        <label className="text-sm font-medium">Ênfase</label>
-        
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button 
@@ -121,7 +119,7 @@ const EmphasisSelector: React.FC<EmphasisSelectorProps> = ({
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-full min-w-[200px]">
           <div className="border-t p-2">
-              <p className="font-semibold mb-2">Cargos</p>
+              <p className="font-semibold mb-2">Cargo</p>
               {careerOptions.map((career) => (
                 <DropdownMenuCheckboxItem
                   key={career.id}

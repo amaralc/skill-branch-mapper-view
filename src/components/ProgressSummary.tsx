@@ -68,6 +68,8 @@ const ProgressSummary: React.FC<ProgressSummaryProps> = ({
 
     let maxPoints = 0;
 
+    console.log(skillPath.branches)
+
     skillPath.branches.forEach((branch) => {
       branch.commits.forEach((commit) => {
         // Skip commits that don't match the selected track (if a track is selected)
