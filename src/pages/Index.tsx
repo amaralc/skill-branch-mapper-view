@@ -14,6 +14,7 @@ import { careerPaths } from '@/data/skillData';
 import { toast } from "sonner";
 import { Upload, FileText } from 'lucide-react';
 import CsvUploader from '@/components/CsvUploader';
+import { getEvaluation } from '@/utils/indexedDb';
 
 const Index = () => {
   const [searchParams] = useSearchParams();
