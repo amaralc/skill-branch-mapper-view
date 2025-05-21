@@ -1,10 +1,30 @@
-
 import { SkillPath, Tag, Branch } from '../types/skill';
 
-export const calculatePoints = (path: SkillPath, selectedTrack: string | null = null, selectedLevel: string | null = null): number => {
+export const calculatePoints = (path: SkillPath, selectedTrack: string | null = null, selectedLevel: string | null = null, selectedSpecialties: string[] = []): number => {
   let totalPoints = 0;
 
-  path.branches.forEach(branch => {
+  // Define base/common tracks that are always included
+  const baseTracks = ['ACCOUNTABILITY', 'ADAPTABILITY', 'COMMUNICATION', 'CONTINUOUS-DEVELOPMENT', 
+                      'EMOTIONAL-INTELLIGENCE', 'RESULTS-ORIENTATION', 'QUALITY', 'SECURITY', 
+                      'ARCHITECTURE', 'CONTINUOUS-DELIVERY'];
+  
+  // Filter branches based on selected specialties
+  const filteredBranches = path.branches.filter(branch => {
+    // Always include base branches
+    if (baseTracks.includes(branch.id)) {
+      return true;
+    }
+    
+    // Include specialty branches only if they're in the selectedSpecialties array
+    if (selectedSpecialties.length > 0) {
+      const branchLowerCase = branch.id.toLowerCase();
+      return selectedSpecialties.some(emphasis => emphasis.toLowerCase() === branchLowerCase);
+    }
+    
+    return false;
+  });
+
+  filteredBranches.forEach(branch => {
     branch.commits.forEach(commit => {
       // Skip commits that don't match the selected track
       if (selectedTrack && commit.metadata?.track) {
@@ -38,10 +58,31 @@ export const calculatePoints = (path: SkillPath, selectedTrack: string | null = 
   return totalPoints;
 };
 
-export const getMaxPoints = (path: SkillPath, selectedTrack: string | null = null, selectedLevel: string | null = null): number => {
+export const getMaxPoints = (path: SkillPath, selectedTrack: string | null = null, selectedLevel: string | null = null, selectedSpecialties: string[] = []): number => {
   let maxPoints = 0;
   
-  path.branches.forEach(branch => {
+  // Define base/common tracks that are always included
+  const baseTracks = ['ACCOUNTABILITY', 'ADAPTABILITY', 'COMMUNICATION', 'CONTINUOUS-DEVELOPMENT', 
+                      'EMOTIONAL-INTELLIGENCE', 'RESULTS-ORIENTATION', 'QUALITY', 'SECURITY', 
+                      'ARCHITECTURE', 'CONTINUOUS-DELIVERY'];
+  
+  // Filter branches based on selected specialties
+  const filteredBranches = path.branches.filter(branch => {
+    // Always include base branches
+    if (baseTracks.includes(branch.id)) {
+      return true;
+    }
+    
+    // Include specialty branches only if they're in the selectedSpecialties array
+    if (selectedSpecialties.length > 0) {
+      const branchLowerCase = branch.id.toLowerCase();
+      return selectedSpecialties.some(emphasis => emphasis.toLowerCase() === branchLowerCase);
+    }
+    
+    return false;
+  });
+  
+  filteredBranches.forEach(branch => {
     branch.commits.forEach(commit => {
       // Skip commits that don't match the selected track
       if (selectedTrack && commit.metadata?.track) {
@@ -152,8 +193,8 @@ export const getBranchNextLevel = (branch: Branch, tags: Tag[], selectedTrack: s
   return null;
 };
 
-export const getCurrentLevel = (path: SkillPath, selectedTrack: string | null = null, selectedLevel: string | null = null): Tag | null => {
-  const points = calculatePoints(path, selectedTrack, selectedLevel);
+export const getCurrentLevel = (path: SkillPath, selectedTrack: string | null = null, selectedLevel: string | null = null, selectedSpecialties: string[] = []): Tag | null => {
+  const points = calculatePoints(path, selectedTrack, selectedLevel, selectedSpecialties);
   const sortedTags = [...path.tags].sort((a, b) => b.pointsRequired - a.pointsRequired);
   
   for (const tag of sortedTags) {
@@ -165,8 +206,8 @@ export const getCurrentLevel = (path: SkillPath, selectedTrack: string | null = 
   return null;
 };
 
-export const getNextLevel = (path: SkillPath, selectedTrack: string | null = null, selectedLevel: string | null = null): Tag | null => {
-  const points = calculatePoints(path, selectedTrack, selectedLevel);
+export const getNextLevel = (path: SkillPath, selectedTrack: string | null = null, selectedLevel: string | null = null, selectedSpecialties: string[] = []): Tag | null => {
+  const points = calculatePoints(path, selectedTrack, selectedLevel, selectedSpecialties);
   const sortedTags = [...path.tags].sort((a, b) => a.pointsRequired - b.pointsRequired);
   
   for (const tag of sortedTags) {

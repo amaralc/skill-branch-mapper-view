@@ -8,26 +8,51 @@ interface ProgressSummaryProps {
   skillPath: SkillPath;
   selectedTrack: string | null;
   selectedLevel?: string | null;
+  selectedSpecialties?: string[]; // Add selected specialties prop
 }
 
 const ProgressSummary: React.FC<ProgressSummaryProps> = ({
   skillPath,
   selectedTrack,
   selectedLevel,
+  selectedSpecialties = [], // Default to empty array
 }) => {
+  // Define base/common tracks that are always included
+  const baseTracks = ['ACCOUNTABILITY', 'ADAPTABILITY', 'COMMUNICATION', 'CONTINUOUS-DEVELOPMENT', 
+                      'EMOTIONAL-INTELLIGENCE', 'RESULTS-ORIENTATION', 'QUALITY', 'SECURITY', 
+                      'ARCHITECTURE', 'CONTINUOUS-DELIVERY'];
+
+  // Filter branches based on selected specialties
+  const filteredBranches = skillPath.branches?.filter(branch => {
+    // Always include base branches
+    if (baseTracks.includes(branch.id)) {
+      return true;
+    }
+    
+    // Include specialty branches only if they're in the selectedSpecialties array
+    if (selectedSpecialties.length > 0) {
+      const branchLowerCase = branch.id.toLowerCase();
+      return selectedSpecialties.some(emphasis => emphasis.toLowerCase() === branchLowerCase);
+    }
+    
+    return false;
+  }) || [];
+
+  console.log("ProgressSummary - Filtered branches:", filteredBranches.map(b => b.id));
+
   // Calculate filtered points based on the selected track and level
   const calculateFilteredPoints = (
-    skillPath: SkillPath,
+    filteredBranches: typeof skillPath.branches,
     selectedTrack: string | null,
     selectedLevel: string | null
   ) => {
-    if (!skillPath.branches || skillPath.branches.length === 0) {
+    if (!filteredBranches || filteredBranches.length === 0) {
       return 0;
     }
 
     let totalPoints = 0;
 
-    skillPath.branches.forEach((branch) => {
+    filteredBranches.forEach((branch) => {
       branch.commits.forEach((commit) => {
         // Skip commits that don't match the selected track (if a track is selected)
         if (
@@ -58,19 +83,17 @@ const ProgressSummary: React.FC<ProgressSummaryProps> = ({
 
   // Calculate maximum points for commits that match the selected track and level
   const getFilteredMaxPoints = (
-    skillPath: SkillPath,
+    filteredBranches: typeof skillPath.branches,
     selectedTrack: string | null,
     selectedLevel: string | null
   ) => {
-    if (!skillPath.branches || skillPath.branches.length === 0) {
+    if (!filteredBranches || filteredBranches.length === 0) {
       return 0;
     }
 
     let maxPoints = 0;
 
-    console.log(skillPath.branches)
-
-    skillPath.branches.forEach((branch) => {
+    filteredBranches.forEach((branch) => {
       branch.commits.forEach((commit) => {
         // Skip commits that don't match the selected track (if a track is selected)
         if (
@@ -98,8 +121,8 @@ const ProgressSummary: React.FC<ProgressSummaryProps> = ({
     return maxPoints;
   };
 
-  const points = calculateFilteredPoints(skillPath, selectedTrack, selectedLevel);
-  const maxPoints = getFilteredMaxPoints(skillPath, selectedTrack, selectedLevel);
+  const points = calculateFilteredPoints(filteredBranches, selectedTrack, selectedLevel);
+  const maxPoints = getFilteredMaxPoints(filteredBranches, selectedTrack, selectedLevel);
   const percentage = maxPoints > 0 ? Math.round((points / maxPoints) * 100) : 0;
 
   // Calculate total counts of behavior evaluations, filtering by track and level if needed
@@ -110,8 +133,8 @@ const ProgressSummary: React.FC<ProgressSummaryProps> = ({
     always: 0,
   };
 
-  if (skillPath.branches && skillPath.branches.length > 0) {
-    skillPath.branches.forEach((branch) => {
+  if (filteredBranches && filteredBranches.length > 0) {
+    filteredBranches.forEach((branch) => {
       branch.commits.forEach((commit) => {
         // Skip commits that don't match the selected track (if a track is selected)
         if (

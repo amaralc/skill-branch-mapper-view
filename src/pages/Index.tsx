@@ -538,6 +538,7 @@ const Index = () => {
                         skillPath={skillPath}
                         selectedTrack={selectedTrack}
                         selectedLevel={selectedLevel}
+                        selectedSpecialties={selectedEmphasis}
                       />
                     </div>
                   </div>
