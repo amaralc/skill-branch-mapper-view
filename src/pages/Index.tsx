@@ -513,7 +513,6 @@ const Index = () => {
                   <div>
                     <div className="mb-6">
                       <CareerSelector 
-                        careers={careerPaths}
                         selectedCareerId={selectedCareerId}
                         onChange={handleCareerChange}
                       />
@@ -521,7 +520,6 @@ const Index = () => {
                     {skillPath.specialties && skillPath.specialties.length > 0 && (
                       <div className="mb-6">
                         <EmphasisSelector
-                          specialties={skillPath.specialties}
                           selectedSpecialties={selectedEmphasis}
                           onChange={handleEmphasisChange}
                         />
@@ -547,7 +545,8 @@ const Index = () => {
                 
                 <SkillBranches
                   branches={filteredBranches}
-                  onEvaluate={evaluateCommit}
+                  skillPath={skillPath}
+                  onEvaluateCommit={evaluateCommit}
                   onUpdateComment={updateComment}
                   selectedLevel={selectedLevel}
                   selectedTrack={selectedTrack}

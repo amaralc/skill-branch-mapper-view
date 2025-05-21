@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Branch, SkillPath, Tag } from "@/types/skill";
 import LevelSection from "./LevelSection";
@@ -62,15 +63,17 @@ const BranchView: React.FC<BranchViewProps> = ({
     onEvaluateCommit(branch.id, commitId, evaluation);
   };
 
-  // Create a map of levels to tags
+  // Create a map of levels to tags - with null check for skillPath.tags
   const levelTags: Record<string, Tag> = {};
-  skillPath.tags.forEach((tag) => {
-    const levelMatch = tag.level.match(/Level (\d+)/);
-    if (levelMatch) {
-      const levelNumber = levelMatch[1];
-      levelTags[levelNumber] = tag;
-    }
-  });
+  if (skillPath && skillPath.tags) {
+    skillPath.tags.forEach((tag) => {
+      const levelMatch = tag.level.match(/Level (\d+)/);
+      if (levelMatch) {
+        const levelNumber = levelMatch[1];
+        levelTags[levelNumber] = tag;
+      }
+    });
+  }
 
   // Check if we have a selected level to determine if we should show toggle buttons
   const hasSelectedLevel = !!selectedLevel;
