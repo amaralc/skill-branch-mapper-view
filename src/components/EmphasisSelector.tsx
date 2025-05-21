@@ -58,6 +58,13 @@ const EmphasisSelector: React.FC<EmphasisSelectorProps> = ({
     return "";
   };
 
+  // Log the current state for debugging
+  console.log("EmphasisSelector render:", { 
+    selectedItems, 
+    availableCareerOptions: careerOptions,
+    selectedCareerId: getSelectedCareerId()
+  });
+
   return (
     <div className="w-full">
       <Select 
