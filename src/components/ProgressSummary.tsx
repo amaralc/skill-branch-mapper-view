@@ -3,19 +3,23 @@ import React from "react";
 import { SkillPath } from "@/types/skill";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { RotateCcw } from "lucide-react";
 
 interface ProgressSummaryProps {
   skillPath: SkillPath;
   selectedTrack: string | null;
   selectedLevel?: string | null;
-  selectedSpecialties?: string[]; // Add selected specialties prop
+  selectedSpecialties?: string[];
+  onResetEvaluations?: () => void; // Nova prop para função de reset
 }
 
 const ProgressSummary: React.FC<ProgressSummaryProps> = ({
   skillPath,
   selectedTrack,
   selectedLevel,
-  selectedSpecialties = [], // Default to empty array
+  selectedSpecialties = [],
+  onResetEvaluations // Recebendo a função de reset
 }) => {
   // Define base/common tracks that are always included
   const baseTracks = ['ACCOUNTABILITY', 'ADAPTABILITY', 'COMMUNICATION', 'CONTINUOUS-DEVELOPMENT', 
@@ -208,6 +212,19 @@ const ProgressSummary: React.FC<ProgressSummaryProps> = ({
           </div>
           <Progress value={percentage} className="h-2" />
         </div>
+
+        {/* Botão de Reiniciar Avaliação */}
+        {onResetEvaluations && (
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={onResetEvaluations}
+            className="flex items-center gap-2 w-full mt-2"
+          >
+            <RotateCcw className="h-4 w-4" />
+            Reiniciar Avaliação
+          </Button>
+        )}
       </div>
     </div>
   );

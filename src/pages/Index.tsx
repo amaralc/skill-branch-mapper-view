@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { SkillPath } from '@/data/skillData';
@@ -404,6 +403,13 @@ const Index = () => {
     );
   }
 
+  // Handle reset of all evaluations
+  const handleResetAllEvaluations = () => {
+    // Reset all evaluations and keep the existing skillPath and metadata
+    resetAllEvaluations();
+    toast.success("Avaliação reiniciada com sucesso");
+  };
+
   return (
     <>
       <header className="bg-black text-white p-4">
@@ -539,6 +545,7 @@ const Index = () => {
                         selectedTrack={selectedTrack}
                         selectedLevel={selectedLevel}
                         selectedSpecialties={selectedEmphasis}
+                        onResetEvaluations={handleResetAllEvaluations}
                       />
                     </div>
                   </div>
