@@ -49,6 +49,16 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
     }
   };
 
+  const evaluationExists = async (evaluationId: string): Promise<boolean> => {
+    try {
+      const savedEvaluation = await getEvaluation(evaluationId);
+      return !!savedEvaluation;
+    } catch (error) {
+      console.error("Error checking if evaluation exists:", error);
+      return false;
+    }
+  };
+
   const evaluateCommit = async (branchId: string, commitId: string, evaluation: 'never' | 'sometimes' | 'always') => {
     const evaluationId = searchParams.get('eval') || generateEvaluationId();
     const currentTimestamp = Date.now();
@@ -150,6 +160,7 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
     resetAllEvaluations,
     updateEvaluationMeta,
     evaluationMeta,
-    isLoading
+    isLoading,
+    evaluationExists
   };
 }

@@ -19,7 +19,7 @@ import CsvUploader from '@/components/CsvUploader';
 const Index = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const hasEvalParam = searchParams.has('eval');
+  const evalParam = searchParams.get('eval');
   
   const defaultCareer = careerPaths.find(path => path.id === "software") || careerPaths[0];
   const [selectedCareerId, setSelectedCareerId] = useState(defaultCareer.id);
@@ -27,6 +27,7 @@ const Index = () => {
   const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
   const [selectedTrack, setSelectedTrack] = useState<string | null>('T'); // Default to Technical track
   const [showCsvImport, setShowCsvImport] = useState(false);
+  const [hasValidEvaluation, setHasValidEvaluation] = useState(false);
   
   const jsonFileInputRef = useRef<HTMLInputElement>(null);
 
@@ -36,18 +37,33 @@ const Index = () => {
     resetAllEvaluations, 
     updateEvaluationMeta, 
     evaluationMeta, 
-    isLoading 
+    isLoading,
+    evaluationExists
   } = useEvaluationState(defaultCareer);
 
-  // Save the default career and track values on component mount if no evaluation exists
+  // Check if we have a valid evaluation when component mounts
   useEffect(() => {
-    if (!hasEvalParam) {
+    const checkEvaluation = async () => {
+      if (evalParam) {
+        const exists = await evaluationExists(evalParam);
+        setHasValidEvaluation(exists);
+      } else {
+        setHasValidEvaluation(false);
+      }
+    };
+    
+    checkEvaluation();
+  }, [evalParam]);
+
+  // Save the default career and track values on component mount if we're starting a new evaluation
+  useEffect(() => {
+    if (!evalParam) {
       updateEvaluationMeta({
         careerId: selectedCareerId,
         selectedTrack: selectedTrack
       });
     }
-  }, [hasEvalParam]);
+  }, []);
 
   // Load saved evaluation metadata when component mounts or evaluation changes
   useEffect(() => {
@@ -157,6 +173,7 @@ const Index = () => {
       
       // Add eval parameter to URL
       navigate('/?eval=true');
+      setHasValidEvaluation(true);
     } catch (error) {
       console.error("Error importing evaluation:", error);
       toast.error("Erro ao importar avaliação");
@@ -229,7 +246,7 @@ const Index = () => {
                 Trilhas de conhecimento organizadas por área
               </p>
             </div>
-            {hasEvalParam && (
+            {hasValidEvaluation && (
               <ActionsDrawer 
                 onExport={handleExportEvaluation}
                 onImport={handleImportEvaluation}
@@ -240,7 +257,7 @@ const Index = () => {
       </header>
 
       <main className="max-w-[1200px] mx-auto py-5 px-[16px]">
-        {!hasEvalParam ? (
+        {!hasValidEvaluation ? (
           <div className="flex flex-col items-center justify-center min-h-[70vh]">
             <h2 className="text-2xl font-bold mb-8">Bem-vindo ao Skill Branch Mapper</h2>
             <div className="flex flex-col gap-6 w-full max-w-md">
