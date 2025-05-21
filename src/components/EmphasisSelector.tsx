@@ -43,8 +43,8 @@ const EmphasisSelector: React.FC<EmphasisSelectorProps> = ({
           <SelectValue placeholder="Escolha uma ênfase" />
         </SelectTrigger>
         <SelectContent>
-          <SelectLabel className="font-bold">Ênfase</SelectLabel>
           <SelectGroup>
+            <SelectLabel className="font-bold">Ênfase</SelectLabel>
             {careerOptions.map(career => (
               <SelectItem key={career.id} value={career.id}>
                 {career.label}
