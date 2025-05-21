@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { SkillPath } from '@/data/skillData';
@@ -38,6 +39,16 @@ const Index = () => {
     isLoading 
   } = useEvaluationState(defaultCareer);
 
+  // Save the default career and track values on component mount if no evaluation exists
+  useEffect(() => {
+    if (!hasEvalParam) {
+      updateEvaluationMeta({
+        careerId: selectedCareerId,
+        selectedTrack: selectedTrack
+      });
+    }
+  }, [hasEvalParam]);
+
   // Load saved evaluation metadata when component mounts or evaluation changes
   useEffect(() => {
     if (evaluationMeta.careerId) {
@@ -54,6 +65,11 @@ const Index = () => {
       console.log("Setting track from evaluationMeta:", evaluationMeta.selectedTrack);
       setSelectedTrack(evaluationMeta.selectedTrack);
     }
+
+    if (evaluationMeta.specialties) {
+      console.log("Setting emphasis from evaluationMeta:", evaluationMeta.specialties);
+      setSelectedEmphasis(evaluationMeta.specialties);
+    }
   }, [evaluationMeta]);
 
   // Handle functions for career, emphasis, level, and track changes
@@ -69,6 +85,8 @@ const Index = () => {
 
   const handleEmphasisChange = (emphasisIds: string[]) => {
     setSelectedEmphasis(emphasisIds);
+    // Save the emphasis selection to IndexedDB
+    updateEvaluationMeta({ specialties: emphasisIds });
   };
 
   const handleLevelChange = (level: string) => {
@@ -91,7 +109,8 @@ const Index = () => {
       timestamp: Date.now(),
       careerId: selectedCareerId,
       selectedLevel,
-      selectedTrack
+      selectedTrack,
+      specialties: selectedEmphasis
     };
     
     const blob = new Blob([JSON.stringify(evaluationData, null, 2)], { type: 'application/json' });
@@ -106,24 +125,42 @@ const Index = () => {
   };
 
   const handleImportEvaluation = (importedData: any) => {
-    // Check if it's the new format with metadata
-    if (importedData.careerId) {
-      setSelectedCareerId(importedData.careerId);
-      setSelectedLevel(importedData.selectedLevel);
-      setSelectedTrack(importedData.selectedTrack);
+    try {
+      // Check if it's the new format with metadata
+      if (importedData.careerId) {
+        setSelectedCareerId(importedData.careerId);
+        setSelectedLevel(importedData.selectedLevel);
+        setSelectedTrack(importedData.selectedTrack);
+        
+        // Set specialties if available
+        if (importedData.specialties && Array.isArray(importedData.specialties)) {
+          setSelectedEmphasis(importedData.specialties);
+        }
+        
+        // Reset evaluation with the imported data
+        resetAllEvaluations(importedData.skillPath);
+        
+        // Update all metadata at once
+        updateEvaluationMeta({
+          careerId: importedData.careerId,
+          selectedLevel: importedData.selectedLevel, 
+          selectedTrack: importedData.selectedTrack,
+          specialties: importedData.specialties
+        });
+      } else {
+        // Handle legacy format (just skillPath)
+        resetAllEvaluations(importedData);
+      }
       
-      // Reset evaluation with the imported data
-      resetAllEvaluations(importedData.skillPath);
-    } else {
-      // Handle legacy format (just skillPath)
-      resetAllEvaluations(importedData);
+      // Hide the import dialogs
+      setShowCsvImport(false);
+      
+      // Add eval parameter to URL
+      navigate('/?eval=true');
+    } catch (error) {
+      console.error("Error importing evaluation:", error);
+      toast.error("Erro ao importar avaliação");
     }
-    
-    // Hide the import dialogs
-    setShowCsvImport(false);
-    
-    // Add eval parameter to URL
-    navigate('/?eval=true');
   };
 
   // Function to trigger file input click
