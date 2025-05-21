@@ -4,27 +4,28 @@ import { Select, SelectGroup, SelectTrigger, SelectContent, SelectItem, SelectVa
 import { careerOptions } from '@/types/emphasis';
 
 interface EmphasisSelectorProps {
-  selectedEmphasis: string[];
-  onEmphasisChange: (emphasis: string[]) => void;
-  // Add support for new prop names used in Index.tsx
+  // Make the original props optional since we have alternative props now
+  selectedEmphasis?: string[];
+  onEmphasisChange?: (emphasis: string[]) => void;
+  // Alternative prop names used in Index.tsx
   selectedSpecialties?: string[];
   onChange?: (emphasis: string[]) => void;
 }
 
 const EmphasisSelector: React.FC<EmphasisSelectorProps> = ({
-  selectedEmphasis,
+  selectedEmphasis = [],
   onEmphasisChange,
   selectedSpecialties,
   onChange
 }) => {
-  // Use either selectedSpecialties or selectedEmphasis
+  // Use either selectedSpecialties or selectedEmphasis with a default empty array
   const selectedItems = selectedSpecialties || selectedEmphasis;
   
   // Use either onChange or onEmphasisChange
   const handleChange = (emphasis: string[]) => {
     if (onChange) {
       onChange(emphasis);
-    } else {
+    } else if (onEmphasisChange) {
       onEmphasisChange(emphasis);
     }
   };
