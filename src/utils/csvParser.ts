@@ -1,4 +1,3 @@
-
 import { Branch, Commit, SkillPath, Tag } from "@/types/skill";
 
 interface CsvRow {
@@ -26,7 +25,14 @@ export const parseCsv = (csvContent: string): CsvRow[] => {
     throw new Error("CSV vazio ou inválido");
   }
 
-  const headers = lines[0].split(",").map(header => header.trim());
+  // Clean up any BOM (Byte Order Mark) from the first line
+  let firstLine = lines[0];
+  if (firstLine.charCodeAt(0) === 0xFEFF) {
+    firstLine = firstLine.substring(1);
+    lines[0] = firstLine;
+  }
+
+  const headers = firstLine.split(",").map(header => header.trim());
 
   return lines
     .slice(1)
@@ -56,7 +62,7 @@ export const parseCsv = (csvContent: string): CsvRow[] => {
       // Cria um objeto CsvRow corretamente tipado com strings vazias padrão
       const row: CsvRow = {
         career: "",
-        behaviorDifferentiator: "", // Added this field
+        behaviorDifferentiator: "", 
         baseBehavior: "",
         level: "",
         track: "",
@@ -77,8 +83,46 @@ export const parseCsv = (csvContent: string): CsvRow[] => {
         }
       });
 
+      // Verifique se há caracteres problemáticos na descrição e limpe-os
+      if (row.description) {
+        row.description = cleanText(row.description);
+      }
+
+      // Limpeza de outros campos de texto
+      row.career = cleanText(row.career);
+      row.behaviorDifferentiator = cleanText(row.behaviorDifferentiator);
+      row.baseBehavior = cleanText(row.baseBehavior);
+      row.groupCompetence = cleanText(row.groupCompetence);
+
       return row;
     });
+};
+
+// Função para limpar texto com caracteres problemáticos
+const cleanText = (text: string): string => {
+  if (!text) return "";
+  
+  // Substituir caracteres comuns de codificação errada
+  return text
+    .replace(/\uFFFD/g, '') // Unicode replacement character
+    .replace(/�/g, '') // Mojibake characters
+    .replace(/[\u0080-\u009F]/g, match => {
+      // Map common Windows-1252 control chars to their UTF-8 equivalents
+      const charMap: Record<number, string> = {
+        0x80: '€', 0x82: '‚', 0x83: 'ƒ', 0x84: '„', 0x85: '…', 
+        0x86: '†', 0x87: '‡', 0x88: 'ˆ', 0x89: '‰', 0x8A: 'Š',
+        0x8B: '‹', 0x8C: 'Œ', 0x8E: 'Ž', 0x91: ''', 0x92: ''',
+        0x93: '"', 0x94: '"', 0x95: '•', 0x96: '–', 0x97: '—',
+        0x98: '˜', 0x99: '™', 0x9A: 'š', 0x9B: '›', 0x9C: 'œ',
+        0x9E: 'ž', 0x9F: 'Ÿ'
+      };
+      return charMap[match.charCodeAt(0)] || '';
+    })
+    .replace(/crit�rio/g, 'critério')
+    .replace(/c�digo/g, 'código')
+    .replace(/leg�vel/g, 'legível')
+    .replace(/f�cil/g, 'fácil')
+    .trim();
 };
 
 export const convertCsvToSkillPath = (csvData: CsvRow[]): SkillPath => {
