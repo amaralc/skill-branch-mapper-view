@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { SkillPath } from '@/data/skillData';
@@ -15,7 +14,6 @@ import { careerPaths } from '@/data/skillData';
 import { toast } from "sonner";
 import { Upload, FileText } from 'lucide-react';
 import CsvUploader from '@/components/CsvUploader';
-import { getEvaluation } from '@/utils/indexedDb';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -162,12 +160,16 @@ const Index = () => {
     if (!importedData) return;
     
     try {
+      console.log("Confirming override with imported data:", importedData);
+      
       // Continue with handling the import
       // If this is an existing evaluation with the same ID, we'll override both
       // the data and the URL timestamp
       const currentEvalId = searchParams.get('eval');
       
       if (currentEvalId && importedData.id && currentEvalId === importedData.id) {
+        console.log("Updating existing evaluation with same ID");
+        
         // Update URL with the imported timestamp
         const params = new URLSearchParams(searchParams);
         params.set('eval', importedData.id);
@@ -188,6 +190,7 @@ const Index = () => {
         setHasValidEvaluation(true);
         toast.success("Avaliação atualizada com sucesso");
       } else {
+        console.log("Creating new evaluation from imported data");
         // Create new evaluation
         await createNewEvaluation(importedData.skillPath, {
           careerId: importedData.careerId,
@@ -199,6 +202,7 @@ const Index = () => {
         toast.success("Avaliação importada com sucesso");
       }
     } catch (error) {
+      console.error("Error handling override:", error);
       toast.error("Erro ao importar avaliação");
     } finally {
       setImportedData(null);
@@ -207,16 +211,23 @@ const Index = () => {
   };
 
   const handleCancelOverride = () => {
+    console.log("Override cancelled by user");
     setImportedData(null);
     setShowOverrideDialog(false);
   };
 
   const handleImportEvaluation = async (data: any) => {
     try {
+      console.log("Handling evaluation import:", data);
+      
       // Check if we're importing an evaluation with the same ID as the current one
       const currentEvalId = searchParams.get('eval');
       
       if (currentEvalId && data.id && currentEvalId === data.id) {
+        console.log("Same ID detected, showing confirmation dialog", {
+          currentId: currentEvalId,
+          importedId: data.id
+        });
         // Store the data temporarily and show confirmation dialog
         setImportedData(data);
         setShowOverrideDialog(true);
@@ -294,10 +305,16 @@ const Index = () => {
           const data = JSON.parse(e.target?.result as string);
           
           if (data.skillPath) {
+            console.log("JSON file parsed successfully:", { 
+              hasId: !!data.id,
+              currentEvalId: searchParams.get('eval')
+            });
+            
             // Check if we're importing an evaluation with the same ID as the current one
             const currentEvalId = searchParams.get('eval');
             
             if (currentEvalId && data.id && currentEvalId === data.id) {
+              console.log("Same ID detected in file selection, showing dialog");
               // Store the data temporarily and show confirmation dialog
               setImportedData(data);
               setShowOverrideDialog(true);
@@ -318,6 +335,7 @@ const Index = () => {
             toast.error("Formato de avaliação inválido");
           }
         } catch (error) {
+          console.error("JSON parse error:", error);
           toast.error("Erro ao carregar o arquivo JSON");
         }
       };

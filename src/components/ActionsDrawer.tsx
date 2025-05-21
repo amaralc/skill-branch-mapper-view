@@ -7,7 +7,6 @@ import { toast } from "sonner";
 import { SkillPath } from '@/types/skill';
 import CsvUploader from '@/components/CsvUploader';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getEvaluation } from '@/utils/indexedDb';
 import { useSearchParams } from 'react-router-dom';
 import {
   AlertDialog,
@@ -57,6 +56,10 @@ const ActionsDrawer = ({ onExport, onImport, currentTimestamp }: ActionsDrawerPr
       
       if (evaluationId && importedData.id === evaluationId) {
         // If importing an evaluation with the same ID, show confirmation dialog
+        console.log("Same ID detected, showing confirmation dialog", { 
+          currentId: evaluationId, 
+          importedId: importedData.id 
+        });
         setImportData(importedData);
         setShowConfirmDialog(true);
         return;
@@ -66,6 +69,7 @@ const ActionsDrawer = ({ onExport, onImport, currentTimestamp }: ActionsDrawerPr
       onImport(importedData);
       toast.success("Avaliação importada com sucesso");
     } catch (error) {
+      console.error("Import error:", error);
       toast.error("Falha ao importar arquivo de avaliação");
     }
 
@@ -77,6 +81,7 @@ const ActionsDrawer = ({ onExport, onImport, currentTimestamp }: ActionsDrawerPr
 
   const handleConfirmImport = () => {
     if (importData) {
+      console.log("Confirming import of evaluation with same ID");
       onImport(importData);
       setImportData(null);
       setShowConfirmDialog(false);
@@ -90,6 +95,7 @@ const ActionsDrawer = ({ onExport, onImport, currentTimestamp }: ActionsDrawerPr
   };
 
   const handleCancelImport = () => {
+    console.log("Import cancelled by user");
     setImportData(null);
     setShowConfirmDialog(false);
     
