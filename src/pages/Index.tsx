@@ -495,7 +495,11 @@ const Index = () => {
 
             {selectedCareerId && selectedEmphasis.length > 0 ? (
               <>
-                <ProgressSummary skillPath={skillPath} selectedTrack={selectedTrack} />
+                <ProgressSummary 
+                  skillPath={skillPath} 
+                  selectedTrack={selectedTrack}
+                  selectedLevel={selectedLevel} 
+                />
                 
                 <div className="flex flex-col gap-4 mb-6">
                   <Button 

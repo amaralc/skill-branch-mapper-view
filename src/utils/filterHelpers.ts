@@ -57,10 +57,11 @@ export const filterCommitsByLevelAndTrack = (
   });
 };
 
-// Helper function to count commits and evaluations with track filtering
+// Helper function to count commits and evaluations with track and level filtering
 export const getCommitCounts = (
   branches: Branch[],
-  selectedTrack: string | null
+  selectedTrack: string | null,
+  selectedLevel: string | null = null
 ) => {
   const counts = {
     notEvaluated: 0,
@@ -89,6 +90,11 @@ export const getCommitCounts = (
         } else if (commit.metadata.track !== selectedTrack) {
           return;
         }
+      }
+      
+      // Skip commits that don't match the selected level
+      if (selectedLevel && commit.metadata?.level && commit.metadata.level !== selectedLevel) {
+        return;
       }
 
       counts.total++;

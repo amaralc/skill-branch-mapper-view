@@ -1,22 +1,25 @@
+
 import React from "react";
 import { SkillPath } from "@/types/skill";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { calculatePoints, getMaxPoints } from "@/utils/skillCalculations";
 
 interface ProgressSummaryProps {
   skillPath: SkillPath;
   selectedTrack: string | null;
+  selectedLevel?: string | null;
 }
 
 const ProgressSummary: React.FC<ProgressSummaryProps> = ({
   skillPath,
   selectedTrack,
+  selectedLevel,
 }) => {
-  // Calculate filtered points based on the selected track
+  // Calculate filtered points based on the selected track and level
   const calculateFilteredPoints = (
     skillPath: SkillPath,
-    selectedTrack: string | null
+    selectedTrack: string | null,
+    selectedLevel: string | null
   ) => {
     let totalPoints = 0;
 
@@ -26,7 +29,17 @@ const ProgressSummary: React.FC<ProgressSummaryProps> = ({
         if (
           selectedTrack &&
           commit.metadata?.track &&
-          commit.metadata.track !== selectedTrack
+          commit.metadata.track !== selectedTrack &&
+          ["L5", "L6", "L7"].includes(commit.metadata.level)
+        ) {
+          return;
+        }
+
+        // Skip commits that don't match the selected level (if a level is selected)
+        if (
+          selectedLevel &&
+          commit.metadata?.level &&
+          commit.metadata.level !== selectedLevel
         ) {
           return;
         }
@@ -39,10 +52,11 @@ const ProgressSummary: React.FC<ProgressSummaryProps> = ({
     return totalPoints;
   };
 
-  // Calculate maximum points for commits that match the selected track
+  // Calculate maximum points for commits that match the selected track and level
   const getFilteredMaxPoints = (
     skillPath: SkillPath,
-    selectedTrack: string | null
+    selectedTrack: string | null,
+    selectedLevel: string | null
   ) => {
     let maxPoints = 0;
 
@@ -58,6 +72,15 @@ const ProgressSummary: React.FC<ProgressSummaryProps> = ({
           return;
         }
 
+        // Skip commits that don't match the selected level (if a level is selected)
+        if (
+          selectedLevel &&
+          commit.metadata?.level &&
+          commit.metadata.level !== selectedLevel
+        ) {
+          return;
+        }
+
         maxPoints += 2; // Each commit can earn up to 2 points
       });
     });
@@ -65,11 +88,11 @@ const ProgressSummary: React.FC<ProgressSummaryProps> = ({
     return maxPoints;
   };
 
-  const points = calculateFilteredPoints(skillPath, selectedTrack);
-  const maxPoints = getFilteredMaxPoints(skillPath, selectedTrack);
+  const points = calculateFilteredPoints(skillPath, selectedTrack, selectedLevel);
+  const maxPoints = getFilteredMaxPoints(skillPath, selectedTrack, selectedLevel);
   const percentage = maxPoints > 0 ? Math.round((points / maxPoints) * 100) : 0;
 
-  // Calculate total counts of behavior evaluations, filtering by track if needed
+  // Calculate total counts of behavior evaluations, filtering by track and level if needed
   const totalCounts = {
     notEvaluated: 0,
     never: 0,
@@ -85,6 +108,15 @@ const ProgressSummary: React.FC<ProgressSummaryProps> = ({
         commit.metadata?.track &&
         commit.metadata.track !== selectedTrack &&
         ["L5", "L6", "L7"].includes(commit.metadata.level)
+      ) {
+        return;
+      }
+
+      // Skip commits that don't match the selected level (if a level is selected)
+      if (
+        selectedLevel &&
+        commit.metadata?.level &&
+        commit.metadata.level !== selectedLevel
       ) {
         return;
       }

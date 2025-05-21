@@ -1,7 +1,7 @@
 
 import { SkillPath, Tag, Branch } from '../types/skill';
 
-export const calculatePoints = (path: SkillPath, selectedTrack: string | null = null): number => {
+export const calculatePoints = (path: SkillPath, selectedTrack: string | null = null, selectedLevel: string | null = null): number => {
   let totalPoints = 0;
 
   path.branches.forEach(branch => {
@@ -24,6 +24,11 @@ export const calculatePoints = (path: SkillPath, selectedTrack: string | null = 
           return;
         }
       }
+
+      // Skip commits that don't match the selected level
+      if (selectedLevel && commit.metadata?.level && commit.metadata.level !== selectedLevel) {
+        return;
+      }
       
       if (commit.evaluation === 'sometimes') totalPoints += 1;
       else if (commit.evaluation === 'always') totalPoints += 2;
@@ -33,7 +38,7 @@ export const calculatePoints = (path: SkillPath, selectedTrack: string | null = 
   return totalPoints;
 };
 
-export const getMaxPoints = (path: SkillPath, selectedTrack: string | null = null): number => {
+export const getMaxPoints = (path: SkillPath, selectedTrack: string | null = null, selectedLevel: string | null = null): number => {
   let maxPoints = 0;
   
   path.branches.forEach(branch => {
@@ -56,6 +61,11 @@ export const getMaxPoints = (path: SkillPath, selectedTrack: string | null = nul
           return;
         }
       }
+
+      // Skip commits that don't match the selected level
+      if (selectedLevel && commit.metadata?.level && commit.metadata.level !== selectedLevel) {
+        return;
+      }
       
       maxPoints += 2;
     });
@@ -64,7 +74,7 @@ export const getMaxPoints = (path: SkillPath, selectedTrack: string | null = nul
   return maxPoints;
 };
 
-export const calculateBranchPoints = (branch: Branch, selectedTrack: string | null = null): number => {
+export const calculateBranchPoints = (branch: Branch, selectedTrack: string | null = null, selectedLevel: string | null = null): number => {
   let points = 0;
   branch.commits.forEach(commit => {
     // Skip commits that don't match the selected track
@@ -85,6 +95,11 @@ export const calculateBranchPoints = (branch: Branch, selectedTrack: string | nu
         return;
       }
     }
+
+    // Skip commits that don't match the selected level
+    if (selectedLevel && commit.metadata?.level && commit.metadata.level !== selectedLevel) {
+      return;
+    }
     
     if (commit.evaluation === 'sometimes') points += 1;
     else if (commit.evaluation === 'always') points += 2;
@@ -92,8 +107,8 @@ export const calculateBranchPoints = (branch: Branch, selectedTrack: string | nu
   return points;
 };
 
-export const getBranchCurrentLevel = (branch: Branch, tags: Tag[], selectedTrack: string | null = null): Tag | null => {
-  const points = calculateBranchPoints(branch, selectedTrack);
+export const getBranchCurrentLevel = (branch: Branch, tags: Tag[], selectedTrack: string | null = null, selectedLevel: string | null = null): Tag | null => {
+  const points = calculateBranchPoints(branch, selectedTrack, selectedLevel);
   
   // Get the tag requirements specific to this branch
   const branchRequirements = branch.levelRequirements || [];
@@ -116,8 +131,8 @@ export const getBranchCurrentLevel = (branch: Branch, tags: Tag[], selectedTrack
   return null;
 };
 
-export const getBranchNextLevel = (branch: Branch, tags: Tag[], selectedTrack: string | null = null): Tag | null => {
-  const points = calculateBranchPoints(branch, selectedTrack);
+export const getBranchNextLevel = (branch: Branch, tags: Tag[], selectedTrack: string | null = null, selectedLevel: string | null = null): Tag | null => {
+  const points = calculateBranchPoints(branch, selectedTrack, selectedLevel);
   
   const branchRequirements = branch.levelRequirements || [];
   
@@ -137,8 +152,8 @@ export const getBranchNextLevel = (branch: Branch, tags: Tag[], selectedTrack: s
   return null;
 };
 
-export const getCurrentLevel = (path: SkillPath, selectedTrack: string | null = null): Tag | null => {
-  const points = calculatePoints(path, selectedTrack);
+export const getCurrentLevel = (path: SkillPath, selectedTrack: string | null = null, selectedLevel: string | null = null): Tag | null => {
+  const points = calculatePoints(path, selectedTrack, selectedLevel);
   const sortedTags = [...path.tags].sort((a, b) => b.pointsRequired - a.pointsRequired);
   
   for (const tag of sortedTags) {
@@ -150,8 +165,8 @@ export const getCurrentLevel = (path: SkillPath, selectedTrack: string | null = 
   return null;
 };
 
-export const getNextLevel = (path: SkillPath, selectedTrack: string | null = null): Tag | null => {
-  const points = calculatePoints(path, selectedTrack);
+export const getNextLevel = (path: SkillPath, selectedTrack: string | null = null, selectedLevel: string | null = null): Tag | null => {
+  const points = calculatePoints(path, selectedTrack, selectedLevel);
   const sortedTags = [...path.tags].sort((a, b) => a.pointsRequired - b.pointsRequired);
   
   for (const tag of sortedTags) {
