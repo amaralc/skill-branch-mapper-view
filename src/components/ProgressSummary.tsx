@@ -211,6 +211,6 @@ const ProgressSummary: React.FC<ProgressSummaryProps> = ({
       </div>
     </div>
   );
-};
+}
 
 export default ProgressSummary;

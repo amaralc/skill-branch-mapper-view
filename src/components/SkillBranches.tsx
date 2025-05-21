@@ -4,7 +4,6 @@ import { Branch, SkillPath } from '@/types/skill';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import BranchView from '@/components/BranchView';
-import { filterCommitsByLevelAndTrack } from '@/utils/filterHelpers';
 
 interface SkillBranchesProps {
   branches: Branch[];
@@ -28,13 +27,25 @@ const SkillBranches: React.FC<SkillBranchesProps> = ({
 
   // Filter branches to only include those with commits
   const branchesWithCommits = branches.filter(branch => {
-    // If filtering by track, only include branches with commits for that track
+    // Apply filter based on selectedLevel if present
+    if (selectedLevel) {
+      // Check if there are any commits for the selected level
+      const hasCommitsForLevel = branch.commits.some(commit => 
+        commit.metadata?.level === selectedLevel && 
+        (!selectedTrack || !commit.metadata?.track || commit.metadata.track === selectedTrack)
+      );
+      return hasCommitsForLevel;
+    }
+    
+    // If filtering by track only, check for commits with that track
     if (selectedTrack) {
       const hasCommitsForTrack = branch.commits.some(commit => 
         !commit.metadata?.track || commit.metadata.track === selectedTrack
       );
       return branch.commits.length > 0 && hasCommitsForTrack;
     }
+    
+    // No filters applied, just check if branch has commits
     return branch.commits.length > 0;
   });
   

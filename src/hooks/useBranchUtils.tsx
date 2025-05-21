@@ -68,7 +68,15 @@ export function useBranchUtils(
       always: 0,
     };
 
-    commits.forEach((commit) => {
+    // Filter commits by level if a level is selected
+    const filteredByLevel = selectedLevel
+      ? commits.filter((commit) => {
+          // Only include commits that match the selected level
+          return commit.metadata?.level === selectedLevel;
+        })
+      : commits;
+
+    filteredByLevel.forEach((commit) => {
       if (commit.evaluation === null) counts.notEvaluated++;
       else if (commit.evaluation === "never") counts.never++;
       else if (commit.evaluation === "sometimes") counts.sometimes++;
