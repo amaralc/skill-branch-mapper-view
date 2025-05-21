@@ -56,6 +56,7 @@ export const parseCsv = (csvContent: string): CsvRow[] => {
       // Cria um objeto CsvRow corretamente tipado com strings vazias padrão
       const row: CsvRow = {
         career: "",
+        behaviorDifferentiator: "", // Added this field
         baseBehavior: "",
         level: "",
         track: "",

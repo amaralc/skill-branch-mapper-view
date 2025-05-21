@@ -8,6 +8,7 @@ export interface Commit {
   onUpdateComment?: (comment: string) => void;
   metadata?: {
     career?: string;
+    behaviorDifferentiator?: string; // Added this field
     baseBehavior?: string;
     level?: string;
     track?: string;
