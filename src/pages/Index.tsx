@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { SkillPath } from '@/data/skillData';
@@ -40,7 +39,8 @@ const Index = () => {
     evaluationMeta, 
     isLoading,
     evaluationExists,
-    createNewEvaluation
+    createNewEvaluation,
+    timestamp
   } = useEvaluationState(defaultCareer);
 
   // Check if we have a valid evaluation when component mounts
@@ -126,6 +126,7 @@ const Index = () => {
     const evaluationData = {
       skillPath,
       timestamp: Date.now(),
+      id: searchParams.get('eval'),
       careerId: selectedCareerId,
       selectedLevel,
       selectedTrack,
@@ -143,8 +144,25 @@ const Index = () => {
     URL.revokeObjectURL(url);
   };
 
-  const handleImportEvaluation = (importedData: any) => {
+  const handleImportEvaluation = async (importedData: any) => {
     try {
+      // Check if we're importing an evaluation with the same ID as the current one
+      const currentEvalId = searchParams.get('eval');
+      
+      if (currentEvalId && importedData.id && currentEvalId === importedData.id) {
+        // Get the current evaluation from IndexedDB
+        const currentEvaluation = await getEvaluation(currentEvalId);
+        
+        // If the imported evaluation is newer or user confirms override
+        if (!currentEvaluation || importedData.timestamp > currentEvaluation.timestamp) {
+          // This is a newer version of the same evaluation, proceed with update
+          console.log("Updating existing evaluation with newer version");
+        } else {
+          // This is an older version, we already checked in ActionsDrawer but log for clarity
+          console.log("Overriding with older version of the same evaluation (user confirmed)");
+        }
+      }
+      
       // Check if it's the new format with metadata
       if (importedData.careerId) {
         setSelectedCareerId(importedData.careerId);
@@ -156,16 +174,33 @@ const Index = () => {
           setSelectedEmphasis(importedData.specialties);
         }
         
-        // Reset evaluation with the imported data
-        resetAllEvaluations(importedData.skillPath);
-        
-        // Update all metadata at once
-        updateEvaluationMeta({
-          careerId: importedData.careerId,
-          selectedLevel: importedData.selectedLevel, 
-          selectedTrack: importedData.selectedTrack,
-          specialties: importedData.specialties
-        });
+        // If we're importing an evaluation with an ID and timestamp
+        if (importedData.id) {
+          // Use the existing ID from the imported data
+          const params = new URLSearchParams(searchParams);
+          params.set('eval', importedData.id);
+          params.set('timestamp', importedData.timestamp.toString());
+          window.history.replaceState({}, '', `${window.location.pathname}?${params.toString()}`);
+          
+          // Reset evaluation with the imported data
+          resetAllEvaluations(importedData.skillPath);
+          
+          // Update all metadata at once
+          updateEvaluationMeta({
+            careerId: importedData.careerId,
+            selectedLevel: importedData.selectedLevel, 
+            selectedTrack: importedData.selectedTrack,
+            specialties: importedData.specialties
+          });
+        } else {
+          // Create a new evaluation if there's no ID in the imported data
+          await createNewEvaluation(importedData.skillPath, {
+            careerId: importedData.careerId,
+            selectedLevel: importedData.selectedLevel,
+            selectedTrack: importedData.selectedTrack,
+            specialties: importedData.specialties
+          });
+        }
       } else {
         // Handle legacy format (just skillPath)
         resetAllEvaluations(importedData);
@@ -282,6 +317,7 @@ const Index = () => {
               <ActionsDrawer 
                 onExport={handleExportEvaluation}
                 onImport={handleImportEvaluation}
+                currentTimestamp={timestamp}
               />
             )}
           </div>

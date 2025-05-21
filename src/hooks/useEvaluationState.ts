@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { SkillPath } from '@/types/skill';
@@ -21,6 +22,7 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
     selectedTrack?: string | null;
     specialties?: string[];
   }>({});
+  const [timestamp, setTimestamp] = useState<number>(Date.now());
 
   useEffect(() => {
     const evaluationId = searchParams.get('eval');
@@ -36,6 +38,7 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
       const savedEvaluation = await getEvaluation(evaluationId);
       if (savedEvaluation) {
         setSkillPath(savedEvaluation.skillPath);
+        setTimestamp(savedEvaluation.timestamp);
         setEvaluationMeta({
           careerId: savedEvaluation.careerId,
           selectedLevel: savedEvaluation.selectedLevel,
@@ -66,6 +69,7 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
     }
     
     const currentTimestamp = Date.now();
+    setTimestamp(currentTimestamp);
     
     const updatedSkillPath = {
       ...skillPath,
@@ -100,6 +104,12 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
       selectedTrack: evaluationMeta.selectedTrack,
       specialties: evaluationMeta.specialties
     });
+    
+    // Update URL timestamp parameter
+    setSearchParams(prev => {
+      prev.set('timestamp', currentTimestamp.toString());
+      return prev;
+    });
   };
 
   const evaluateCommit = async (branchId: string, commitId: string, evaluation: 'never' | 'sometimes' | 'always') => {
@@ -110,6 +120,7 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
     }
     
     const currentTimestamp = Date.now();
+    setTimestamp(currentTimestamp);
     
     const updatedSkillPath = {
       ...skillPath,
@@ -146,6 +157,12 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
       selectedTrack: evaluationMeta.selectedTrack,
       specialties: evaluationMeta.specialties
     });
+    
+    // Update URL timestamp parameter
+    setSearchParams(prev => {
+      prev.set('timestamp', currentTimestamp.toString());
+      return prev;
+    });
   };
 
   const createNewEvaluation = async (newSkillPath: SkillPath, metadata?: {
@@ -156,6 +173,7 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
   }) => {
     const evaluationId = generateEvaluationId();
     const currentTimestamp = Date.now();
+    setTimestamp(currentTimestamp);
     const updatedMeta = { ...evaluationMeta, ...metadata };
     
     setSkillPath(newSkillPath);
@@ -168,7 +186,7 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
       ...updatedMeta
     });
     
-    setSearchParams({ eval: evaluationId });
+    setSearchParams({ eval: evaluationId, timestamp: currentTimestamp.toString() });
     return evaluationId;
   };
 
@@ -184,14 +202,22 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
       return;
     }
     
+    const currentTimestamp = Date.now();
+    setTimestamp(currentTimestamp);
     const updatedMeta = { ...evaluationMeta, ...meta };
     setEvaluationMeta(updatedMeta);
     
     await saveEvaluation({
       id: evaluationId,
-      timestamp: Date.now(),
+      timestamp: currentTimestamp,
       skillPath,
       ...updatedMeta
+    });
+    
+    // Update URL timestamp parameter
+    setSearchParams(prev => {
+      prev.set('timestamp', currentTimestamp.toString());
+      return prev;
     });
   };
 
@@ -201,6 +227,9 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
       console.error("Cannot reset evaluations without an active evaluation");
       return;
     }
+    
+    const currentTimestamp = Date.now();
+    setTimestamp(currentTimestamp);
     
     // If we're resetting with a new skill path, use that
     // Otherwise, just reset the evaluations in the current skill path but preserve comments
@@ -222,9 +251,15 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
     
     await saveEvaluation({
       id: evaluationId,
-      timestamp: Date.now(),
+      timestamp: currentTimestamp,
       skillPath: updatedSkillPath,
       ...evaluationMeta
+    });
+    
+    // Update URL timestamp parameter
+    setSearchParams(prev => {
+      prev.set('timestamp', currentTimestamp.toString());
+      return prev;
     });
   };
 
@@ -237,6 +272,7 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
     evaluationMeta,
     isLoading,
     evaluationExists,
-    createNewEvaluation
+    createNewEvaluation,
+    timestamp
   };
 }

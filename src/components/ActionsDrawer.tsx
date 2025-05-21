@@ -7,15 +7,19 @@ import { toast } from "sonner";
 import { SkillPath } from '@/types/skill';
 import CsvUploader from '@/components/CsvUploader';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getEvaluation } from '@/utils/indexedDb';
+import { useSearchParams } from 'react-router-dom';
 
 interface ActionsDrawerProps {
   onExport: () => void;
   onImport: (importedData: any) => void;
+  currentTimestamp: number;
 }
 
-const ActionsDrawer = ({ onExport, onImport }: ActionsDrawerProps) => {
+const ActionsDrawer = ({ onExport, onImport, currentTimestamp }: ActionsDrawerProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [searchParams] = useSearchParams();
 
   const handleImportClick = () => {
     fileInputRef.current?.click();
@@ -34,6 +38,19 @@ const ActionsDrawer = ({ onExport, onImport }: ActionsDrawerProps) => {
       // Check if it's a valid evaluation file (has skillPath)
       if (!importedData.skillPath) {
         throw new Error("Invalid evaluation file format");
+      }
+      
+      // Check for timestamp and evaluation ID conflicts
+      const evaluationId = searchParams.get('eval');
+      
+      if (evaluationId && importedData.id === evaluationId) {
+        // If importing an evaluation with the same ID, compare timestamps
+        if (importedData.timestamp <= currentTimestamp) {
+          // Ask for confirmation if the imported evaluation is older
+          if (!window.confirm('The evaluation you are importing is older than your current one. Do you want to override it anyway?')) {
+            return;
+          }
+        }
       }
 
       onImport(importedData);
