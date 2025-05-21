@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { SkillPath } from '@/data/skillData';
@@ -38,7 +37,8 @@ const Index = () => {
     updateEvaluationMeta, 
     evaluationMeta, 
     isLoading,
-    evaluationExists
+    evaluationExists,
+    createNewEvaluation
   } = useEvaluationState(defaultCareer);
 
   // Check if we have a valid evaluation when component mounts
@@ -54,16 +54,6 @@ const Index = () => {
     
     checkEvaluation();
   }, [evalParam]);
-
-  // Save the default career and track values on component mount if we're starting a new evaluation
-  useEffect(() => {
-    if (!evalParam) {
-      updateEvaluationMeta({
-        careerId: selectedCareerId,
-        selectedTrack: selectedTrack
-      });
-    }
-  }, []);
 
   // Load saved evaluation metadata when component mounts or evaluation changes
   useEffect(() => {
@@ -92,31 +82,42 @@ const Index = () => {
   const handleCareerChange = (careerId: string) => {
     setSelectedCareerId(careerId);
     
-    // Update career in the evaluation metadata and set default track
-    updateEvaluationMeta({ 
-      careerId,
-      selectedTrack: 'T' // Always set default track when career changes
-    });
+    if (hasValidEvaluation) {
+      // Only update career in the evaluation metadata if an evaluation exists
+      updateEvaluationMeta({ 
+        careerId,
+        selectedTrack: 'T' // Always set default track when career changes
+      });
+    }
   };
 
   const handleEmphasisChange = (emphasisIds: string[]) => {
     setSelectedEmphasis(emphasisIds);
-    // Save the emphasis selection to IndexedDB
-    updateEvaluationMeta({ specialties: emphasisIds });
+    
+    if (hasValidEvaluation) {
+      // Save the emphasis selection to IndexedDB only if an evaluation exists
+      updateEvaluationMeta({ specialties: emphasisIds });
+    }
   };
 
   const handleLevelChange = (level: string) => {
     const newLevel = level === "" ? null : level;
     setSelectedLevel(newLevel);
-    // Save the level selection to IndexedDB
-    updateEvaluationMeta({ selectedLevel: newLevel });
+    
+    if (hasValidEvaluation) {
+      // Save the level selection to IndexedDB only if an evaluation exists
+      updateEvaluationMeta({ selectedLevel: newLevel });
+    }
   };
 
   const handleTrackChange = (track: string) => {
     const newTrack = track === "" ? null : track;
     setSelectedTrack(newTrack);
-    // Save the track selection to IndexedDB
-    updateEvaluationMeta({ selectedTrack: newTrack });
+    
+    if (hasValidEvaluation) {
+      // Save the track selection to IndexedDB only if an evaluation exists
+      updateEvaluationMeta({ selectedTrack: newTrack });
+    }
   };
 
   const handleExportEvaluation = () => {
@@ -170,9 +171,6 @@ const Index = () => {
       
       // Hide the import dialogs
       setShowCsvImport(false);
-      
-      // Add eval parameter to URL
-      navigate('/?eval=true');
       setHasValidEvaluation(true);
     } catch (error) {
       console.error("Error importing evaluation:", error);
@@ -187,22 +185,54 @@ const Index = () => {
     }
   };
 
-  // Handle file selection
-  const handleFileSelection = (event: React.ChangeEvent<HTMLInputElement>) => {
+  // Handle file selection for JSON import
+  const handleFileSelection = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
     
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = async (e) => {
       try {
         const data = JSON.parse(e.target?.result as string);
-        handleImportEvaluation(data);
-        toast.success("Avaliação carregada com sucesso");
+        
+        if (data.skillPath) {
+          // If we're importing a complete evaluation with skillPath
+          await createNewEvaluation(data.skillPath, {
+            careerId: data.careerId,
+            selectedLevel: data.selectedLevel,
+            selectedTrack: data.selectedTrack,
+            specialties: data.specialties
+          });
+          setHasValidEvaluation(true);
+          toast.success("Avaliação carregada com sucesso");
+        } else {
+          // Handle legacy format or invalid data
+          toast.error("Formato de avaliação inválido");
+        }
       } catch (error) {
         toast.error("Erro ao carregar o arquivo JSON");
       }
     };
     reader.readAsText(file);
+  };
+
+  // Handle CSV import - This is the only way to start a new evaluation
+  const handleCsvImport = async (importedSkillPath: SkillPath) => {
+    try {
+      // Create a new evaluation with default values
+      await createNewEvaluation(importedSkillPath, {
+        careerId: defaultCareer.id,
+        selectedTrack: 'T'
+      });
+      
+      // Hide CSV import dialog and mark evaluation as valid
+      setShowCsvImport(false);
+      setHasValidEvaluation(true);
+      toast.success("CSV importado com sucesso");
+    } catch (error) {
+      console.error("Error importing CSV:", error);
+      toast.error("Erro ao importar CSV");
+    }
   };
 
   // Define which branches are base competencies
@@ -264,7 +294,7 @@ const Index = () => {
               {showCsvImport ? (
                 <div className="bg-white p-6 rounded-lg shadow-md">
                   <h3 className="text-lg font-semibold mb-4">Importar CSV de Comportamentos</h3>
-                  <CsvUploader onImport={handleImportEvaluation} onClose={() => setShowCsvImport(false)} />
+                  <CsvUploader onImport={handleCsvImport} onClose={() => setShowCsvImport(false)} />
                   <div className="flex justify-end gap-2 mt-4">
                     <Button 
                       variant="outline" 

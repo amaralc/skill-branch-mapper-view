@@ -60,7 +60,12 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
   };
 
   const evaluateCommit = async (branchId: string, commitId: string, evaluation: 'never' | 'sometimes' | 'always') => {
-    const evaluationId = searchParams.get('eval') || generateEvaluationId();
+    const evaluationId = searchParams.get('eval');
+    if (!evaluationId) {
+      console.error("Cannot evaluate commit without an active evaluation");
+      return;
+    }
+    
     const currentTimestamp = Date.now();
     
     const updatedSkillPath = {
@@ -96,10 +101,30 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
       selectedTrack: evaluationMeta.selectedTrack,
       specialties: evaluationMeta.specialties
     });
+  };
 
-    if (!searchParams.get('eval')) {
-      setSearchParams({ eval: evaluationId });
-    }
+  const createNewEvaluation = async (newSkillPath: SkillPath, metadata?: {
+    careerId?: string;
+    selectedLevel?: string | null;
+    selectedTrack?: string | null;
+    specialties?: string[];
+  }) => {
+    const evaluationId = generateEvaluationId();
+    const currentTimestamp = Date.now();
+    const updatedMeta = { ...evaluationMeta, ...metadata };
+    
+    setSkillPath(newSkillPath);
+    setEvaluationMeta(updatedMeta);
+    
+    await saveEvaluation({
+      id: evaluationId,
+      timestamp: currentTimestamp,
+      skillPath: newSkillPath,
+      ...updatedMeta
+    });
+    
+    setSearchParams({ eval: evaluationId });
+    return evaluationId;
   };
 
   const updateEvaluationMeta = async (meta: {
@@ -108,9 +133,13 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
     selectedTrack?: string | null;
     specialties?: string[];
   }) => {
-    const evaluationId = searchParams.get('eval') || generateEvaluationId();
-    const updatedMeta = { ...evaluationMeta, ...meta };
+    const evaluationId = searchParams.get('eval');
+    if (!evaluationId) {
+      console.error("Cannot update metadata without an active evaluation");
+      return;
+    }
     
+    const updatedMeta = { ...evaluationMeta, ...meta };
     setEvaluationMeta(updatedMeta);
     
     await saveEvaluation({
@@ -119,14 +148,14 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
       skillPath,
       ...updatedMeta
     });
-
-    if (!searchParams.get('eval')) {
-      setSearchParams({ eval: evaluationId });
-    }
   };
 
   const resetAllEvaluations = async (newSkillPath?: SkillPath) => {
-    const evaluationId = searchParams.get('eval') || generateEvaluationId();
+    const evaluationId = searchParams.get('eval');
+    if (!evaluationId) {
+      console.error("Cannot reset evaluations without an active evaluation");
+      return;
+    }
     
     const updatedSkillPath = newSkillPath || {
       ...skillPath,
@@ -148,10 +177,6 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
       skillPath: updatedSkillPath,
       ...evaluationMeta
     });
-
-    if (!searchParams.get('eval')) {
-      setSearchParams({ eval: evaluationId });
-    }
   };
 
   return {
@@ -161,6 +186,7 @@ export function useEvaluationState(initialSkillPath: SkillPath) {
     updateEvaluationMeta,
     evaluationMeta,
     isLoading,
-    evaluationExists
+    evaluationExists,
+    createNewEvaluation
   };
 }

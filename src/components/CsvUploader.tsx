@@ -38,11 +38,11 @@ const CsvUploader: React.FC<CsvUploaderProps> = ({ onImport, onClose }) => {
       const skillPath = convertCsvToSkillPath(csvData);
       onImport(skillPath);
   
-      toast.success('CSV imported successfully');
+      toast.success('CSV importado com sucesso');
       if (onClose) onClose();
     } catch (error) {
       console.error('CSV import error:', error);
-      toast.error('Failed to process CSV file. Please check the format and try again.');
+      toast.error('Falha ao processar arquivo CSV. Por favor, verifique o formato e tente novamente.');
     } finally {
       setIsLoading(false);
       if (fileInputRef.current) {
@@ -54,7 +54,7 @@ const CsvUploader: React.FC<CsvUploaderProps> = ({ onImport, onClose }) => {
   return (
     <div className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="csv-file">Import Career Path from CSV</Label>
+        <Label htmlFor="csv-file">Importar Trilha de Carreira a partir de CSV</Label>
         <div className="flex gap-2">
           <Input
             ref={fileInputRef}
@@ -67,7 +67,7 @@ const CsvUploader: React.FC<CsvUploaderProps> = ({ onImport, onClose }) => {
           />
         </div>
         <p className="text-sm text-gray-500">
-          Upload a CSV file with career path data. The file should have the expected format with columns:
+          Faça upload de um arquivo CSV com dados da trilha de carreira. O arquivo deve ter o formato esperado com colunas:
           career, baseBehavior, level, track, groupCompetence, groupCompetenceId, groupCompetenceLevelId, id, description, size.
         </p>
       </div>
@@ -85,7 +85,7 @@ const CsvUploader: React.FC<CsvUploaderProps> = ({ onImport, onClose }) => {
         disabled={isLoading}
       >
         <Upload className="w-4 h-4 mr-2" />
-        Select CSV File
+        Selecionar Arquivo CSV
       </Button>
     </div>
   );
