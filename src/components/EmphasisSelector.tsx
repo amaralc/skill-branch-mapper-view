@@ -40,7 +40,7 @@ const EmphasisSelector: React.FC<EmphasisSelectorProps> = ({
     <div className="w-full">
       <Select value={getSelectedCareerId()} onValueChange={handleCareerChange}>
         <SelectTrigger className="w-full">
-          <SelectValue placeholder="Escolha uma carreira" />
+          <SelectValue placeholder="Escolha uma ênfase" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>

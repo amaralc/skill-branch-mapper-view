@@ -477,7 +477,6 @@ const Index = () => {
               onCareerChange={handleCareerChange}
             />
             <div>
-              <label className="block text-sm font-medium mb-1">Carreira</label>
               <EmphasisSelector
                 selectedEmphasis={selectedEmphasis}
                 onEmphasisChange={handleEmphasisChange}
