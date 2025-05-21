@@ -3,6 +3,7 @@ import { Branch, Commit, SkillPath, Tag } from "@/types/skill";
 
 interface CsvRow {
   career: string;
+  behaviorDifferentiator: string;
   baseBehavior: string;
   level: string;
   track: string;
@@ -113,6 +114,7 @@ export const convertCsvToSkillPath = (csvData: CsvRow[]): SkillPath => {
             // Store all relevant metadata in the commit
             metadata: {
               career: row.career,
+              behaviorDifferentiator: row.behaviorDifferentiator,
               baseBehavior: row.baseBehavior,
               level: row.level,
               track: row.track,

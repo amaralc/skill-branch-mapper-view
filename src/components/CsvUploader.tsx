@@ -88,7 +88,7 @@ const CsvUploader: React.FC<CsvUploaderProps> = ({ onImport, onClose }) => {
         </div>
         <p className="text-sm text-gray-500">
           Faça upload de um arquivo CSV com dados da trilha de carreira. O arquivo deve ter o formato esperado com colunas:
-          career, baseBehavior, level, track, groupCompetence, groupCompetenceId, groupCompetenceLevelId, id, description, size.
+          career, behaviorDifferentiator, baseBehavior, level, track, groupCompetence, groupCompetenceId, groupCompetenceLevelId, id, description, size.
         </p>
       </div>
       
