@@ -21,6 +21,10 @@ const ProgressSummary: React.FC<ProgressSummaryProps> = ({
     selectedTrack: string | null,
     selectedLevel: string | null
   ) => {
+    if (!skillPath.branches || skillPath.branches.length === 0) {
+      return 0;
+    }
+
     let totalPoints = 0;
 
     skillPath.branches.forEach((branch) => {
@@ -30,7 +34,7 @@ const ProgressSummary: React.FC<ProgressSummaryProps> = ({
           selectedTrack &&
           commit.metadata?.track &&
           commit.metadata.track !== selectedTrack &&
-          ["L5", "L6", "L7"].includes(commit.metadata.level)
+          ["L5", "L6", "L7"].includes(commit.metadata.level || "")
         ) {
           return;
         }
@@ -58,6 +62,10 @@ const ProgressSummary: React.FC<ProgressSummaryProps> = ({
     selectedTrack: string | null,
     selectedLevel: string | null
   ) => {
+    if (!skillPath.branches || skillPath.branches.length === 0) {
+      return 0;
+    }
+
     let maxPoints = 0;
 
     skillPath.branches.forEach((branch) => {
@@ -67,7 +75,7 @@ const ProgressSummary: React.FC<ProgressSummaryProps> = ({
           selectedTrack &&
           commit.metadata?.track &&
           commit.metadata.track !== selectedTrack &&
-          ["L5", "L6", "L7"].includes(commit.metadata.level)
+          ["L5", "L6", "L7"].includes(commit.metadata.level || "")
         ) {
           return;
         }
@@ -100,33 +108,35 @@ const ProgressSummary: React.FC<ProgressSummaryProps> = ({
     always: 0,
   };
 
-  skillPath.branches.forEach((branch) => {
-    branch.commits.forEach((commit) => {
-      // Skip commits that don't match the selected track (if a track is selected)
-      if (
-        selectedTrack &&
-        commit.metadata?.track &&
-        commit.metadata.track !== selectedTrack &&
-        ["L5", "L6", "L7"].includes(commit.metadata.level)
-      ) {
-        return;
-      }
+  if (skillPath.branches && skillPath.branches.length > 0) {
+    skillPath.branches.forEach((branch) => {
+      branch.commits.forEach((commit) => {
+        // Skip commits that don't match the selected track (if a track is selected)
+        if (
+          selectedTrack &&
+          commit.metadata?.track &&
+          commit.metadata.track !== selectedTrack &&
+          ["L5", "L6", "L7"].includes(commit.metadata.level || "")
+        ) {
+          return;
+        }
 
-      // Skip commits that don't match the selected level (if a level is selected)
-      if (
-        selectedLevel &&
-        commit.metadata?.level &&
-        commit.metadata.level !== selectedLevel
-      ) {
-        return;
-      }
+        // Skip commits that don't match the selected level (if a level is selected)
+        if (
+          selectedLevel &&
+          commit.metadata?.level &&
+          commit.metadata.level !== selectedLevel
+        ) {
+          return;
+        }
 
-      if (commit.evaluation === null) totalCounts.notEvaluated++;
-      else if (commit.evaluation === "never") totalCounts.never++;
-      else if (commit.evaluation === "sometimes") totalCounts.sometimes++;
-      else if (commit.evaluation === "always") totalCounts.always++;
+        if (commit.evaluation === null) totalCounts.notEvaluated++;
+        else if (commit.evaluation === "never") totalCounts.never++;
+        else if (commit.evaluation === "sometimes") totalCounts.sometimes++;
+        else if (commit.evaluation === "always") totalCounts.always++;
+      });
     });
-  });
+  }
 
   return (
     <div

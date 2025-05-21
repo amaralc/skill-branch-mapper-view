@@ -12,7 +12,7 @@ import LevelTrackSelector from '@/components/LevelTrackSelector';
 import SkillBranches from '@/components/SkillBranches';
 import { careerPaths } from '@/data/skillData';
 import { toast } from "sonner";
-import { Upload, FileText } from 'lucide-react';
+import { Upload, FileText, AlertCircle } from 'lucide-react';
 import CsvUploader from '@/components/CsvUploader';
 import {
   AlertDialog,
@@ -24,6 +24,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
 const Index = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -367,8 +368,10 @@ const Index = () => {
     }
   };
 
-  // Define which branches are base competencies
-  const baseTracks = ['ACCOUNTABILITY', 'ADAPTABILITY', 'COMMUNICATION', 'CONTINUOUS-DEVELOPMENT', 'EMOTIONAL-INTELLIGENCE', 'RESULTS-ORIENTATION', 'QUALITY', 'SECURITY', 'ARCHITECTURE', 'CONTINUOUS-DELIVERY'];
+  // Define which branches are base competencies - now this is just for filtering, not hardcoded data
+  const baseTracks = ['ACCOUNTABILITY', 'ADAPTABILITY', 'COMMUNICATION', 'CONTINUOUS-DEVELOPMENT', 
+                      'EMOTIONAL-INTELLIGENCE', 'RESULTS-ORIENTATION', 'QUALITY', 'SECURITY', 
+                      'ARCHITECTURE', 'CONTINUOUS-DELIVERY'];
   
   const filteredBranches = skillPath?.branches?.filter(branch => {
     // Always include base branches
@@ -384,6 +387,9 @@ const Index = () => {
     
     return false;
   }) || [];
+
+  // Show a message when no data is available
+  const showNoDataMessage = !isLoading && (!skillPath.branches || skillPath.branches.length === 0) && hasValidEvaluation;
 
   // Loading state
   if (isLoading) {
@@ -429,110 +435,126 @@ const Index = () => {
                   <h3 className="text-lg font-semibold mb-4">Importar CSV de Comportamentos</h3>
                   <CsvUploader onImport={handleCsvImport} onClose={() => setShowCsvImport(false)} />
                   <div className="flex justify-end gap-2 mt-4">
-                    <Button 
-                      variant="outline" 
-                      onClick={() => setShowCsvImport(false)}
-                      className="bg-white text-black border-black hover:bg-gray-100"
-                    >
-                      Cancelar
-                    </Button>
+                    {/* ... keep existing code (for buttons) */}
                   </div>
                 </div>
               ) : (
                 <>
-                  <Button
-                    size="lg"
-                    onClick={handleJsonButtonClick}
-                    className="py-8 text-lg bg-black text-white hover:bg-black/90"
-                  >
-                    <FileText className="w-5 h-5 mr-2" />
-                    Carregar Avaliação em JSON
-                  </Button>
-
-                  <input 
-                    type="file" 
-                    ref={jsonFileInputRef} 
-                    onChange={handleFileSelection} 
-                    accept=".json" 
-                    className="hidden" 
-                  />
-
-                  <Button
-                    size="lg"
-                    onClick={() => setShowCsvImport(true)}
-                    className="py-8 text-lg bg-white text-black border-black hover:bg-gray-100"
-                    variant="outline"
-                  >
-                    <Upload className="w-5 h-5 mr-2" />
-                    Carregar CSV de comportamentos
-                  </Button>
+                  <Alert className="bg-blue-50 border-blue-300">
+                    <AlertCircle className="h-4 w-4 text-blue-800" />
+                    <AlertTitle className="text-blue-800">Informação</AlertTitle>
+                    <AlertDescription className="text-blue-700">
+                      Todos os comportamentos avaliados devem ser importados via CSV ou de uma avaliação prévia.
+                      Não existem comportamentos pré-definidos.
+                    </AlertDescription>
+                  </Alert>
+                
+                  <div className="bg-white p-6 rounded-lg shadow-md">
+                    <h3 className="text-lg font-semibold mb-4">Importar CSV de Comportamentos</h3>
+                    <p className="text-gray-600 mb-4">
+                      Importe um arquivo CSV contendo os comportamentos desejados para avaliação.
+                    </p>
+                    <Button
+                      onClick={() => setShowCsvImport(true)}
+                      className="w-full flex gap-2 items-center justify-center bg-black hover:bg-gray-800 text-white"
+                    >
+                      <Upload className="w-4 h-4" />
+                      <span>Importar CSV</span>
+                    </Button>
+                  </div>
+                  
+                  <div className="bg-white p-6 rounded-lg shadow-md">
+                    <h3 className="text-lg font-semibold mb-4">Importar Avaliação Existente</h3>
+                    <p className="text-gray-600 mb-4">
+                      Carregue uma avaliação salva anteriormente no formato JSON.
+                    </p>
+                    <Button
+                      onClick={handleJsonButtonClick}
+                      className="w-full flex gap-2 items-center justify-center"
+                      variant="outline"
+                    >
+                      <FileText className="w-4 h-4" />
+                      <span>Importar JSON</span>
+                    </Button>
+                    <input
+                      ref={jsonFileInputRef}
+                      type="file"
+                      accept=".json"
+                      onChange={handleFileSelection}
+                      className="hidden"
+                    />
+                  </div>
                 </>
               )}
             </div>
           </div>
         ) : (
-          <div className="flex flex-col gap-4">
-            <CareerSelector
-              selectedCareerId={selectedCareerId}
-              onCareerChange={handleCareerChange}
-            />
-            <div>
-              <EmphasisSelector
-                selectedEmphasis={selectedEmphasis}
-                onEmphasisChange={handleEmphasisChange}
-              />
-            </div>
-            
-            {selectedCareerId && selectedEmphasis.length > 0 && (
-              <LevelTrackSelector 
-                branches={filteredBranches}
-                selectedLevel={selectedLevel}
-                selectedTrack={selectedTrack}
-                onLevelChange={handleLevelChange}
-                onTrackChange={handleTrackChange}
-              />
-            )}
-
-            {selectedCareerId && selectedEmphasis.length > 0 ? (
+          <>
+            {showNoDataMessage ? (
+              <div className="flex flex-col items-center justify-center min-h-[50vh]">
+                <Alert className="bg-amber-50 border-amber-300 mb-4 max-w-3xl">
+                  <AlertCircle className="h-5 w-5 text-amber-800" />
+                  <AlertTitle className="text-amber-800 text-lg">Nenhum comportamento encontrado</AlertTitle>
+                  <AlertDescription className="text-amber-700">
+                    Não existem comportamentos para avaliação nesta trilha. Importe um arquivo CSV com os comportamentos desejados.
+                  </AlertDescription>
+                </Alert>
+                <Button
+                  onClick={() => setShowCsvImport(true)}
+                  className="flex gap-2 items-center justify-center bg-black hover:bg-gray-800 text-white"
+                >
+                  <Upload className="w-4 h-4" />
+                  <span>Importar CSV de Comportamentos</span>
+                </Button>
+              </div>
+            ) : (
               <>
-                <ProgressSummary 
-                  skillPath={skillPath} 
-                  selectedTrack={selectedTrack}
-                  selectedLevel={selectedLevel} 
-                />
-                
-                <div className="flex flex-col gap-4 mb-6">
-                  <Button 
-                    variant="outline" 
-                    className="w-full bg-white text-black border-black hover:bg-gray-100" 
-                    onClick={() => resetAllEvaluations()}
-                  >
-                    Reiniciar Avaliação
-                  </Button>
-                </div>
-
-                <div className="flex flex-col">
-                  <div className="bg-white rounded-lg shadow p-4 mb-6">
-                    <h2 className="text-lg font-bold mb-3">Trilhas de Competência</h2>
-                    <SkillBranches
-                      branches={filteredBranches}
+                <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-6">
+                  <div>
+                    <div className="mb-6">
+                      <CareerSelector 
+                        careers={careerPaths}
+                        selectedCareerId={selectedCareerId}
+                        onChange={handleCareerChange}
+                      />
+                    </div>
+                    {skillPath.specialties && skillPath.specialties.length > 0 && (
+                      <div className="mb-6">
+                        <EmphasisSelector
+                          specialties={skillPath.specialties}
+                          selectedSpecialties={selectedEmphasis}
+                          onChange={handleEmphasisChange}
+                        />
+                      </div>
+                    )}
+                    <div>
+                      <LevelTrackSelector
+                        selectedLevel={selectedLevel}
+                        selectedTrack={selectedTrack}
+                        onLevelChange={handleLevelChange}
+                        onTrackChange={handleTrackChange}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <ProgressSummary
                       skillPath={skillPath}
-                      onEvaluateCommit={evaluateCommit}
-                      onUpdateComment={updateComment}
-                      selectedLevel={selectedLevel}
                       selectedTrack={selectedTrack}
+                      selectedLevel={selectedLevel}
                     />
                   </div>
                 </div>
+                
+                <SkillBranches
+                  branches={filteredBranches}
+                  onEvaluate={evaluateCommit}
+                  onUpdateComment={updateComment}
+                  selectedLevel={selectedLevel}
+                  selectedTrack={selectedTrack}
+                />
               </>
-            ) : (
-              <div className="text-center py-12 text-gray-500">
-                {selectedCareerId ? 
-                  'Selecione uma carreira para visualizar as trilhas de competência' :
-                  'Selecione uma carreira para começar'}
-              </div>
             )}
-          </div>
+          </>
         )}
       </main>
 
@@ -540,18 +562,15 @@ const Index = () => {
       <AlertDialog open={showOverrideDialog} onOpenChange={setShowOverrideDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Substituir avaliação existente?</AlertDialogTitle>
+            <AlertDialogTitle>Substituir avaliação atual?</AlertDialogTitle>
             <AlertDialogDescription>
-              {importedData && importedData.timestamp > timestamp
-                ? "A avaliação importada é mais recente que a sua avaliação atual."
-                : "A avaliação importada é mais antiga que a sua avaliação atual."}
-              <br />
-              Deseja substituir sua avaliação atual pela avaliação importada?
+              Você está importando uma avaliação com o mesmo ID da atual. 
+              Isso substituirá todos os dados da avaliação atual.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={handleCancelOverride}>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={handleConfirmOverride}>Substituir</AlertDialogAction>
+            <AlertDialogAction onClick={handleConfirmOverride}>Confirmar</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

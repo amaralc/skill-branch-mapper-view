@@ -6,6 +6,10 @@ export const filterCommitsByLevelAndTrack = (
   selectedLevel: string | null,
   selectedTrack: string | null
 ): Branch[] => {
+  if (!branches || branches.length === 0) {
+    return [];
+  }
+  
   if (!selectedLevel && !selectedTrack) {
     return branches;
   }
@@ -71,6 +75,10 @@ export const getCommitCounts = (
     total: 0,
   };
 
+  if (!branches || branches.length === 0) {
+    return counts;
+  }
+
   branches.forEach((branch) => {
     branch.commits.forEach((commit) => {
       // Skip commits that don't match the selected track
@@ -111,6 +119,10 @@ export const getCommitCounts = (
 // Helper function to get all available levels from commits
 export const getAvailableLevels = (branches: Branch[]): string[] => {
   const levels = new Set<string>();
+
+  if (!branches || branches.length === 0) {
+    return [];
+  }
 
   branches.forEach((branch) => {
     branch.commits.forEach((commit) => {

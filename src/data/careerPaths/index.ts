@@ -1,24 +1,22 @@
 
-import softwareCareerPath from './softwareCareerPath';
 import productManagementPath from './productCareerPath';
-import { commonBranches } from './allCareerPaths';
 import { careerOptions } from '../../types/emphasis';
 
-// Função auxiliar para adicionar branches comuns a um skillPath
-const addCommonBranches = (skillPath: typeof softwareCareerPath) => ({
-  ...skillPath,
-  branches: [...commonBranches, ...skillPath.branches]
-});
-
-// Adiciona as branches comuns a todos os caminhos de carreira
-const enhancedSoftwarePath = addCommonBranches({
-  ...softwareCareerPath,
+// Define an empty career path that will be populated only via CSV upload
+const emptySoftwareCareerPath = {
+  id: "software",
+  name: "Software Engineering",
+  description: "Trilha de conhecimento para profissionais de engenharia de software",
+  branches: [],
+  tags: [],
   specialties: careerOptions.find(c => c.id === "software")?.specialties || ["front-end", "back-end"]
-});
+};
 
-const enhancedProductPath = addCommonBranches({
+// Create an initial product path with empty branches
+const emptyProductPath = {
   ...productManagementPath,
+  branches: [],
   specialties: careerOptions.find(c => c.id === "product-management")?.specialties || ["value-refinement"]
-});
+};
 
-export const careerPaths = [enhancedSoftwarePath, enhancedProductPath];
+export const careerPaths = [emptySoftwareCareerPath, emptyProductPath];
