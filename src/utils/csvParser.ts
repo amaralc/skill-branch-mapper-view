@@ -21,13 +21,17 @@ export const parseCsv = (csvContent: string): CsvRow[] => {
     .replace(/\r/g, "\n");
 
   const lines = normalizedContent.split("\n");
-  const headers = lines[0].split(",");
+  if (lines.length === 0) {
+    throw new Error("CSV vazio ou inválido");
+  }
+
+  const headers = lines[0].split(",").map(header => header.trim());
 
   return lines
     .slice(1)
     .filter((line) => line.trim() !== "")
     .map((line) => {
-      // Enhanced handling for values that contain commas within quotes
+      // Manipulação avançada para valores que contêm vírgulas dentro de aspas
       const values: string[] = [];
       let inQuotes = false;
       let currentValue = "";
@@ -45,10 +49,10 @@ export const parseCsv = (csvContent: string): CsvRow[] => {
         }
       }
 
-      // Add the last value
+      // Adiciona o último valor
       values.push(currentValue.trim().replace(/^"|"$/g, ""));
 
-      // Create a properly typed CsvRow object with default empty strings
+      // Cria um objeto CsvRow corretamente tipado com strings vazias padrão
       const row: CsvRow = {
         career: "",
         baseBehavior: "",
@@ -62,10 +66,10 @@ export const parseCsv = (csvContent: string): CsvRow[] => {
         size: "",
       };
 
-      // Fill in values from the CSV
+      // Preenche os valores do CSV
       headers.forEach((header, index) => {
         const trimmedHeader = header.trim();
-        // Only set values for keys that actually exist in CsvRow type
+        // Apenas define valores para chaves que existem no tipo CsvRow
         if (trimmedHeader in row && index < values.length) {
           (row as any)[trimmedHeader] = values[index];
         }

@@ -25,17 +25,37 @@ const CsvUploader: React.FC<CsvUploaderProps> = ({ onImport, onClose }) => {
   
     try {
       const arrayBuffer = await file.arrayBuffer();
-      const decoder = new TextDecoder('iso-8859-1'); // You can also try 'iso-8859-1' if needed
-      const text = decoder.decode(arrayBuffer);
-  
-      console.log('Raw CSV text sample:', text.substring(0, 200));
-      const csvData = parseCsv(text);
-  
-      if (!csvData || csvData.length === 0) {
-        throw new Error('The CSV file appears to be empty or invalid');
+      
+      // Tentar várias codificações diferentes até encontrar uma que funcione bem
+      const encodings = ['utf-8', 'windows-1252', 'iso-8859-1', 'latin1'];
+      let parsedData;
+      let text;
+      
+      for (const encoding of encodings) {
+        try {
+          const decoder = new TextDecoder(encoding);
+          text = decoder.decode(arrayBuffer);
+          
+          // Tentar fazer o parse com esta codificação
+          const csvData = parseCsv(text);
+          
+          // Se chegou aqui sem erros e os dados parecem válidos
+          if (csvData && csvData.length > 0) {
+            parsedData = csvData;
+            console.log(`CSV decodificado com sucesso usando codificação: ${encoding}`);
+            break;
+          }
+        } catch (e) {
+          console.log(`Falha ao tentar com a codificação ${encoding}:`, e);
+          continue;
+        }
+      }
+      
+      if (!parsedData || parsedData.length === 0) {
+        throw new Error('Não foi possível interpretar o arquivo CSV com nenhuma das codificações tentadas');
       }
   
-      const skillPath = convertCsvToSkillPath(csvData);
+      const skillPath = convertCsvToSkillPath(parsedData);
       onImport(skillPath);
   
       toast.success('CSV importado com sucesso');
