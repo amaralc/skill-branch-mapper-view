@@ -118,34 +118,17 @@ const EmphasisSelector: React.FC<EmphasisSelectorProps> = ({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-full min-w-[200px]">
-          <div className="border-t p-2">
+            <div className="border-t p-2">
               <p className="font-semibold mb-2">Cargo</p>
               {careerOptions.map((career) => (
                 <DropdownMenuCheckboxItem
                   key={career.id}
                   checked={getSelectedCareerId() === career.id}
                   onSelect={(e) => {
-                    e.preventDefault();
                     handleCareerChange(career.id);
                   }}
                 >
                   {career.label}
-                </DropdownMenuCheckboxItem>
-              ))}
-            </div>
-            <div className="p-2">
-              <p className="font-semibold mb-2">Especialidades</p>
-              {emphasisOptions.map((emphasis) => (
-                <DropdownMenuCheckboxItem
-                  key={emphasis.id}
-                  checked={selectedItems.includes(emphasis.id)}
-                  disabled={true}
-                  onSelect={(e) => {
-                    e.preventDefault();
-                    toggleSpecialty(emphasis.id);
-                  }}
-                >
-                  {emphasis.label}
                 </DropdownMenuCheckboxItem>
               ))}
             </div>

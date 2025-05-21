@@ -512,19 +512,19 @@ const Index = () => {
               <>
                 <div className="grid grid-cols-1 gap-6">
                   <div>
-                    <div className="mb-6">
+                    <div className="mb-4">
                       <CareerSelector 
                         selectedCareerId={selectedCareerId}
                         onChange={handleCareerChange}
                       />
                     </div>
-                    <div className="mb-6">
+                    <div className="mb-4">
                       <EmphasisSelector
                         selectedSpecialties={selectedEmphasis}
                         onChange={handleEmphasisChange}
                       />
                     </div>
-                    <div className="mb-6">
+                    <div className="mb-4">
                       <LevelTrackSelector
                         branches={skillPath.branches || []} 
                         selectedLevel={selectedLevel}
@@ -533,7 +533,7 @@ const Index = () => {
                         onTrackChange={handleTrackChange}
                       />
                     </div>
-                    <div>
+                    <div className="mb-4">
                       <ProgressSummary
                         skillPath={skillPath}
                         selectedTrack={selectedTrack}
