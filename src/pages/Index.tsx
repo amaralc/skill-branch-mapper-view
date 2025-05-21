@@ -518,14 +518,12 @@ const Index = () => {
                         onChange={handleCareerChange}
                       />
                     </div>
-                    {skillPath.specialties && skillPath.specialties.length > 0 && (
-                      <div className="mb-6">
-                        <EmphasisSelector
-                          selectedSpecialties={selectedEmphasis}
-                          onChange={handleEmphasisChange}
-                        />
-                      </div>
-                    )}
+                    <div className="mb-6">
+                      <EmphasisSelector
+                        selectedSpecialties={selectedEmphasis}
+                        onChange={handleEmphasisChange}
+                      />
+                    </div>
                     <div className="mb-6">
                       <LevelTrackSelector
                         branches={skillPath.branches || []} 

@@ -120,24 +120,8 @@ const EmphasisSelector: React.FC<EmphasisSelectorProps> = ({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-full min-w-[200px]">
-            <div className="p-2">
-              <p className="font-semibold mb-2">Ênfases:</p>
-              {emphasisOptions.map((emphasis) => (
-                <DropdownMenuCheckboxItem
-                  key={emphasis.id}
-                  checked={selectedItems.includes(emphasis.id)}
-                  onSelect={(e) => {
-                    e.preventDefault();
-                    toggleSpecialty(emphasis.id);
-                  }}
-                >
-                  {emphasis.label}
-                </DropdownMenuCheckboxItem>
-              ))}
-            </div>
-            
-            <div className="border-t p-2">
-              <p className="font-semibold mb-2">Carreiras pré-definidas:</p>
+          <div className="border-t p-2">
+              <p className="font-semibold mb-2">Cargos</p>
               {careerOptions.map((career) => (
                 <DropdownMenuCheckboxItem
                   key={career.id}
@@ -148,6 +132,22 @@ const EmphasisSelector: React.FC<EmphasisSelectorProps> = ({
                   }}
                 >
                   {career.label}
+                </DropdownMenuCheckboxItem>
+              ))}
+            </div>
+            <div className="p-2">
+              <p className="font-semibold mb-2">Especialidades</p>
+              {emphasisOptions.map((emphasis) => (
+                <DropdownMenuCheckboxItem
+                  key={emphasis.id}
+                  checked={selectedItems.includes(emphasis.id)}
+                  disabled={true}
+                  onSelect={(e) => {
+                    e.preventDefault();
+                    toggleSpecialty(emphasis.id);
+                  }}
+                >
+                  {emphasis.label}
                 </DropdownMenuCheckboxItem>
               ))}
             </div>
