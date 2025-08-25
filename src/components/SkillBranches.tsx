@@ -22,8 +22,22 @@ const SkillBranches: React.FC<SkillBranchesProps> = ({
   selectedLevel,
   selectedTrack
 }) => {
-  // Define which branches are base competencies
-  const baseTracks = ['ACCOUNTABILITY', 'ADAPTABILITY', 'COMMUNICATION', 'CONTINUOUS-DEVELOPMENT', 'EMOTIONAL-INTELLIGENCE', 'RESULTS-ORIENTATION', 'QUALITY', 'SECURITY', 'ARCHITECTURE', 'CONTINUOUS-DELIVERY'];
+  // Define all possible competences that should be shown
+  const allCompetences = [
+    'ARCHITECTURE', 'BACK-END', 'CLOUD-INFRASTRUCTURE', 'CONTINUOUS-DELIVERY', 
+    'ENGINEERING-AND-DATA-SCIENCE', 'FRONT-END', 'MOBILE', 'QUALITY', 'SECURITY', 
+    'VALUE-REFINEMENT', 'ACCOUNTABILITY', 'ADAPTABILIDADE', 'COMUNICAÇÃO', 
+    'DESENVOLVIMENTO-CONTÍNUO', 'INTELIGÊNCIA-EMOCIONAL', 'RESOLUÇÃO-DE-PROBLEMA', 
+    'DESENVOLVE-PESSOAS', 'GESTÃO-DE-EQUIPE', 'ORIENTAÇÃO-A-RESULTADO'
+  ];
+  
+  // Define which branches are base competencies (non-specialty)
+  const baseTracks = [
+    'ACCOUNTABILITY', 'ADAPTABILIDADE', 'COMUNICAÇÃO', 'DESENVOLVIMENTO-CONTÍNUO', 
+    'INTELIGÊNCIA-EMOCIONAL', 'RESOLUÇÃO-DE-PROBLEMA', 'DESENVOLVE-PESSOAS', 
+    'GESTÃO-DE-EQUIPE', 'ORIENTAÇÃO-A-RESULTADO', 'QUALITY', 'SECURITY', 
+    'ARCHITECTURE', 'CONTINUOUS-DELIVERY'
+  ];
 
   // Filter branches to only include those with commits
   const branchesWithCommits = branches.filter(branch => {
