@@ -118,6 +118,31 @@ const cleanText = (text: string): string => {
       };
       return charMap[match.charCodeAt(0)] || '';
     })
+    // Fix common Portuguese UTF-8 double-encoding issues
+    .replace(/Ã§/g, 'ç')     // ç encoded as Ã§
+    .replace(/Ã£/g, 'ã')     // ã encoded as Ã£
+    .replace(/Ã¡/g, 'á')     // á encoded as Ã¡
+    .replace(/Ã©/g, 'é')     // é encoded as Ã©
+    .replace(/Ã­/g, 'í')     // í encoded as Ã­
+    .replace(/Ã³/g, 'ó')     // ó encoded as Ã³
+    .replace(/Ãº/g, 'ú')     // ú encoded as Ãº
+    .replace(/Ã¢/g, 'â')     // â encoded as Ã¢
+    .replace(/Ãª/g, 'ê')     // ê encoded as Ãª
+    .replace(/Ã´/g, 'ô')     // ô encoded as Ã´
+    .replace(/Ãµ/g, 'õ')     // õ encoded as Ãµ
+    .replace(/Ã\u0081/g, 'Á')      // Á encoded as Ã\u0081
+    .replace(/Ã\u0080/g, 'À')      // À encoded as Ã\u0080
+    .replace(/Ã\u0082/g, 'Â')      // Â encoded as Ã\u0082
+    .replace(/Ã\u0083/g, 'Ã')      // Ã encoded as Ã\u0083
+    .replace(/Ã\u0087/g, 'Ç')      // Ç encoded as Ã\u0087
+    .replace(/Ã\u0089/g, 'É')      // É encoded as Ã\u0089
+    .replace(/Ã\u008A/g, 'Ê')     // Ê encoded as Ã\u008A
+    .replace(/Ã\u008D/g, 'Í')     // Í encoded as Ã\u008D
+    .replace(/Ã\u0093/g, 'Ó')     // Ó encoded as Ã\u0093
+    .replace(/Ã\u0094/g, 'Ô')     // Ô encoded as Ã\u0094
+    .replace(/Ã\u0095/g, 'Õ')     // Õ encoded as Ã\u0095
+    .replace(/Ã\u009A/g, 'Ú')     // Ú encoded as Ã\u009A
+    // Fix specific words that were already in the function
     .replace(/crit�rio/g, 'critério')
     .replace(/c�digo/g, 'código')
     .replace(/leg�vel/g, 'legível')
