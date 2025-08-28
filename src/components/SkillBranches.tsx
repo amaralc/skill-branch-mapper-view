@@ -4,6 +4,7 @@ import { Branch, SkillPath } from '@/types/skill';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import BranchView from '@/components/BranchView';
+import { BASE_TRACKS } from '@/utils/constants';
 
 interface SkillBranchesProps {
   branches: Branch[];
@@ -23,7 +24,7 @@ const SkillBranches: React.FC<SkillBranchesProps> = ({
   selectedTrack
 }) => {
   // Define which branches are base competencies
-  const baseTracks = ['ACCOUNTABILITY', 'ADAPTABILITY', 'COMMUNICATION', 'CONTINUOUS-DEVELOPMENT', 'EMOTIONAL-INTELLIGENCE', 'RESULTS-ORIENTATION', 'QUALITY', 'SECURITY', 'ARCHITECTURE', 'CONTINUOUS-DELIVERY'];
+  const baseTracks = BASE_TRACKS;
 
   // Filter branches to only include those with commits
   const branchesWithCommits = branches.filter(branch => {

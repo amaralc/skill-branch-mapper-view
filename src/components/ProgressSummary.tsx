@@ -5,6 +5,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { RotateCcw } from "lucide-react";
+import { BASE_TRACKS } from '@/utils/constants';
 
 interface ProgressSummaryProps {
   skillPath: SkillPath;
@@ -22,9 +23,7 @@ const ProgressSummary: React.FC<ProgressSummaryProps> = ({
   onResetEvaluations // Recebendo a função de reset
 }) => {
   // Define base/common tracks that are always included
-  const baseTracks = ['ACCOUNTABILITY', 'ADAPTABILITY', 'COMMUNICATION', 'CONTINUOUS-DEVELOPMENT', 
-                      'EMOTIONAL-INTELLIGENCE', 'RESULTS-ORIENTATION', 'QUALITY', 'SECURITY', 
-                      'ARCHITECTURE', 'CONTINUOUS-DELIVERY'];
+  const baseTracks = BASE_TRACKS;
 
   // Filter branches based on selected specialties
   const filteredBranches = skillPath.branches?.filter(branch => {
