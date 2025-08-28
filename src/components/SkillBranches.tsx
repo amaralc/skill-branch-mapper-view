@@ -4,6 +4,7 @@ import { Branch, SkillPath } from '@/types/skill';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import BranchView from '@/components/BranchView';
+import { BASE_TRACKS } from '@/utils/constants';
 
 interface SkillBranchesProps {
   branches: Branch[];
@@ -22,22 +23,8 @@ const SkillBranches: React.FC<SkillBranchesProps> = ({
   selectedLevel,
   selectedTrack
 }) => {
-  // Define all possible competences that should be shown
-  const allCompetences = [
-    'ARCHITECTURE', 'BACK-END', 'CLOUD-INFRASTRUCTURE', 'CONTINUOUS-DELIVERY', 
-    'ENGINEERING-AND-DATA-SCIENCE', 'FRONT-END', 'MOBILE', 'QUALITY', 'SECURITY', 
-    'VALUE-REFINEMENT', 'ACCOUNTABILITY', 'ADAPTABILIDADE', 'COMUNICAÇÃO', 
-    'DESENVOLVIMENTO-CONTÍNUO', 'INTELIGÊNCIA-EMOCIONAL', 'RESOLUÇÃO-DE-PROBLEMA', 
-    'DESENVOLVE-PESSOAS', 'GESTÃO-DE-EQUIPE', 'ORIENTAÇÃO-A-RESULTADO'
-  ];
-  
-  // Define which branches are base competencies (non-specialty)
-  const baseTracks = [
-    'ACCOUNTABILITY', 'ADAPTABILIDADE', 'COMUNICAÇÃO', 'DESENVOLVIMENTO-CONTÍNUO', 
-    'INTELIGÊNCIA-EMOCIONAL', 'RESOLUÇÃO-DE-PROBLEMA', 'DESENVOLVE-PESSOAS', 
-    'GESTÃO-DE-EQUIPE', 'ORIENTAÇÃO-A-RESULTADO', 'QUALITY', 'SECURITY', 
-    'ARCHITECTURE', 'CONTINUOUS-DELIVERY'
-  ];
+  // Define which branches are base competencies
+  const baseTracks = BASE_TRACKS;
 
   // Filter branches to only include those with commits
   const branchesWithCommits = branches.filter(branch => {

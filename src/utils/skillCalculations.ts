@@ -1,12 +1,11 @@
 import { SkillPath, Tag, Branch } from '../types/skill';
+import { BASE_TRACKS } from './constants';
 
 export const calculatePoints = (path: SkillPath, selectedTrack: string | null = null, selectedLevel: string | null = null, selectedSpecialties: string[] = []): number => {
   let totalPoints = 0;
 
   // Define base/common tracks that are always included
-  const baseTracks = ['ACCOUNTABILITY', 'ADAPTABILITY', 'COMMUNICATION', 'CONTINUOUS-DEVELOPMENT', 
-                      'EMOTIONAL-INTELLIGENCE', 'RESULTS-ORIENTATION', 'QUALITY', 'SECURITY', 
-                      'ARCHITECTURE', 'CONTINUOUS-DELIVERY'];
+  const baseTracks = BASE_TRACKS;
   
   // Filter branches based on selected specialties
   const filteredBranches = path.branches.filter(branch => {
@@ -62,9 +61,7 @@ export const getMaxPoints = (path: SkillPath, selectedTrack: string | null = nul
   let maxPoints = 0;
   
   // Define base/common tracks that are always included
-  const baseTracks = ['ACCOUNTABILITY', 'ADAPTABILITY', 'COMMUNICATION', 'CONTINUOUS-DEVELOPMENT', 
-                      'EMOTIONAL-INTELLIGENCE', 'RESULTS-ORIENTATION', 'QUALITY', 'SECURITY', 
-                      'ARCHITECTURE', 'CONTINUOUS-DELIVERY'];
+  const baseTracks = BASE_TRACKS;
   
   // Filter branches based on selected specialties
   const filteredBranches = path.branches.filter(branch => {

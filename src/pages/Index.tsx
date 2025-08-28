@@ -25,6 +25,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { BASE_TRACKS } from '@/utils/constants';
 
 const Index = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -369,9 +370,7 @@ const Index = () => {
   };
 
   // Define which branches are base competencies - now this is just for filtering, not hardcoded data
-  const baseTracks = ['ACCOUNTABILITY', 'ADAPTABILITY', 'COMMUNICATION', 'CONTINUOUS-DEVELOPMENT', 
-                      'EMOTIONAL-INTELLIGENCE', 'RESULTS-ORIENTATION', 'QUALITY', 'SECURITY', 
-                      'ARCHITECTURE', 'CONTINUOUS-DELIVERY'];
+  const baseTracks = BASE_TRACKS;
   
   const filteredBranches = skillPath?.branches?.filter(branch => {
     // Always include base branches
